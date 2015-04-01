@@ -1,5 +1,6 @@
 package es.remara.notacommonsnake.manager;
-//Linea random
+//Linea randommasas
+//sas
 public class SceneManager 
 {
 
