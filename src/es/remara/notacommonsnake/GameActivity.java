@@ -1,5 +1,7 @@
 package es.remara.notacommonsnake;
 
+//Javi acepta
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
