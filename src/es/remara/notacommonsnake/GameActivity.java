@@ -1,6 +1,6 @@
 package es.remara.notacommonsnake;
 
-//Javi acepta
+//Javi! aceptaaa!!!
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
