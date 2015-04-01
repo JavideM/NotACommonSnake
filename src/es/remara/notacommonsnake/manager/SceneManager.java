@@ -3,6 +3,7 @@ package es.remara.notacommonsnake.manager;
 /*
  * Esta clase maneja los cambios de escena
  */
+//Linea 1
 
 public class SceneManager 
 {
