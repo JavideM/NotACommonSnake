@@ -8,11 +8,13 @@ import es.remara.notacommonsnake.GameActivity;
 
 public class ResourcesManager 
 {
+	
 	private static final ResourcesManager INSTANCE = new ResourcesManager();
-	private static Engine engine;
-	private static GameActivity activity;
-	private static BoundCamera camera;
-	private static VertexBufferObjectManager vbom;
+	
+	public static Engine engine;
+	public static GameActivity activity;
+	public static BoundCamera camera;
+	public static VertexBufferObjectManager vbom;
 	
 	public static ResourcesManager getInstance()
 	{
