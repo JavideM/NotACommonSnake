@@ -7,12 +7,11 @@ import es.remara.notacommonsnake.base.BaseScene;
 /*
  * Esta clase maneja los cambios de escena
  */
-//Linea 1
 
 public class SceneManager 
 {
 
-	private static final SceneManager INSTANCE = new SceneManager();
+	
 	
 	private BaseScene splashScene;
 	
@@ -52,4 +51,20 @@ public class SceneManager
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/*
+	 * Getters
+	 */
+	
+	public static final SceneManager INSTANCE = new SceneManager();
+	
+	public SceneType getCurrentSceneType()
+    {
+        return currentSceneType;
+    }
+    
+    public BaseScene getCurrentScene()
+    {
+        return currentScene;
+    }
 }

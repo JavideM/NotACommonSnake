@@ -16,10 +16,53 @@ public class ResourcesManager
 	public static BoundCamera camera;
 	public static VertexBufferObjectManager vbom;
 	
-	public static ResourcesManager getInstance()
-	{
-		return INSTANCE;
-	}
+ 	public void loadMenuResources()
+    {
+        loadMenuGraphics();
+        loadMenuAudio();
+    }
+    
+    public void loadGameResources()
+    {
+        loadGameGraphics();
+        loadGameFonts();
+        loadGameAudio();
+    }
+    
+    private void loadMenuGraphics()
+    {
+        
+    }
+    
+    private void loadMenuAudio()
+    {
+        
+    }
+
+    private void loadGameGraphics()
+    {
+        
+    }
+    
+    private void loadGameFonts()
+    {
+        
+    }
+    
+    private void loadGameAudio()
+    {
+        
+    }
+    
+    public void loadSplashScreen()
+    {
+    
+    }
+    
+    public void unloadSplashScreen()
+    {
+
+    }
 	
 	/*
 	 * Esta clase prepara todos los parametros de ResourcesManager 
@@ -31,6 +74,11 @@ public class ResourcesManager
 		getInstance().activity = activity;
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
+	}
+	
+	public static ResourcesManager getInstance()
+	{
+		return INSTANCE;
 	}
 	
 }
