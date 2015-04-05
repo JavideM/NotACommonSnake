@@ -47,7 +47,7 @@ public class GameActivity extends BaseGameActivity
 	{
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);		
 	}
-
+	
 	@Override
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception 
