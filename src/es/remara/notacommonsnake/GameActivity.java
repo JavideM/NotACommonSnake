@@ -1,6 +1,8 @@
 package es.remara.notacommonsnake;
 
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -50,7 +52,14 @@ public class GameActivity extends BaseGameActivity
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception 
 	{
-		// TODO Auto-generated method stub
+		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
+		{
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                //Cargar aqui la escena del menú
+            }
+		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 

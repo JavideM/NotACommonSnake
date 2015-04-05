@@ -2,7 +2,9 @@ package es.remara.notacommonsnake.manager;
 
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.scene.SplashScene;
 
 /*
  * Esta clase maneja los cambios de escena
@@ -47,9 +49,19 @@ public class SceneManager
 	}
 
 	//Metodo que crea una escena Splash
-	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-		// TODO Auto-generated method stub
-		
+	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
+	{
+		ResourcesManager.getInstance().loadSplashScreen();
+		splashScene = new SplashScene();
+		currentScene = splashScene;
+		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+	}
+	
+	private void disposeSplashScene()
+	{
+		ResourcesManager.getInstance().unloadSplashScreen();
+		splashScene.disposeScene();
+		splashScene = null;
 	}
 	
 	/*
