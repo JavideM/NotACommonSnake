@@ -18,6 +18,7 @@ public class GameActivity extends BaseGameActivity
 	
 	private BoundCamera camera;
 	private EngineOptions engineoptions;
+	private ResourcesManager resourcesmanager;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() 
@@ -34,6 +35,7 @@ public class GameActivity extends BaseGameActivity
 			throws Exception 
 	{
 		ResourcesManager.prepareManager(mEngine, this, this.camera, getVertexBufferObjectManager());
+		resourcesmanager = ResourcesManager.getInstance();
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
