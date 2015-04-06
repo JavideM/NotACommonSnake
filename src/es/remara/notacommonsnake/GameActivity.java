@@ -1,5 +1,7 @@
 package es.remara.notacommonsnake;
 
+import java.io.IOException;
+
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -34,7 +36,7 @@ public class GameActivity extends BaseGameActivity
 	@Override
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
-			throws Exception 
+			throws IOException 
 	{
 		ResourcesManager.prepareManager(mEngine, this, this.camera, getVertexBufferObjectManager());
 		resourcesmanager = ResourcesManager.getInstance();
@@ -43,14 +45,14 @@ public class GameActivity extends BaseGameActivity
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
-			throws Exception 
+			throws IOException 
 	{
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);		
 	}
 	
 	@Override
 	public void onPopulateScene(Scene pScene,
-			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception 
+			OnPopulateSceneCallback pOnPopulateSceneCallback) 
 	{
 		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
 		{

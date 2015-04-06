@@ -1,5 +1,6 @@
 package es.remara.notacommonsnake.manager;
 
+import org.andengine.engine.Engine;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 
@@ -12,10 +13,9 @@ import es.remara.notacommonsnake.scene.SplashScene;
 
 public class SceneManager 
 {
-
-	
 	
 	private BaseScene splashScene;
+	private BaseScene menuScene;
 	
 	private SceneManager engine;
 	private BaseScene currentScene;
@@ -23,7 +23,8 @@ public class SceneManager
 	
 	public enum SceneType
 	{
-		SCENE_SPLASH
+		SCENE_SPLASH,
+		SCENE_MENU
 	};
 	
 	public static SceneManager getInstance()
@@ -45,9 +46,25 @@ public class SceneManager
 		case SCENE_SPLASH:
 			setScene(splashScene);
 			break;
+		case SCENE_MENU:
+			setScene(menuScene);
+			break;
 		}
 	}
 
+	//Metodos para crear el menu, la primera vez que se llama a la escena
+	public void createMenuScene()
+	{
+		//Por desarrollar
+		disposeSplashScene();
+	}
+	
+	//Metodo para cargar el Menu desde otras escenas
+	public void loadMenuScene(final Engine mEngine)
+	{
+		
+	}
+	
 	//Metodo que crea una escena Splash
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
 	{
