@@ -17,14 +17,16 @@ public class SceneManager
 	private BaseScene splashScene;
 	private BaseScene menuScene;
 	
-	private SceneManager engine;
 	private BaseScene currentScene;
 	private SceneType currentSceneType;
+	
+	private Engine engine = ResourcesManager.getInstance().engine;
 	
 	public enum SceneType
 	{
 		SCENE_SPLASH,
-		SCENE_MENU
+		SCENE_MENU,
+		SCENE_SNAKE
 	};
 	
 	public static SceneManager getInstance()
