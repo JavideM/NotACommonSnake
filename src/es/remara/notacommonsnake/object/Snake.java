@@ -37,7 +37,7 @@ public class Snake extends Entity{
 		Rectangle cola = new Rectangle(pX - pWidth, pY, pWidth, pHeight, vbom);
 		cola.setColor(Color.BLUE);
 		this.body.addFirst(cola);
-		cola.attachChild(cola);
+		attachChild(cola);
 	}
 	
 	//Constructor con texturas
