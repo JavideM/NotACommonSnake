@@ -3,7 +3,9 @@ package es.remara.notacommonsnake.manager;
 import org.andengine.engine.Engine;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
-
+import es.remara.notacommonsnake.manager.ResourcesManager;
+import es.remara.notacommonsnake.manager.SceneManager;
+import es.remara.notacommonsnake.scene.MainMenuScene;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.scene.SplashScene;
 
@@ -51,13 +53,20 @@ public class SceneManager
 		case SCENE_MENU:
 			setScene(menuScene);
 			break;
+		case SCENE_SNAKE:
+			break;
+		default:
+			break;
 		}
 	}
 
 	//Metodos para crear el menu, la primera vez que se llama a la escena
 	public void createMenuScene()
 	{
-		//Por desarrollar
+		ResourcesManager.getInstance().loadMenuResources();
+		menuScene = new MainMenuScene();
+	    SceneManager.getInstance().setScene(menuScene);
+    
 		disposeSplashScene();
 	}
 	
