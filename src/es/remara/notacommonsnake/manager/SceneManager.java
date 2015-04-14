@@ -5,6 +5,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.scene.GameSnakeScene;
 import es.remara.notacommonsnake.scene.SplashScene;
 
 /*
@@ -16,11 +17,13 @@ public class SceneManager
 	
 	private BaseScene splashScene;
 	private BaseScene menuScene;
+	private BaseScene gamesnakeScene;
 	
 	private BaseScene currentScene;
 	private SceneType currentSceneType;
 	
 	private Engine engine = ResourcesManager.getInstance().engine;
+
 	
 	public enum SceneType
 	{
@@ -50,6 +53,9 @@ public class SceneManager
 			break;
 		case SCENE_MENU:
 			setScene(menuScene);
+			break;
+		case SCENE_SNAKE:
+			setScene(gamesnakeScene);
 			break;
 		}
 	}
@@ -81,6 +87,15 @@ public class SceneManager
 		ResourcesManager.getInstance().unloadSplashScreen();
 		splashScene.disposeScene();
 		splashScene = null;
+	}
+	
+
+	//Metodo crea el juego
+	public void createSnakeGameScene() {
+		gamesnakeScene = new GameSnakeScene();
+		SceneManager.getInstance().setScene(gamesnakeScene);
+		//disposeSplashScene();
+		
 	}
 	
 	/*
