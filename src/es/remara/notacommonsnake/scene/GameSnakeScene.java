@@ -40,8 +40,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		comidaAleatoria();
 		
 		//Serpiente
-		snake = new Snake(resourcesManager.camera.getWidth()/16, resourcesManager.camera.getHeight()*25/48, 
-				resourcesManager.camera.getWidth()/40, resourcesManager.camera.getHeight()/24, vbom);
+		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, 
+				camera.getWidth()/40, camera.getHeight()/24, vbom);
 		attachChild(snake);
 		
 		registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
@@ -53,13 +53,10 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		));
 		
 		setOnSceneTouchListener(this);
-		
-		
 	}
 
 	private void comidaAleatoria() {
-		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);
-		
+		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
 	}
 
 	protected void actualizaSerpiente() {
@@ -68,7 +65,6 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			snake.crece();
 		}
 		snake.muevete();
-		
 	}
 
 	
@@ -103,19 +99,15 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			
 			@Override
 			protected boolean onSingleTap() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			protected boolean onDoubleTap() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		};
-		
 		mSGD.setEnabled(true);
-		
 	}
 
 	@Override
@@ -126,7 +118,6 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	@Override
 	public SceneType getSceneType() {
 		return SceneType.SCENE_SNAKE;
-		
 	}
 
 	@Override

@@ -61,6 +61,7 @@ public class GameActivity extends BaseGameActivity
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 //Cargar aqui la escena del menú
                 //SceneManager.getInstance().createSnakeGameScene();
+                //SceneManager.getInstance().createWorkInProgress();
             }
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
