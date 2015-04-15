@@ -23,6 +23,9 @@ public class ResourcesManager
 	private BitmapTextureAtlas splashTextureAtlas;
 	public ITextureRegion splash_region;
 	
+	private BitmapTextureAtlas wipTextureAtlas;
+	public ITextureRegion wip_region; 
+	
  	public void loadMenuResources()
     {
         loadMenuGraphics();
@@ -73,6 +76,20 @@ public class ResourcesManager
 	{
 		splashTextureAtlas.unload();
 		splash_region = null;
+	}
+	
+	public void loadWorkInProgressScreen()
+	{
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/workinprogress/");
+		wipTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(wipTextureAtlas, activity, "workinprogress.png", 0, 0);
+		wipTextureAtlas.load();
+	}
+	
+	public void unloadWorkInProgressScreen()
+	{
+		wipTextureAtlas.unload();
+		wip_region = null;
 	}
 	
 	/*
