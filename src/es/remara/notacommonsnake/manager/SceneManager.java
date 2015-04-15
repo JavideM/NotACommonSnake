@@ -26,7 +26,8 @@ public class SceneManager
 	{
 		SCENE_SPLASH,
 		SCENE_MENU,
-		SCENE_SNAKE
+		SCENE_SNAKE,
+		SCENE_ARKANOID
 	};
 	
 	public static SceneManager getInstance()
@@ -82,6 +83,9 @@ public class SceneManager
 		splashScene.disposeScene();
 		splashScene = null;
 	}
+	
+	//Método que crea la escena Arkanoid
+	
 	
 	/*
 	 * Getters
