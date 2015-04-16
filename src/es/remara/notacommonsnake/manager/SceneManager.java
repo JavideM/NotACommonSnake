@@ -81,7 +81,9 @@ public class SceneManager
 	
 	//Metodo para cargar el Menu desde otras escenas
 	public void loadMenuScene(final Engine mEngine, BaseScene prescene)
-	{
+	{	
+		menuScene = new MainMenuScene();
+		SceneManager.getInstance().setScene(menuScene);
 		switch(prescene.getSceneType()){
 			case SCENE_SNAKE:
 				gamesnakeScene.disposeScene();
