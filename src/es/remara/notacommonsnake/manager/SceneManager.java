@@ -3,103 +3,102 @@ package es.remara.notacommonsnake.manager;
 import org.andengine.engine.Engine;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
-
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.scene.GameArkanoidScene;
 import es.remara.notacommonsnake.scene.SplashScene;
 
 /*
  * Esta clase maneja los cambios de escena
  */
 
-public class SceneManager 
-{
-	
+public class SceneManager {
+
 	private BaseScene splashScene;
+	private BaseScene arkanoidScene;
 	private BaseScene menuScene;
-	
+
 	private BaseScene currentScene;
 	private SceneType currentSceneType;
-	
+
 	private Engine engine = ResourcesManager.getInstance().engine;
-	
-	public enum SceneType
-	{
-		SCENE_SPLASH,
-		SCENE_MENU,
-		SCENE_SNAKE,
-		SCENE_ARKANOID
+
+	public enum SceneType {
+		SCENE_SPLASH, SCENE_MENU, SCENE_SNAKE, SCENE_ARKANOID
 	};
-	
-	public static SceneManager getInstance()
-	{
+
+	public static SceneManager getInstance() {
 		return INSTANCE;
 	}
-	
-	public void setScene(BaseScene scene)
-	{
+
+	public void setScene(BaseScene scene) {
 		engine.setScene(scene);
 		currentScene = scene;
 		currentSceneType = scene.getSceneType();
 	}
-	
-	public void setScene(SceneType sceneType)
-	{
-		switch(sceneType)
-		{
+
+	public void setScene(SceneType sceneType) {
+		switch (sceneType) {
 		case SCENE_SPLASH:
 			setScene(splashScene);
 			break;
 		case SCENE_MENU:
 			setScene(menuScene);
 			break;
+		case SCENE_ARKANOID:
+			setScene(arkanoidScene);
+			break;
 		}
 	}
 
-	//Metodos para crear el menu, la primera vez que se llama a la escena
-	public void createMenuScene()
-	{
-		//Por desarrollar
+	// Metodos para crear el menu, la primera vez que se llama a la escena
+	public void createMenuScene() {
+		// Por desarrollar
 		disposeSplashScene();
 	}
-	
-	//Metodo para cargar el Menu desde otras escenas
-	public void loadMenuScene(final Engine mEngine)
-	{
-		
+
+	// Metodo para cargar el Menu desde otras escenas
+	public void loadMenuScene(final Engine mEngine) {
+
 	}
-	
-	//Metodo que crea una escena Splash
-	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
-	{
+
+	// Metodo que crea una escena Splash
+	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
 		ResourcesManager.getInstance().loadSplashScreen();
 		splashScene = new SplashScene();
 		currentScene = splashScene;
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 	}
-	
-	private void disposeSplashScene()
-	{
+
+	private void disposeSplashScene() {
 		ResourcesManager.getInstance().unloadSplashScreen();
 		splashScene.disposeScene();
 		splashScene = null;
 	}
-	
-	//Método que crea la escena Arkanoid
-	
-	
+
+	// Método que crea la escena Arkanoid
+	public void createArkanoidScene(OnCreateSceneCallback pOnCreateSceneCallback) {
+		ResourcesManager.getInstance().loadGameArkanoidResources();
+		arkanoidScene = new GameArkanoidScene();
+		currentScene = arkanoidScene;
+		pOnCreateSceneCallback.onCreateSceneFinished(arkanoidScene);
+	}
+
+	@SuppressWarnings("unused")
+	private void disposeArkanoidScene() {
+		// Aun por implementar
+	}
+
 	/*
 	 * Getters
 	 */
-	
+
 	public static final SceneManager INSTANCE = new SceneManager();
-	
-	public SceneType getCurrentSceneType()
-    {
-        return currentSceneType;
-    }
-    
-    public BaseScene getCurrentScene()
-    {
-        return currentScene;
-    }
+
+	public SceneType getCurrentSceneType() {
+		return currentSceneType;
+	}
+
+	public BaseScene getCurrentScene() {
+		return currentScene;
+	}
 }
