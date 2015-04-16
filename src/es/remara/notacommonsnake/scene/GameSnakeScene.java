@@ -1,7 +1,5 @@
 package es.remara.notacommonsnake.scene;
 
-import java.util.LinkedList;
-
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
@@ -17,27 +15,21 @@ import android.os.Looper;
 
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
+import es.remara.notacommonsnake.object.Snake;
+import es.remara.notacommonsnake.other.Direccion;
 
 public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	
-	private Rectangle snakehead;
 	private Rectangle food;
-	private LinkedList<Rectangle> snake;
+	private Snake snake;
 	
  	private SurfaceGestureDetector mSGD;
 
- 	private int direccion;
- 	
- 	private final int DERECHA = 10;
- 	private final int IZQUIERDA = -10;
- 	private final int ARRIBA = 1;
- 	private final int ABAJO = -1;
 	
 	@Override
 	public void createScene() {
 		creacontroles();
-		
-		direccion = DERECHA;
+
 		
 		setBackground(new Background(Color.GREEN));
 		
@@ -47,85 +39,35 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		attachChild(food);
 		comidaAleatoria();
 		
-		/*Serpiente*/
-		//--cabeza
-		snakehead = new Rectangle(resourcesManager.camera.getWidth()/16, resourcesManager.camera.getHeight()*25/48, 
-				resourcesManager.camera.getWidth()/40, resourcesManager.camera.getHeight()/24, vbom);
-		snakehead.setColor(Color.RED);
-		attachChild(snakehead);
-		//--cuerpo
-		snake = new LinkedList<Rectangle>();
-		Rectangle cuerpo = new Rectangle(resourcesManager.camera.getWidth()/16 - 20, resourcesManager.camera.getHeight()*25/48, 
-				resourcesManager.camera.getWidth()/40, resourcesManager.camera.getHeight()/24, vbom);
-		cuerpo.setColor(Color.YELLOW);
-		attachChild(cuerpo);
-		snake.addFirst(cuerpo);
-	
-		this.registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
+		//Serpiente
+		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, 
+				camera.getWidth()/40, camera.getHeight()/24, vbom);
+		attachChild(snake);
+		
+		registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
-					move();
-					
+					actualizaSerpiente();
 				}
-
-			
 			}
 		));
 		
 		setOnSceneTouchListener(this);
-		
-		
 	}
 
 	private void comidaAleatoria() {
-		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);
-		
+		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
 	}
 
-	protected void move() {
-		if(snakehead.getX() == food.getX() && snakehead.getY() == food.getY()){
+	protected void actualizaSerpiente() {
+		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
 			comidaAleatoria();
-			snakecrece();
+			snake.crece();
 		}
-		Rectangle cola = snake.removeLast();
-		cola.setPosition(snakehead);
-		snake.addFirst(cola);
-		switch(direccion){
-			case(ARRIBA):
-				if(snakehead.getY() < resourcesManager.camera.getHeight() - 10)
-					snakehead.setPosition(snakehead.getX(), snakehead.getY() + 20);
-				else
-					snakehead.setPosition(snakehead.getX(), 10);
-				break;
-			case(ABAJO):
-				if(snakehead.getY() > 10)
-					snakehead.setPosition(snakehead.getX(), snakehead.getY() - 20);
-				else
-					snakehead.setPosition(snakehead.getX(), resourcesManager.camera.getHeight() - 10);
-				break;
-			case(DERECHA):
-				if(snakehead.getX() < resourcesManager.camera.getWidth() - 10)
-					snakehead.setPosition(snakehead.getX() + 20, snakehead.getY());
-				else
-					snakehead.setPosition(10, snakehead.getY());
-				break;
-			case(IZQUIERDA):
-				if(snakehead.getX() > 10)
-					snakehead.setPosition(snakehead.getX() - 20, snakehead.getY() );
-				else
-					snakehead.setPosition(resourcesManager.camera.getWidth() - 10, snakehead.getY() );
-				break;
-		}
-		
+		snake.muevete();
 	}
 
-	private void snakecrece() {
-		Rectangle colanuevaRectangle = new Rectangle(snake.getFirst().getX(), snake.getFirst().getY(), 
-				resourcesManager.camera.getWidth()/40, resourcesManager.camera.getHeight()/24, vbom);
-		colanuevaRectangle.setColor(Color.YELLOW);
-		attachChild(colanuevaRectangle);
-		snake.addFirst(colanuevaRectangle);
-	}
+	
 
 	private void creacontroles() {
 		Looper.prepare();
@@ -133,43 +75,39 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			
 			@Override
 			protected boolean onSwipeUp() {
-				direccion = ARRIBA;
+				snake.setDirec(Direccion.ARRIBA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeRight() {
-				direccion = DERECHA;
+				snake.setDirec(Direccion.DERECHA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeLeft() {
-				direccion = IZQUIERDA;
+				snake.setDirec(Direccion.IZQUIERDA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeDown() {
-				direccion = ABAJO;
+				snake.setDirec(Direccion.ABAJO);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSingleTap() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			protected boolean onDoubleTap() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		};
-		
 		mSGD.setEnabled(true);
-		
 	}
 
 	@Override
@@ -180,19 +118,14 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	@Override
 	public SceneType getSceneType() {
 		return SceneType.SCENE_SNAKE;
-		
 	}
 
 	@Override
 	public void disposeScene() {
-		snakehead.detachSelf();
-		snakehead.dispose();
+		snake.dispose();
+		snake.detachSelf();
 		food.detachSelf();
 		food.dispose();
-		for (Rectangle cuerpo: snake) {
-			cuerpo.detachSelf();
-			cuerpo.dispose();
-		}
 		this.detachSelf();
 		this.dispose();
 		

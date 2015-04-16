@@ -35,19 +35,20 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
+	public ITextureRegion wip_region; 
+
 	
-	
-	// Bipmat Texture Atlas of Menus and Splash
+	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
-
+	private BitmapTextureAtlas wipTextureAtlas;
 	
 	
 //---------------------------------------------
 // CLASS LOGIC
 //---------------------------------------------
 
- 	public void loadMenuResources()
+public void loadMenuResources()
     {
         loadMenuGraphics();
         loadMenuAudio();
@@ -120,14 +121,25 @@ public class ResourcesManager
 		splash_region = null;
 	}
 	
+
 	public void unloadMenuTextures()
 	{
 		menuTextureAtlas.unload();
 	}
 	
-	public void loadMenuTextures()
+	
+	public void loadWorkInProgressScreen()
 	{
-		menuTextureAtlas.load();
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/workinprogress/");
+		wipTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(wipTextureAtlas, activity, "workinprogress.png", 0, 0);
+		wipTextureAtlas.load();
+	}
+	
+	public void unloadWorkInProgressScreen()
+	{
+		wipTextureAtlas.unload();
+		wip_region = null;
 	}
 	
 	/*

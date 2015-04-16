@@ -67,7 +67,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		{
 			case MENU_PLAY:
 				//Load Game Scene!
-				SceneManager.getInstance().loadGameScene(engine);
+				SceneManager.getInstance().createSnakeGameScene();
 				return true;
 			case MENU_OPTIONS:
 				return true;
@@ -106,6 +106,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() );
 		
 		menuChildScene.setOnMenuItemClickListener(this);
+		
+		menuChildScene.buildAnimations();
 		
 		setChildScene(menuChildScene);
 	}
