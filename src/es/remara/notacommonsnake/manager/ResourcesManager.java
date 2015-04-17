@@ -5,8 +5,13 @@ import org.andengine.engine.camera.BoundCamera;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.debug.Debug;
 
 import es.remara.notacommonsnake.GameActivity;
 
@@ -20,13 +25,35 @@ public class ResourcesManager
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	
-	private BitmapTextureAtlas splashTextureAtlas;
-	public ITextureRegion splash_region;
 	
- 	public void loadMenuResources()
+//---------------------------------------------
+// TEXTURES & TEXTURE REGIONS
+//---------------------------------------------
+	
+	// Menus and Splash Textures
+	public ITextureRegion splash_region;
+	public ITextureRegion menu_background_region;
+	public ITextureRegion play_region;
+	public ITextureRegion options_region;
+	public ITextureRegion wip_region; 
+	public ITextureRegion ark_ball_region;
+	
+	// Bipmat Textures
+	private BitmapTextureAtlas splashTextureAtlas;
+	private BuildableBitmapTextureAtlas menuTextureAtlas;
+	private BitmapTextureAtlas wipTextureAtlas;
+	private BitmapTextureAtlas ark_ballTextureAtlas;
+
+	
+//---------------------------------------------
+// CLASS LOGIC
+//---------------------------------------------
+
+public void loadMenuResources()
     {
         loadMenuGraphics();
         loadMenuAudio();
+        loadMenuFonts();
     }
     
     public void loadGameResources()
@@ -36,14 +63,56 @@ public class ResourcesManager
         loadGameAudio();
     }
     
+    public void loadGameArkanoidResources() {
+		loadGameArkanoidGraphics();
+		loadGameFonts();
+		loadGameArkanoidAudio();
+	}
+    
+    private void loadGameArkanoidGraphics() {
+		// bola
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		ark_ballTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 16, 16);
+		ark_ball_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(ark_ballTextureAtlas, activity,
+						"arkanoid/ball.png", 0, 0);
+		ark_ballTextureAtlas.load();
+
+		// plataforma textureAtlas y region pendiente
+		// muros textureAtlas y region pendiente
+	}
+
+	private void loadGameArkanoidAudio() {
+		// Audio
+	}
+    
     private void loadMenuGraphics()
     {
-        
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
+        menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
+        // menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
+        play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_play.png");
+        options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_options.png");
+       
+    	try 
+    	{
+			this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+			this.menuTextureAtlas.load();
+		} 
+    	catch (final TextureAtlasBuilderException e)
+    	{
+			Debug.e(e);
+		}
     }
     
     private void loadMenuAudio()
     {
         
+    }
+    
+    private void loadMenuFonts(){
+    	
     }
 
     private void loadGameGraphics()
@@ -73,6 +142,27 @@ public class ResourcesManager
 	{
 		splashTextureAtlas.unload();
 		splash_region = null;
+	}
+	
+
+	public void unloadMenuTextures()
+	{
+		menuTextureAtlas.unload();
+	}
+	
+	
+	public void loadWorkInProgressScreen()
+	{
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/workinprogress/");
+		wipTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(wipTextureAtlas, activity, "workinprogress.png", 0, 0);
+		wipTextureAtlas.load();
+	}
+	
+	public void unloadWorkInProgressScreen()
+	{
+		wipTextureAtlas.unload();
+		wip_region = null;
 	}
 	
 	/*
