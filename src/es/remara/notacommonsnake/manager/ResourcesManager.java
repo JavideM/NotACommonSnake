@@ -36,13 +36,14 @@ public class ResourcesManager
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
 	public ITextureRegion wip_region; 
-
+	public ITextureRegion ark_ball_region;
 	
 	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	private BitmapTextureAtlas wipTextureAtlas;
-	
+	private BitmapTextureAtlas ark_ballTextureAtlas;
+
 	
 //---------------------------------------------
 // CLASS LOGIC
@@ -62,7 +63,29 @@ public void loadMenuResources()
         loadGameAudio();
     }
     
+    public void loadGameArkanoidResources() {
+		loadGameArkanoidGraphics();
+		loadGameFonts();
+		loadGameArkanoidAudio();
+	}
     
+    private void loadGameArkanoidGraphics() {
+		// bola
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		ark_ballTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 16, 16);
+		ark_ball_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(ark_ballTextureAtlas, activity,
+						"arkanoid/ball.png", 0, 0);
+		ark_ballTextureAtlas.load();
+
+		// plataforma textureAtlas y region pendiente
+		// muros textureAtlas y region pendiente
+	}
+
+	private void loadGameArkanoidAudio() {
+		// Audio
+	}
     
     private void loadMenuGraphics()
     {
