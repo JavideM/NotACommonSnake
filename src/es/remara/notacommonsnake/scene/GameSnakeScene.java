@@ -47,7 +47,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
-					actualizaSerpiente();
+					actualizaPantalla();
 				}
 			}
 		));
@@ -55,20 +55,37 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		setOnSceneTouchListener(this);
 	}
 
-	private void comidaAleatoria() {
-		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
+	@Override
+	public void onBackKeyPressed() {
+		return;		
 	}
 
-	protected void actualizaSerpiente() {
-		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
-			comidaAleatoria();
-			snake.crece();
-		}
-		snake.muevete();
+	@Override
+	public SceneType getSceneType() {
+		return SceneType.SCENE_SNAKE;
 	}
 
+	@Override
+	public void disposeScene() {
+		snake.dispose();
+		snake.detachSelf();
+		food.detachSelf();
+		food.dispose();
+		this.detachSelf();
+		this.dispose();
+		
+	}
+
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		
+		return mSGD.onManagedTouchEvent(pSceneTouchEvent);
+	}	
 	
-
+	/*
+	 * Metodos de creación de elementos
+	 * */
+	
 	private void creacontroles() {
 		Looper.prepare();
 		mSGD =  new SurfaceGestureDetector(resourcesManager.activity) {
@@ -109,31 +126,24 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		};
 		mSGD.setEnabled(true);
 	}
-
-	@Override
-	public void onBackKeyPressed() {
-		return;		
+	
+	/*
+	 *  Métodos 
+	 */
+	
+	private void comidaAleatoria() {
+		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
 	}
 
-	@Override
-	public SceneType getSceneType() {
-		return SceneType.SCENE_SNAKE;
+	protected void actualizaPantalla() {
+		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
+			comidaAleatoria();
+			snake.crece();
+		}
+		snake.muevete();
 	}
 
-	@Override
-	public void disposeScene() {
-		snake.dispose();
-		snake.detachSelf();
-		food.detachSelf();
-		food.dispose();
-		this.detachSelf();
-		this.dispose();
-		
-	}
 
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		
-		return mSGD.onManagedTouchEvent(pSceneTouchEvent);
-	}	
+
+	
 }
