@@ -19,16 +19,8 @@ public class ResourcesManager {
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 
-	// SplashScene gfx
 	private BitmapTextureAtlas splashTextureAtlas;
 	public ITextureRegion splash_region;
-	// Arkanoid gfx
-	private BitmapTextureAtlas ark_ballTextureAtlas;
-	public ITextureRegion ark_ball_region;
-	// Plataforma gfx. Futuros recursos del sprite platform
-	@SuppressWarnings("unused")
-	private BitmapTextureAtlas platformTextureAtlas;
-	public ITextureRegion platform_region;
 
 	public void loadMenuResources() {
 		loadMenuGraphics();
@@ -68,21 +60,11 @@ public class ResourcesManager {
 	}
 
 	private void loadGameArkanoidGraphics() {
-		// bola
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		ark_ballTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), 16, 16);
-		ark_ball_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(ark_ballTextureAtlas, activity,
-						"arkanoid/ball.png", 0, 0);
-		ark_ballTextureAtlas.load();
 
-		// plataforma textureAtlas y region pendiente
-		// muros textureAtlas y region pendiente
 	}
 
 	private void loadGameArkanoidAudio() {
-		// Audio
+
 	}
 
 	public void loadSplashScreen() {
