@@ -91,27 +91,26 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	
 	private void createMenuScene(){
-		menuChildScene = new MenuScene(camera);
-		menuChildScene.setPosition( camera.getWidth() / 2 , camera.getHeight() / 2 );
-		
+		menuChildScene = new MenuScene(camera);		
 		menuChildScene.buildAnimations();
+
+		menuChildScene.setPosition(camera.getWidth()/2 , camera.getHeight()/2 );
 		
-		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.1f, 1.2f );
+		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.1f, 1.2f);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.1f, 1);
-		final IMenuItem achivementsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.1f, 1);
+		final IMenuItem achivementsMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.2f, 1 );
 		
 		menuChildScene.addMenuItem(playMenuItem);
 		menuChildScene.addMenuItem(optionsMenuItem);
-		menuChildScene.addMenuItem(achivementsMenuItem);		
+		menuChildScene.addMenuItem(achivementsMenuItem);
+				
+		menuChildScene.setBackgroundEnabled(false);		
 		
-		menuChildScene.setBackgroundEnabled(false);
-		
-		achivementsMenuItem.setPosition(achivementsMenuItem.getX() - camera.getWidth() / 3, achivementsMenuItem.getY() );
-		playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() );
-		optionsMenuItem.setPosition(optionsMenuItem.getX() + camera.getWidth() / 3, optionsMenuItem.getY() );
+		optionsMenuItem.setPosition( optionsMenuItem.getX() - (camera.getWidth()/3), optionsMenuItem.getY() );
+		playMenuItem.setPosition( playMenuItem.getX(), playMenuItem.getY() );
+		achivementsMenuItem.setPosition( achivementsMenuItem.getX() + (camera.getWidth()/3), achivementsMenuItem.getY() );
 		
 		menuChildScene.setOnMenuItemClickListener(this);
-		
 		
 		setChildScene(menuChildScene);
 	}
