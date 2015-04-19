@@ -42,6 +42,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Archivos de Bin que dan problemas
 bin/NotACommonSnake.apk
 bin/classes.dex
 bin/resources.ap_
+
+#
