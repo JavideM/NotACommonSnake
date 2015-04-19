@@ -115,4 +115,14 @@ public class Snake extends Entity{
 		}
 	}
 	
+	public boolean suicidado()
+	{
+		for (Rectangle parte : body) {
+			if(parte.getX() == head.getX() && parte.getY() == head.getY())
+				return true;
+		}
+		return false;
+	}
+	
+	
 }
