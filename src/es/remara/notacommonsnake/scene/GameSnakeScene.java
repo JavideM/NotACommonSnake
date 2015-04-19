@@ -92,25 +92,29 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			
 			@Override
 			protected boolean onSwipeUp() {
-				snake.setDirec(Direccion.ARRIBA);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.ARRIBA))
+					snake.setDirec(Direccion.ARRIBA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeRight() {
-				snake.setDirec(Direccion.DERECHA);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.DERECHA))
+					snake.setDirec(Direccion.DERECHA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeLeft() {
-				snake.setDirec(Direccion.IZQUIERDA);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.IZQUIERDA))
+					snake.setDirec(Direccion.IZQUIERDA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeDown() {
-				snake.setDirec(Direccion.ABAJO);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.ABAJO))
+					snake.setDirec(Direccion.ABAJO);
 				return false;
 			}
 			
@@ -140,7 +144,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			comidaAleatoria();
 			snake.crece();
 		}
-		snake.muevete();
+		if(!snake.suicidado())
+			snake.muevete();
 	}
 
 
