@@ -14,6 +14,7 @@ import org.andengine.util.math.MathUtils;
 import android.os.Looper;
 
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.other.Direccion;
@@ -43,6 +44,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, 
 				camera.getWidth()/40, camera.getHeight()/24, vbom);
 		attachChild(snake);
+		
+		
 		
 		registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
 			@Override
@@ -92,25 +95,29 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			
 			@Override
 			protected boolean onSwipeUp() {
-				snake.setDirec(Direccion.ARRIBA);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.ARRIBA))
+					snake.setDirec(Direccion.ARRIBA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeRight() {
-				snake.setDirec(Direccion.DERECHA);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.DERECHA))
+					snake.setDirec(Direccion.DERECHA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeLeft() {
-				snake.setDirec(Direccion.IZQUIERDA);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.IZQUIERDA))
+					snake.setDirec(Direccion.IZQUIERDA);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeDown() {
-				snake.setDirec(Direccion.ABAJO);
+				if(snake.getDirec() != Direccion.opuesta(Direccion.ABAJO))
+					snake.setDirec(Direccion.ABAJO);
 				return false;
 			}
 			
@@ -140,7 +147,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			comidaAleatoria();
 			snake.crece();
 		}
-		snake.muevete();
+		if(!snake.suicidado())
+			snake.muevete();
 	}
 
 
