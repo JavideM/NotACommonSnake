@@ -91,6 +91,7 @@ public class SceneManager
 		switch(prescene.getSceneType()){
 			case SCENE_SNAKE:
 				gamesnakeScene.disposeScene();
+				gamesnakeScene = null;
 				//ResourcesManager.getInstance().unloadGameSnakeResources();
 				break;
 			case SCENE_IN_PROGRESS:
@@ -99,6 +100,8 @@ public class SceneManager
 			default:
 				break;
 		}
+		menuScene = new MainMenuScene();
+	    SceneManager.getInstance().setScene(menuScene);
 		
 	}
 	

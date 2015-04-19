@@ -14,6 +14,7 @@ import org.andengine.util.math.MathUtils;
 import android.os.Looper;
 
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.other.Direccion;
@@ -44,70 +45,17 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 				camera.getWidth()/40, camera.getHeight()/24, vbom);
 		attachChild(snake);
 		
+		
+		
 		registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
-					actualizaSerpiente();
+					actualizaPantalla();
 				}
 			}
 		));
 		
 		setOnSceneTouchListener(this);
-	}
-
-	private void comidaAleatoria() {
-		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
-	}
-
-	protected void actualizaSerpiente() {
-		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
-			comidaAleatoria();
-			snake.crece();
-		}
-		snake.muevete();
-	}
-
-	
-
-	private void creacontroles() {
-		Looper.prepare();
-		mSGD =  new SurfaceGestureDetector(resourcesManager.activity) {
-			
-			@Override
-			protected boolean onSwipeUp() {
-				snake.setDirec(Direccion.ARRIBA);
-				return false;
-			}
-			
-			@Override
-			protected boolean onSwipeRight() {
-				snake.setDirec(Direccion.DERECHA);
-				return false;
-			}
-			
-			@Override
-			protected boolean onSwipeLeft() {
-				snake.setDirec(Direccion.IZQUIERDA);
-				return false;
-			}
-			
-			@Override
-			protected boolean onSwipeDown() {
-				snake.setDirec(Direccion.ABAJO);
-				return false;
-			}
-			
-			@Override
-			protected boolean onSingleTap() {
-				return false;
-			}
-			
-			@Override
-			protected boolean onDoubleTap() {
-				return false;
-			}
-		};
-		mSGD.setEnabled(true);
 	}
 
 	@Override
@@ -136,4 +84,74 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		
 		return mSGD.onManagedTouchEvent(pSceneTouchEvent);
 	}	
+	
+	/*
+	 * Metodos de creación de elementos
+	 * */
+	
+	private void creacontroles() {
+		Looper.prepare();
+		mSGD =  new SurfaceGestureDetector(resourcesManager.activity) {
+			
+			@Override
+			protected boolean onSwipeUp() {
+				if(snake.getDirec() != Direccion.opuesta(Direccion.ARRIBA))
+					snake.setDirec(Direccion.ARRIBA);
+				return false;
+			}
+			
+			@Override
+			protected boolean onSwipeRight() {
+				if(snake.getDirec() != Direccion.opuesta(Direccion.DERECHA))
+					snake.setDirec(Direccion.DERECHA);
+				return false;
+			}
+			
+			@Override
+			protected boolean onSwipeLeft() {
+				if(snake.getDirec() != Direccion.opuesta(Direccion.IZQUIERDA))
+					snake.setDirec(Direccion.IZQUIERDA);
+				return false;
+			}
+			
+			@Override
+			protected boolean onSwipeDown() {
+				if(snake.getDirec() != Direccion.opuesta(Direccion.ABAJO))
+					snake.setDirec(Direccion.ABAJO);
+				return false;
+			}
+			
+			@Override
+			protected boolean onSingleTap() {
+				return false;
+			}
+			
+			@Override
+			protected boolean onDoubleTap() {
+				return false;
+			}
+		};
+		mSGD.setEnabled(true);
+	}
+	
+	/*
+	 *  Métodos 
+	 */
+	
+	private void comidaAleatoria() {
+		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
+	}
+
+	protected void actualizaPantalla() {
+		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
+			comidaAleatoria();
+			snake.crece();
+		}
+		if(!snake.suicidado())
+			snake.muevete();
+	}
+
+
+
+	
 }
