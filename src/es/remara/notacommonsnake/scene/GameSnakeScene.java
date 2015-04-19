@@ -14,6 +14,7 @@ import org.andengine.util.math.MathUtils;
 import android.os.Looper;
 
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.other.Direccion;
@@ -57,7 +58,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 
 	@Override
 	public void onBackKeyPressed() {
-		return;		
+		SceneManager.getInstance().loadMenuScene(engine, this);		
 	}
 
 	@Override
