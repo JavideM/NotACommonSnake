@@ -88,6 +88,8 @@ public class SceneManager
 	//Metodo para cargar el Menu desde otras escenas
 	public void loadMenuScene(final Engine mEngine, BaseScene prescene)
 	{
+		ResourcesManager.getInstance().loadMenuResources();
+	    setScene(menuScene);
 		switch(prescene.getSceneType()){
 			case SCENE_SNAKE:
 				gamesnakeScene.disposeScene();
@@ -100,8 +102,7 @@ public class SceneManager
 			default:
 				break;
 		}
-		menuScene = new MainMenuScene();
-	    SceneManager.getInstance().setScene(menuScene);
+		
 		
 	}
 	
@@ -126,16 +127,16 @@ public class SceneManager
 	public void createSnakeGameScene() {
 		gamesnakeScene = new GameSnakeScene();
 		SceneManager.getInstance().setScene(gamesnakeScene);
+		ResourcesManager.getInstance().unloadMenuTextures();
 		//disposeSplashScene();
 		
 	}
 	
 	// Método que crea la escena Arkanoid
-		public void createArkanoidScene(OnCreateSceneCallback pOnCreateSceneCallback) {
+		public void createArkanoidScene() {
 			ResourcesManager.getInstance().loadGameArkanoidResources();
 			arkanoidScene = new GameArkanoidScene();
 			currentScene = arkanoidScene;
-			pOnCreateSceneCallback.onCreateSceneFinished(arkanoidScene);
 		}
 
 		@SuppressWarnings("unused")
