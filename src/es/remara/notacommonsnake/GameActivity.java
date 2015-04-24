@@ -11,6 +11,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import es.remara.notacommonsnake.manager.DataManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 
@@ -23,6 +24,7 @@ public class GameActivity extends BaseGameActivity
 	private BoundCamera camera;
 	private EngineOptions engineoptions;
 	private ResourcesManager resourcesmanager;
+	private DataManager datamanager;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() 

@@ -98,9 +98,13 @@ public class SceneManager
 				gamesnakeScene = null;
 				//ResourcesManager.getInstance().unloadGameSnakeResources();
 				break;
+			case SCENE_ARKANOID:
+				arkanoidScene.disposeScene();
+				arkanoidScene = null;
+				break;
 			case SCENE_IN_PROGRESS:
 				disposeWorkInProgress();
-				break;
+				break;	
 			default:
 				break;
 		}
