@@ -133,16 +133,16 @@ public class SceneManager
 	}
 	
 	// Método que crea la escena Arkanoid
-		public void createArkanoidScene() {
-			ResourcesManager.getInstance().loadGameArkanoidResources();
-			arkanoidScene = new GameArkanoidScene();
-			currentScene = arkanoidScene;
-		}
+	public void createArkanoidScene() {
+		ResourcesManager.getInstance().loadGameArkanoidResources();
+		arkanoidScene = new GameArkanoidScene();
+		currentScene = arkanoidScene;
+	}
 
-		@SuppressWarnings("unused")
-		private void disposeArkanoidScene() {
-			// Aun por implementar
-		}
+	@SuppressWarnings("unused")
+	private void disposeArkanoidScene() {
+		// Aun por implementar
+	}
 	
 	// Metodo crea una escena WorkInProgress
 	public void createWorkInProgress()
