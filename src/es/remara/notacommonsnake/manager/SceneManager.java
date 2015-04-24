@@ -1,6 +1,7 @@
 package es.remara.notacommonsnake.manager;
 
 import org.andengine.engine.Engine;
+import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import es.remara.notacommonsnake.manager.ResourcesManager;
@@ -89,6 +90,7 @@ public class SceneManager
 	public void loadMenuScene(final Engine mEngine, BaseScene prescene)
 	{
 		ResourcesManager.getInstance().loadMenuResources();
+		menuScene = new MainMenuScene();
 	    setScene(menuScene);
 		switch(prescene.getSceneType()){
 			case SCENE_SNAKE:
@@ -133,16 +135,18 @@ public class SceneManager
 	}
 	
 	// Método que crea la escena Arkanoid
-		public void createArkanoidScene() {
-			ResourcesManager.getInstance().loadGameArkanoidResources();
-			arkanoidScene = new GameArkanoidScene();
-			currentScene = arkanoidScene;
-		}
+	public void createArkanoidScene() {
+		ResourcesManager.getInstance().loadGameArkanoidResources();
+		arkanoidScene = new GameArkanoidScene();
+		currentScene = arkanoidScene;
+		SceneManager.getInstance().setScene(arkanoidScene);
+		ResourcesManager.getInstance().unloadMenuTextures();
+	}
 
-		@SuppressWarnings("unused")
-		private void disposeArkanoidScene() {
-			// Aun por implementar
-		}
+	@SuppressWarnings("unused")
+	private void disposeArkanoidScene() {
+		// Aun por implementar
+	}
 	
 	// Metodo crea una escena WorkInProgress
 	public void createWorkInProgress()
