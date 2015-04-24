@@ -131,6 +131,7 @@ public class SceneManager
 
 	//Metodo crea el juego
 	public void createSnakeGameScene() {
+		ResourcesManager.getInstance().loadGameSnakeResources();
 		gamesnakeScene = new GameSnakeScene();
 		SceneManager.getInstance().setScene(gamesnakeScene);
 		ResourcesManager.getInstance().unloadMenuTextures();

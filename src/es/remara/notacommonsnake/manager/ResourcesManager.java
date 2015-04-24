@@ -58,7 +58,7 @@ public class ResourcesManager
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	private BitmapTextureAtlas wipTextureAtlas;
 	private BitmapTextureAtlas ark_ballTextureAtlas;
-	private BitmapTextureAtlas snakeTextureAtlas;
+	private BuildableBitmapTextureAtlas snakeTextureAtlas;
 
 	
 //---------------------------------------------
@@ -72,7 +72,7 @@ public void loadMenuResources()
         loadMenuFonts();
     }
     
-    public void loadGameResources()
+    public void loadGameSnakeResources()
     {
         loadGameSnakeGraphics();
         loadGameSnakeFonts();
@@ -133,28 +133,36 @@ public void loadMenuResources()
 
     private void loadGameSnakeGraphics()
     {
-        
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		snakeTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
+		background_grass_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "background/grass.png");
+		food_X2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_aqua.png");
+		food_AUG_SPEED_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_black.png");
+		food_REDUC_SPEED_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_blue.png");
+		food_CHG_GAME_MODE_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_green.png");
+		food_GHOST_MODE_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_pink.png");
+		food_SUPER_GROW_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_red.png");
+		food_INV_CONTROLS_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_yellow.png");
+		food_NORMAL_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_lsd.png");
+		snake_body_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_body.png");
+		snake_head_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_head.png");
+		snake_tail_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_tail.png");
+		snake_corner_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_corner.png");
+		wall_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/wall.png");
+		try 
+    	{
+			this.snakeTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+			this.snakeTextureAtlas.load();
+		} 
+    	catch (final TextureAtlasBuilderException e)
+    	{
+			Debug.e(e);
+		}
     }
     
     private void loadGameSnakeFonts()
     {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		snakeTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
-		background_grass_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "backgraound/grass.png", 0, 0);
-		food_X2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_aqua.png", 0, 0);
-		food_AUG_SPEED_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_black.png", 0, 0);
-		food_REDUC_SPEED_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_blue.png", 0, 0);
-		food_CHG_GAME_MODE_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_green.png", 0, 0);
-		food_GHOST_MODE_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_pink.png", 0, 0);
-		food_SUPER_GROW_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_red.png", 0, 0);
-		food_INV_CONTROLS_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_yellow.png", 0, 0);
-		food_NORMAL_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/food_lsd.png", 0, 0);
-		snake_body_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_body.png", 0, 0);
-		snake_head_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_head.png", 0, 0);
-		snake_tail_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_tail.png", 0, 0);
-		snake_corner_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/snake_corner.png", 0, 0);
-		wall_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(snakeTextureAtlas, activity, "snake/wall.png", 0, 0);
-		snakeTextureAtlas.load();
+		
     }
     
     private void loadGameSnakeAudio()

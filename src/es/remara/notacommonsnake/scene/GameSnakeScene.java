@@ -6,6 +6,7 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.SurfaceGestureDetector;
 import org.andengine.util.adt.color.Color;
@@ -31,16 +32,25 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	@Override
 	public void createScene() {
 		creacontroles();
-
-		setBackground(new Background(Color.GREEN));
+		
+		//Background
+		attachChild(new Sprite(camera.getWidth()/2, camera.getHeight()/2,resourcesManager.background_grass_region, vbom));
 		
 		//Comida
-		food = new Food(vbom);
+		food = new Food(resourcesManager.food_AUG_SPEED_region, vbom);
 		attachChild(food);
 
 		//Serpiente
-		snake = new Snake( camera.getWidth()/16, camera.getHeight()*25/48, 
-				camera.getWidth()/40, camera.getHeight()/24, 0.3f, vbom);
+//		snake = new Snake( camera.getWidth()/16, camera.getHeight()*25/48, 
+//				camera.getWidth()/40, camera.getHeight()/24, 0.3f, vbom);
+//		attachChild(snake);
+		
+		//Snake Sprites
+		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, camera.getWidth()/40, camera.getHeight()/24, 
+				resourcesManager.snake_body_region, 
+				resourcesManager.snake_head_region, 
+				resourcesManager.snake_tail_region, 
+				0.3f, vbom);
 		attachChild(snake);
 		
 		registerUpdateHandler(new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
