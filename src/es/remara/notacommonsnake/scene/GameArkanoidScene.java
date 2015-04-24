@@ -16,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import es.remara.notacommonsnake.base.BaseScene;
-import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 
 public class GameArkanoidScene extends BaseScene implements
@@ -42,15 +41,13 @@ public class GameArkanoidScene extends BaseScene implements
 	public void createScene() {
 		setBackground(new Background(0, 100, 200));
 		arkanoidPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
-		SceneManager.getInstance().getCurrentScene()
-				.registerUpdateHandler(arkanoidPhysicsWorld);
+		//registerUpdateHandler(arkanoidPhysicsWorld);
 		createFixtures();
 		createWallSprites();
 		createWallBodies();
 		createBallSprite();
 		createPlatformSprite();
 		setPhysicsConnectors();
-
 	}
 
 	private void createFixtures() {
@@ -82,16 +79,17 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	private void createWallSprites() {
+		rectangles = new Rectangle[4];
 		rectangles[0] = new Rectangle(camera.getWidth() / 2,
 				camera.getHeight() - 3, camera.getWidth(), 6,
-				engine.getVertexBufferObjectManager());
+				vbom);
 		rectangles[1] = new Rectangle(camera.getWidth() / 2, 0,
-				camera.getWidth(), 12, engine.getVertexBufferObjectManager());
+				camera.getWidth(), 12, vbom);
 		rectangles[2] = new Rectangle(camera.getWidth() - 3,
 				camera.getHeight() / 2, 6, camera.getHeight(),
-				engine.getVertexBufferObjectManager());
+				vbom);
 		rectangles[3] = new Rectangle(0, camera.getHeight() / 2, 12,
-				camera.getHeight(), engine.getVertexBufferObjectManager());
+				camera.getHeight(), vbom);
 	}
 
 	private void createWallBodies() {
@@ -117,10 +115,12 @@ public class GameArkanoidScene extends BaseScene implements
 	public void disposeScene() {
 		arkanoidPhysicsWorld.clearForces();
 		arkanoidPhysicsWorld.destroyBody(wall_body);
-
+		arkanoidPhysicsWorld.destroyBody(platformBody);
+		arkanoidPhysicsWorld.destroyBody(ballBody);
 		platform.detachSelf();
 		platform.dispose();
-		SceneManager.getInstance().getCurrentScene().detachSelf();
+		this.dispose();
+		this.detachSelf();
 	}
 
 	@Override
@@ -158,7 +158,6 @@ public class GameArkanoidScene extends BaseScene implements
 										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
 								0.0f);
 			}
-
 		}
 		return false;
 	}
