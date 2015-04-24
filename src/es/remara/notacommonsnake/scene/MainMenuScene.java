@@ -8,6 +8,7 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.util.adt.color.Color;
 
+
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -70,6 +71,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 				SceneManager.getInstance().createSnakeGameScene();
 				return true;
 			case MENU_OPTIONS:
+				SceneManager.getInstance().createArkanoidScene();
 				return true;
 			default:
 				return false;
