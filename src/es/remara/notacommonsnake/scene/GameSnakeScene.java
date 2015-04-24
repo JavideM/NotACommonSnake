@@ -33,7 +33,6 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 
 		
 		setBackground(new Background(Color.GREEN));
-		
 		//Comida
 		food = new Rectangle(10, 10, 16, 16, vbom);
 		food.setColor(Color.BLACK);
