@@ -52,3 +52,4 @@ project.properties
 
 # Clases compiladas en Bin
 bin/classes/*
+*.class
