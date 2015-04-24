@@ -46,5 +46,6 @@ Temporary Items
 bin/NotACommonSnake.apk
 bin/classes.dex
 bin/resources.ap_
-
+.gitignore
+project.properties
 #
