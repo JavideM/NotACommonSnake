@@ -136,8 +136,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 
 	protected void actualizaPantalla() {
 		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
-			food.setRandomPosition();
 			snake.come(food);
+			food.setRandom();
 		}
 		if(!snake.suicidado())
 			snake.muevete();
