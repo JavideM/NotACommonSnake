@@ -27,7 +27,7 @@ public class Food extends Rectangle{
 	private FoodType type;
 	
 	public Food(VertexBufferObjectManager vbom){
-		super(0,0,16,16, vbom);
+		super(10,10,16,16, vbom);
 		setColor(Color.BLACK);
 		
 		setRandomPosition();
@@ -45,5 +45,6 @@ public class Food extends Rectangle{
 	public void setRandomPosition() {
 		setY(MathUtils.random(1, 38)*20 + 10);
 		setX(MathUtils.random(1, 22)*20 + 10);
+
 	}
 }
