@@ -50,4 +50,7 @@ bin/resources.ap_
 # Project propeties
 project.properties
 
-#
+# Clases compiladas en Bin
+bin/*
+*.class
+=======
