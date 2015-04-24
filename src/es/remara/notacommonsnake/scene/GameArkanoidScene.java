@@ -23,7 +23,7 @@ public class GameArkanoidScene extends BaseScene implements
 		IOnSceneTouchListener {
 
 	// Provisional. Se cambiara por sprites (supongo...)
-	private Rectangle[] rectangles;
+	private Rectangle[] walls;
 
 	private Body wall_body;
 
@@ -49,7 +49,16 @@ public class GameArkanoidScene extends BaseScene implements
 		createBallSprite();
 		createPlatformSprite();
 		setPhysicsConnectors();
+		attachChilds();
+		this.setOnSceneTouchListener(this);
+	}
 
+	private void attachChilds() {
+		this.attachChild(ballSprite);
+		this.attachChild(platform);
+		for (int i = 0; i < walls.length; i++) {
+			this.attachChild(walls[i]);
+		}
 	}
 
 	private void createFixtures() {
@@ -63,6 +72,7 @@ public class GameArkanoidScene extends BaseScene implements
 				engine.getVertexBufferObjectManager());
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
+		ballBody.setLinearVelocity(15.0f, 15.0f);
 	}
 
 	// Se cambiara por sprite (plataforma)
@@ -81,30 +91,28 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	private void createWallSprites() {
-		rectangles = new Rectangle[4];
-		rectangles[0] = new Rectangle(camera.getWidth() / 2,
-				camera.getHeight() - 3, camera.getWidth(), 6,
-				vbom);
-		rectangles[1] = new Rectangle(camera.getWidth() / 2, 0,
-				camera.getWidth(), 12, vbom);
-		rectangles[2] = new Rectangle(camera.getWidth() - 3,
-				camera.getHeight() / 2, 6, camera.getHeight(),
-				vbom);
-		rectangles[3] = new Rectangle(0, camera.getHeight() / 2, 12,
+		walls = new Rectangle[4];
+		walls[0] = new Rectangle(camera.getWidth() / 2, camera.getHeight() - 3,
+				camera.getWidth(), 6, vbom);
+		walls[1] = new Rectangle(camera.getWidth() / 2, 0, camera.getWidth(),
+				12, vbom);
+		walls[2] = new Rectangle(camera.getWidth() - 3, camera.getHeight() / 2,
+				6, camera.getHeight(), vbom);
+		walls[3] = new Rectangle(0, camera.getHeight() / 2, 12,
 				camera.getHeight(), vbom);
 	}
 
 	private void createWallBodies() {
 		// Muros
-		for (int i = 0; i < rectangles.length; i++) {
+		for (int i = 0; i < walls.length; i++) {
 			wall_body = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld,
-					rectangles[i], BodyType.StaticBody, wallPlatFix);
+					walls[i], BodyType.StaticBody, wallPlatFix);
 		}
 	}
 
 	@Override
 	public void onBackKeyPressed() {
-		// TODO Auto-generated method stub
+		SceneManager.getInstance().loadMenuScene(engine, this);
 	}
 
 	@Override
@@ -117,10 +125,17 @@ public class GameArkanoidScene extends BaseScene implements
 	public void disposeScene() {
 		arkanoidPhysicsWorld.clearForces();
 		arkanoidPhysicsWorld.destroyBody(wall_body);
-
-		platform.detachSelf();
+		arkanoidPhysicsWorld.destroyBody(platformBody);
+		arkanoidPhysicsWorld.destroyBody(ballBody);
+		this.detachChild(platform);
+		this.detachChild(ballSprite);
+		for (int i = 0; i < walls.length; i++) {
+			this.detachChild(walls[i]);
+			walls[i].dispose();
+		}
 		platform.dispose();
 		this.detachSelf();
+		this.dispose();
 	}
 
 	@Override
