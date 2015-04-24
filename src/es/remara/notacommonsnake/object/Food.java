@@ -3,11 +3,13 @@ package es.remara.notacommonsnake.object;
 import java.util.Random;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathUtils;
 
-public class Food extends Rectangle{
+public class Food extends Sprite{
 	
 
 
@@ -29,10 +31,8 @@ public class Food extends Rectangle{
 	
 	private FoodType type;
 	
-	public Food(VertexBufferObjectManager vbom){
-		super(10,10,16,16, vbom);
-		setColor(Color.BLACK);
-		
+	public Food(ITextureRegion texture, VertexBufferObjectManager vbom){
+		super(10,10,texture, vbom);
 		setRandomPosition();
 		setRandomType();
 	}
@@ -45,25 +45,18 @@ public class Food extends Rectangle{
 		this.type = FoodType.getRandom();
 		switch(this.type){
 			case AUG_SPEED:
-				setColor(Color.WHITE);
 				break;
 			case CHG_GAME_MODE:
-				setColor(Color.BLACK);
 				break;
 			case GHOST_MODE:
-				setColor(Color.BLACK);
 				break;
 			case INV_CONTROLS:
-				setColor(Color.CYAN);
 				break;
 			case REDUC_SPEED:
-				setColor(Color.WHITE);
 				break;
 			case SUPER_GROW:
-				setColor(Color.RED);
 				break;
 			case X2:
-				setColor(Color.BLACK);
 				break;
 			default:
 				break; 
