@@ -16,12 +16,13 @@ import android.os.Looper;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
+import es.remara.notacommonsnake.object.Food;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.other.Direccion;
 
 public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	
-	private Rectangle food;
+	private Food food;
 	private Snake snake;
 	
  	private SurfaceGestureDetector mSGD;
@@ -31,20 +32,18 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	public void createScene() {
 		creacontroles();
 
-		
 		setBackground(new Background(Color.GREEN));
-		//Comida
-		food = new Rectangle(10, 10, 16, 16, vbom);
-		food.setColor(Color.BLACK);
-		attachChild(food);
-		comidaAleatoria();
 		
+		//Comida
+		food = new Food(vbom);
+		attachChild(food);
+
 		//Serpiente
-		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, 
-				camera.getWidth()/40, camera.getHeight()/24, vbom);
+		snake = new Snake( camera.getWidth()/16, camera.getHeight()*25/48, 
+				camera.getWidth()/40, camera.getHeight()/24, 0.3f, vbom);
 		attachChild(snake);
 		
-		registerUpdateHandler(new TimerHandler(0.3f, true, new ITimerCallback() {
+		registerUpdateHandler(new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
 					actualizaPantalla();
@@ -134,15 +133,11 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	/*
 	 *  Métodos 
 	 */
-	
-	private void comidaAleatoria() {
-		food.setPosition(MathUtils.random(1, 38)*20 + 10, MathUtils.random(1, 22)*20 + 10);	
-	}
 
 	protected void actualizaPantalla() {
 		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
-			comidaAleatoria();
-			snake.crece();
+			food.setRandomPosition();
+			snake.come(food);
 		}
 		if(!snake.suicidado())
 			snake.muevete();
