@@ -81,6 +81,7 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	private void createWallSprites() {
+		rectangles = new Rectangle[4];
 		rectangles[0] = new Rectangle(camera.getWidth() / 2,
 				camera.getHeight() - 3, camera.getWidth(), 6,
 				vbom);
