@@ -52,4 +52,7 @@ project.properties
 
 # Clases compiladas en Bin
 bin/classes/*
+<<<<<<< HEAD
 *.class
+=======
+>>>>>>> 3f1c9cf1361bf3242a33919d0da2184c0f2e1b7f
