@@ -14,21 +14,46 @@ import es.remara.notacommonsnake.other.Direccion;
 
 public class Snake extends Entity{
 	
+	private VertexBufferObjectManager vbom;
 	
+	/*
+	 * Snake body
+	 */
 	private Rectangle head;
 	private LinkedList<Rectangle> body = new LinkedList<Rectangle>();
+	
+	/*
+	 * Snake atributes
+	 */
 	private Direccion direc;
+	private float speed;
+	
+	private float initial_speed;
+	
+	/*
+	 * Snake states
+	 */
+	private boolean ghost_mode;
+	private boolean drunk;
+	
+	/*
+	 * Snake dimensions
+	 */
 	private float ancho;
 	private float largo;
-	private VertexBufferObjectManager vbom;
+		
 
-	public Snake(float pX, float pY, float pWidth, float pHeight,
+	public Snake(float pX, float pY, float pWidth, float pHeight, float speed,
 			VertexBufferObjectManager vbom) {
 		super();
 		
 		this.direc = Direccion.DERECHA;
 		this.ancho = pWidth;
 		this.largo = pHeight;
+		this.speed = speed;
+		this.initial_speed = speed;
+		this.ghost_mode = false;
+		this.drunk = false;
 		
 		this.head = new Rectangle(pX, pY, pWidth, pHeight, vbom);
 		head.setColor(Color.RED);
@@ -40,7 +65,9 @@ public class Snake extends Entity{
 		attachChild(cola);
 	}
 	
-	//Constructor con texturas
+	/*
+	 * Constructor con texturas
+	 */
 	public Snake(float pX, float pY, float pWidth, float pHeight,
 			ITextureRegion pTexturaCuerpo, ITextureRegion pTexturaCabeza, ITextureRegion pTexturaCola,
 			VertexBufferObjectManager vbom) {
@@ -60,6 +87,11 @@ public class Snake extends Entity{
 		attachChild(cola);
 	}
 
+	public float getSpeed()
+	{
+		return this.speed;
+	}
+	
 	public Direccion getDirec() {
 		return direc;
 	}
@@ -73,6 +105,10 @@ public class Snake extends Entity{
 		return head;
 	}
 	
+	public boolean is_ghost_mode(){
+		return this.ghost_mode;
+	}
+	
 	//Añade secciones de cuerpo a la serpiente
 	public void crece() {
 		Rectangle colanuevaRectangle = new Rectangle(body.getFirst().getX(), body.getFirst().getY(), 
@@ -82,12 +118,52 @@ public class Snake extends Entity{
 		body.addFirst(colanuevaRectangle);
 	}
 
+	public void come(Food food)
+	{
+		set_default_states();
+		crece();
+		switch(food.getType()){
+			case AUG_SPEED:
+				this.speed = this.speed * 2;
+				break;
+			case CHG_GAME_MODE:
+				break;
+			case GHOST_MODE:
+				this.ghost_mode = true;
+				break;
+			case INV_CONTROLS:
+				this.drunk = true;
+				break;
+			case REDUC_SPEED:
+				this.speed = this.speed/2;
+				break;
+			case SUPER_GROW:
+				crece();
+				break;
+			case X2:
+				break;
+			default:
+				break;
+		}
+	}
+	
+	private void set_default_states()
+	{
+		this.speed = this.initial_speed;
+		this.ghost_mode = false;
+		this.drunk = false;
+	}
+	
 	public void muevete()
 	{
 		Rectangle cola = body.removeLast();
 		cola.setPosition(head);
 		body.addFirst(cola);
-		switch(direc){
+		Direccion direccion;
+		if(drunk)  direccion = Direccion.opuesta(this.direc);
+		else direccion = this.direc;
+		
+		switch(direccion){
 			case ARRIBA:
 				if(head.getY() < ResourcesManager.getInstance().camera.getHeight() - largo/2)
 					head.setPosition(head.getX(), head.getY() + largo);
