@@ -1,5 +1,7 @@
 package es.remara.notacommonsnake.object;
 
+import java.util.Random;
+
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
@@ -16,10 +18,11 @@ public class Food extends Rectangle{
 		CHG_GAME_MODE,
 		GHOST_MODE,
 		SUPER_GROW,
-		INV_CONTROLS;
-		
+		INV_CONTROLS,
+		NORMAL;
 	    public static FoodType getRandom() {
-	        return values()[(int) (Math.random() * values().length)];
+			Random random = new Random();
+	        return values()[random.nextInt(values().length)];
 	    }
 		
 	}
@@ -38,13 +41,44 @@ public class Food extends Rectangle{
 		return type;
 	}
 
-	public void setRandomType() {
+	private void setRandomType() {
 		this.type = FoodType.getRandom();
+		switch(this.type){
+			case AUG_SPEED:
+				setColor(Color.WHITE);
+				break;
+			case CHG_GAME_MODE:
+				setColor(Color.BLACK);
+				break;
+			case GHOST_MODE:
+				setColor(Color.BLACK);
+				break;
+			case INV_CONTROLS:
+				setColor(Color.CYAN);
+				break;
+			case REDUC_SPEED:
+				setColor(Color.WHITE);
+				break;
+			case SUPER_GROW:
+				setColor(Color.RED);
+				break;
+			case X2:
+				setColor(Color.BLACK);
+				break;
+			default:
+				break; 
+		
+		}
 	}
 
-	public void setRandomPosition() {
-		setY(MathUtils.random(1, 38)*20 + 10);
-		setX(MathUtils.random(1, 22)*20 + 10);
-
+	private void setRandomPosition() {
+		setX(MathUtils.random(1, 38)*20 + 10);
+		setY(MathUtils.random(1, 22)*20 + 10);
 	}
+	
+	public void setRandom(){
+		setRandomPosition();
+		setRandomType();
+	}
+	
 }

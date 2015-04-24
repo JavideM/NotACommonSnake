@@ -97,7 +97,7 @@ public class Snake extends Entity{
 	}
 
 	public void setDirec(Direccion direc) {
-		if(direc != Direccion.opuesta(direc))
+		if(direc != this.direc)
 			{
 				this.direc = drunk? Direccion.opuesta(direc): direc;
 			}
@@ -186,7 +186,7 @@ public class Snake extends Entity{
 					head.setPosition(head.getX() - ancho, head.getY() );
 				else
 					head.setPosition(ResourcesManager.getInstance().camera.getWidth() - ancho/2, head.getY() );
-				break;
+				break; 
 		}
 	}
 	
