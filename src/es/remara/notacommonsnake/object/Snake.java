@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
@@ -19,8 +20,8 @@ public class Snake extends Entity{
 	/*
 	 * Snake body
 	 */
-	private Rectangle head;
-	private LinkedList<Rectangle> body = new LinkedList<Rectangle>();
+	private Entity head;
+	private LinkedList<Entity> body = new LinkedList<Entity>();
 	
 	/*
 	 * Snake atributes
@@ -41,6 +42,13 @@ public class Snake extends Entity{
 	 */
 	private float ancho;
 	private float largo;
+
+	/*
+	 * Snake Textures
+	 */
+	private ITextureRegion text_head;
+	private ITextureRegion text_body;
+	private ITextureRegion text_tail;
 		
 
 	public Snake(float pX, float pY, float pWidth, float pHeight, float speed,
@@ -69,22 +77,33 @@ public class Snake extends Entity{
 	 * Constructor con texturas
 	 */
 	public Snake(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTexturaCuerpo, ITextureRegion pTexturaCabeza, ITextureRegion pTexturaCola,
+			ITextureRegion pTexturaCuerpo, ITextureRegion pTexturaCabeza, ITextureRegion pTexturaCola, float speed,
 			VertexBufferObjectManager vbom) {
 		super();
 		
 		this.direc = Direccion.DERECHA;
 		this.ancho = pWidth;
 		this.largo = pHeight;
+		this.speed = speed;
+		this.initial_speed = speed;
+		this.ghost_mode = false;
+		this.drunk = false;
 		
-		this.head = new Rectangle(pX, pY, pWidth, pHeight, vbom);
-		head.setColor(Color.RED);
+		this.text_head = pTexturaCabeza;
+		this.text_body = pTexturaCuerpo;
+		this.text_tail = pTexturaCola;
+		
+		
+		this.head = new Sprite(pX, pY, this.text_head, vbom);
 		attachChild(head);
 		
-		Rectangle cola = new Rectangle(pX - pWidth, pY, pWidth, pHeight, vbom);
-		cola.setColor(Color.BLUE);
+		Entity cola = new Sprite(pX - pWidth, pY, pWidth, pHeight, this.text_tail, vbom);
 		body.addFirst(cola);
 		attachChild(cola);
+		
+		Entity body_part = new Sprite(pX - pWidth, pY, pWidth, pHeight, this.text_body, vbom);
+		body.addFirst(body_part);
+		attachChild(body_part);
 	}
 
 	public float getSpeed()
@@ -97,11 +116,22 @@ public class Snake extends Entity{
 	}
 
 	public void setDirec(Direccion direc) {
-		if(direc != Direccion.opuesta(direc))
-			this.direc = direc;
+		Direccion new_direc;
+		if(direc != this.direc)
+		{
+			new_direc = drunk? Direccion.opuesta(direc): direc;
+			if(Direccion.relative_left(direc) == this.direc){
+				head.setRotation(head.getRotation() + 90.0f);
+			}
+			if(Direccion.relative_right(direc) == this.direc){
+				head.setRotation(head.getRotation() - 90.0f);
+			}
+			this.direc = new_direc;
+		}
+	
 	}
 	
-	public Rectangle getHead() {
+	public Entity getHead() {
 		return head;
 	}
 	
@@ -111,11 +141,10 @@ public class Snake extends Entity{
 	
 	//Añade secciones de cuerpo a la serpiente
 	public void crece() {
-		Rectangle colanuevaRectangle = new Rectangle(body.getFirst().getX(), body.getFirst().getY(), 
-				ancho, largo, vbom);
-		colanuevaRectangle.setColor(Color.BLUE);
-		attachChild(colanuevaRectangle);
-		body.addFirst(colanuevaRectangle);
+		Sprite colanueva = new Sprite(body.getFirst().getX(), body.getFirst().getY(), 
+				this.text_body, vbom);
+		attachChild(colanueva);
+		body.addFirst(colanueva);
 	}
 
 	public void come(Food food)
@@ -156,14 +185,17 @@ public class Snake extends Entity{
 	
 	public void muevete()
 	{
-		Rectangle cola = body.removeLast();
-		cola.setPosition(head);
-		body.addFirst(cola);
-		Direccion direccion;
-		if(drunk)  direccion = Direccion.opuesta(this.direc);
-		else direccion = this.direc;
+		Entity new_tail = body.removeLast();
+		Entity new_body_part = body.removeLast();
+		new_tail.setPosition(new_body_part);
+		new_tail.setRotation(new_body_part.getRotation());
+		new_body_part.setPosition(head);
+		new_body_part.setRotation(head.getRotation());
+
+		body.addLast(new_tail);
+		body.addFirst(new_body_part);
 		
-		switch(direccion){
+		switch(this.direc){
 			case ARRIBA:
 				if(head.getY() < ResourcesManager.getInstance().camera.getHeight() - largo/2)
 					head.setPosition(head.getX(), head.getY() + largo);
@@ -187,13 +219,13 @@ public class Snake extends Entity{
 					head.setPosition(head.getX() - ancho, head.getY() );
 				else
 					head.setPosition(ResourcesManager.getInstance().camera.getWidth() - ancho/2, head.getY() );
-				break;
+				break; 
 		}
 	}
 	
 	public boolean suicidado()
 	{
-		for (Rectangle parte : body) {
+		for (Entity parte : body) {
 			if(parte.getX() == head.getX() && parte.getY() == head.getY())
 				return true;
 		}
