@@ -12,15 +12,21 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactFilter;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 
 public class GameArkanoidScene extends BaseScene implements
-		IOnSceneTouchListener {
+		IOnSceneTouchListener, ContactListener, ContactFilter {
 
 	// Provisional. Se cambiara por sprites (supongo...)
 	private Rectangle[] walls;
@@ -29,7 +35,7 @@ public class GameArkanoidScene extends BaseScene implements
 
 	private Rectangle platform;
 
-	private FixtureDef wallPlatFix, ballFix;
+	private FixtureDef wallFix, ballFix, platFix;
 
 	private Body platformBody, ballBody;
 
@@ -51,6 +57,7 @@ public class GameArkanoidScene extends BaseScene implements
 		setPhysicsConnectors();
 		attachChilds();
 		this.setOnSceneTouchListener(this);
+		arkanoidPhysicsWorld.setContactListener(this);
 	}
 
 	private void attachChilds() {
@@ -62,7 +69,8 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	private void createFixtures() {
-		wallPlatFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
+		wallFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
+		platFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		ballFix = PhysicsFactory.createFixtureDef(10.0f, 1.0f, 0.0f);
 	}
 
@@ -72,7 +80,8 @@ public class GameArkanoidScene extends BaseScene implements
 				engine.getVertexBufferObjectManager());
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
-		ballBody.setLinearVelocity(15.0f, 15.0f);
+		ballBody.setLinearVelocity(1.5f, 1.5f);
+		ballBody.setUserData("Ball");
 	}
 
 	// Se cambiara por sprite (plataforma)
@@ -80,7 +89,8 @@ public class GameArkanoidScene extends BaseScene implements
 		platform = new Rectangle(camera.getHeight() / 2, 60, 64, 12,
 				engine.getVertexBufferObjectManager());
 		platformBody = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld,
-				platform, BodyType.KinematicBody, wallPlatFix);
+				platform, BodyType.KinematicBody, platFix);
+		platformBody.setUserData("Platform");
 	}
 
 	private void setPhysicsConnectors() {
@@ -106,7 +116,8 @@ public class GameArkanoidScene extends BaseScene implements
 		// Muros
 		for (int i = 0; i < walls.length; i++) {
 			wall_body = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld,
-					walls[i], BodyType.StaticBody, wallPlatFix);
+					walls[i], BodyType.StaticBody, wallFix);
+			wall_body.setUserData("Wall");
 		}
 	}
 
@@ -175,6 +186,40 @@ public class GameArkanoidScene extends BaseScene implements
 			}
 
 		}
+		return false;
+	}
+
+	@Override
+	public void beginContact(Contact contact) {
+		Vector2[] contactPoints = contact.getWorldManifold().getPoints();
+		if (contact.getFixtureA().getBody().getUserData().toString()
+				.equals("Platform")) {
+			
+		}
+
+	}
+
+	@Override
+	public void endContact(Contact contact) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+		System.out.println(fixtureA.getBody().getUserData().toString());
 		return false;
 	}
 }
