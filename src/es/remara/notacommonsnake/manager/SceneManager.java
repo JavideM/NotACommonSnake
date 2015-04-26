@@ -159,7 +159,6 @@ public class SceneManager
 		ResourcesManager.getInstance().loadWorkInProgressScreen();
 		workInProgressScene = new WorkInProgressScene();
 		SceneManager.getInstance().setScene(workInProgressScene);
-		disposeSplashScene();
 	}
 	
 	private void disposeWorkInProgress()
