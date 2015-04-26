@@ -41,6 +41,10 @@ public class GameArkanoidScene extends BaseScene implements
 
 	private PhysicsWorld arkanoidPhysicsWorld;
 
+	private Boolean noIniciado = true;
+
+	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
+
 	@SuppressWarnings("unused")
 	private Sprite platformSprite, ballSprite;
 
@@ -80,7 +84,7 @@ public class GameArkanoidScene extends BaseScene implements
 				engine.getVertexBufferObjectManager());
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
-		ballBody.setLinearVelocity(1.5f, 1.5f);
+		ballBody.setLinearVelocity(7.0f, 7.0f);
 		ballBody.setUserData("Ball");
 	}
 
@@ -158,31 +162,17 @@ public class GameArkanoidScene extends BaseScene implements
 			if (pSceneTouchEvent.isActionUp()) {
 
 			} else {
-				platformBody
-						.setTransform(
-								pSceneTouchEvent.getX()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								platform.getY()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								0.0f);
+				platformBody.setTransform(pSceneTouchEvent.getX() / pmr,
+						platform.getY() / pmr, 0.0f);
 			}
 		} else {
 			if (pSceneTouchEvent.getX() < (10 + platform.getWidth() / 2)) {
-				platformBody
-						.setTransform(
-								(10 + platform.getWidth() / 2)
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								platform.getY()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								0.0f);
+				platformBody.setTransform((10 + platform.getWidth() / 2) / pmr,
+						platform.getY() / pmr, 0.0f);
 			} else {
-				platformBody
-						.setTransform(
-								(camera.getWidth() - (10 + platform.getWidth() / 2))
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								platform.getY()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								0.0f);
+				platformBody.setTransform(
+						(camera.getWidth() - (10 + platform.getWidth() / 2))
+								/ pmr, platform.getY() / pmr, 0.0f);
 			}
 
 		}
@@ -194,7 +184,19 @@ public class GameArkanoidScene extends BaseScene implements
 		Vector2[] contactPoints = contact.getWorldManifold().getPoints();
 		if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("Platform")) {
-			
+			float speedMagnitude1 = ballBody.getLinearVelocity().len();
+			float xCom = (contactPoints[0].x - platformBody.getPosition().x)
+					/ ((platform.getWidth() / 2) / pmr);
+			if (xCom < 1 && xCom > -1) {
+				float yCom = (float) (Math.sqrt(1 - (xCom * xCom)));
+				Vector2 normVector = new Vector2(xCom, yCom);
+				ballBody.setLinearVelocity(normVector.mul(speedMagnitude1));
+				System.out.println("x: " + contactPoints[0].x * pmr + " || y:"
+						+ contactPoints[0].y * pmr + " || " + xCom + " : "
+						+ yCom);
+				System.out.println(platformBody.getPosition().x * pmr + " "
+						+ (platform.getWidth() / 2) / pmr);
+			}
 		}
 
 	}
