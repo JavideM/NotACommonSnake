@@ -2,6 +2,7 @@ package es.remara.notacommonsnake.manager;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -13,6 +14,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import es.remara.notacommonsnake.GameActivity;
 
 public class ResourcesManager 
@@ -25,6 +28,7 @@ public class ResourcesManager
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	
+	public Font font;
 	
 //---------------------------------------------
 // TEXTURES & TEXTURE REGIONS
@@ -35,6 +39,8 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
+	public ITextureRegion achivements_region;
+	
 	public ITextureRegion wip_region; 
 	public ITextureRegion ark_ball_region;
 	public ITextureRegion background_grass_region;
@@ -59,6 +65,7 @@ public class ResourcesManager
 	private BitmapTextureAtlas wipTextureAtlas;
 	private BitmapTextureAtlas ark_ballTextureAtlas;
 	private BuildableBitmapTextureAtlas snakeTextureAtlas;
+    private BitmapTextureAtlas mFontTexture;
 
 	
 //---------------------------------------------
@@ -110,7 +117,8 @@ public void loadMenuResources()
         // menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
         play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_play.png");
         options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_options.png");
-       
+        achivements_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_achivements.png");
+        
     	try 
     	{
 			this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -128,6 +136,12 @@ public void loadMenuResources()
     }
     
     private void loadMenuFonts(){
+    	this.mFontTexture = new BitmapTextureAtlas(this.engine.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+        this.font = new Font(this.engine.getFontManager(), this.mFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.BLACK);
+
+        this.engine.getTextureManager().loadTexture(this.mFontTexture);
+        this.engine.getFontManager().loadFont(this.font);
     	
     }
 
