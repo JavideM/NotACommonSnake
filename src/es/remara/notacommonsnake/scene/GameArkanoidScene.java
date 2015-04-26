@@ -12,15 +12,21 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactFilter;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 
 public class GameArkanoidScene extends BaseScene implements
-		IOnSceneTouchListener {
+		IOnSceneTouchListener, ContactListener, ContactFilter {
 
 	// Provisional. Se cambiara por sprites (supongo...)
 	private Rectangle[] walls;
@@ -29,11 +35,15 @@ public class GameArkanoidScene extends BaseScene implements
 
 	private Rectangle platform;
 
-	private FixtureDef wallPlatFix, ballFix;
+	private FixtureDef wallFix, ballFix, platFix;
 
 	private Body platformBody, ballBody;
 
 	private PhysicsWorld arkanoidPhysicsWorld;
+
+	private Boolean noIniciado = true;
+
+	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
 
 	@SuppressWarnings("unused")
 	private Sprite platformSprite, ballSprite;
@@ -51,6 +61,7 @@ public class GameArkanoidScene extends BaseScene implements
 		setPhysicsConnectors();
 		attachChilds();
 		this.setOnSceneTouchListener(this);
+		arkanoidPhysicsWorld.setContactListener(this);
 	}
 
 	private void attachChilds() {
@@ -62,7 +73,8 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	private void createFixtures() {
-		wallPlatFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
+		wallFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
+		platFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		ballFix = PhysicsFactory.createFixtureDef(10.0f, 1.0f, 0.0f);
 	}
 
@@ -72,7 +84,8 @@ public class GameArkanoidScene extends BaseScene implements
 				engine.getVertexBufferObjectManager());
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
-		ballBody.setLinearVelocity(15.0f, 15.0f);
+		ballBody.setLinearVelocity(7.0f, 7.0f);
+		ballBody.setUserData("Ball");
 	}
 
 	// Se cambiara por sprite (plataforma)
@@ -80,7 +93,8 @@ public class GameArkanoidScene extends BaseScene implements
 		platform = new Rectangle(camera.getHeight() / 2, 60, 64, 12,
 				engine.getVertexBufferObjectManager());
 		platformBody = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld,
-				platform, BodyType.KinematicBody, wallPlatFix);
+				platform, BodyType.KinematicBody, platFix);
+		platformBody.setUserData("Platform");
 	}
 
 	private void setPhysicsConnectors() {
@@ -106,7 +120,8 @@ public class GameArkanoidScene extends BaseScene implements
 		// Muros
 		for (int i = 0; i < walls.length; i++) {
 			wall_body = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld,
-					walls[i], BodyType.StaticBody, wallPlatFix);
+					walls[i], BodyType.StaticBody, wallFix);
+			wall_body.setUserData("Wall");
 		}
 	}
 
@@ -147,34 +162,66 @@ public class GameArkanoidScene extends BaseScene implements
 			if (pSceneTouchEvent.isActionUp()) {
 
 			} else {
-				platformBody
-						.setTransform(
-								pSceneTouchEvent.getX()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								platform.getY()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								0.0f);
+				platformBody.setTransform(pSceneTouchEvent.getX() / pmr,
+						platform.getY() / pmr, 0.0f);
 			}
 		} else {
 			if (pSceneTouchEvent.getX() < (10 + platform.getWidth() / 2)) {
-				platformBody
-						.setTransform(
-								(10 + platform.getWidth() / 2)
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								platform.getY()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								0.0f);
+				platformBody.setTransform((10 + platform.getWidth() / 2) / pmr,
+						platform.getY() / pmr, 0.0f);
 			} else {
-				platformBody
-						.setTransform(
-								(camera.getWidth() - (10 + platform.getWidth() / 2))
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								platform.getY()
-										/ PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT,
-								0.0f);
+				platformBody.setTransform(
+						(camera.getWidth() - (10 + platform.getWidth() / 2))
+								/ pmr, platform.getY() / pmr, 0.0f);
 			}
 
 		}
+		return false;
+	}
+
+	@Override
+	public void beginContact(Contact contact) {
+		Vector2[] contactPoints = contact.getWorldManifold().getPoints();
+		if (contact.getFixtureA().getBody().getUserData().toString()
+				.equals("Platform")) {
+			float speedMagnitude1 = ballBody.getLinearVelocity().len();
+			float xCom = (contactPoints[0].x - platformBody.getPosition().x)
+					/ ((platform.getWidth() / 2) / pmr);
+			if (xCom < 1 && xCom > -1) {
+				float yCom = (float) (Math.sqrt(1 - (xCom * xCom)));
+				Vector2 normVector = new Vector2(xCom, yCom);
+				ballBody.setLinearVelocity(normVector.mul(speedMagnitude1));
+				System.out.println("x: " + contactPoints[0].x * pmr + " || y:"
+						+ contactPoints[0].y * pmr + " || " + xCom + " : "
+						+ yCom);
+				System.out.println(platformBody.getPosition().x * pmr + " "
+						+ (platform.getWidth() / 2) / pmr);
+			}
+		}
+
+	}
+
+	@Override
+	public void endContact(Contact contact) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+		System.out.println(fixtureA.getBody().getUserData().toString());
 		return false;
 	}
 }
