@@ -2,15 +2,12 @@ package es.remara.notacommonsnake.scene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.SurfaceGestureDetector;
-import org.andengine.util.adt.color.Color;
-import org.andengine.util.math.MathUtils;
+import org.andengine.opengl.texture.region.ITextureRegion;
 
 import android.os.Looper;
 
@@ -19,7 +16,8 @@ import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.object.Food;
 import es.remara.notacommonsnake.object.Snake;
-import es.remara.notacommonsnake.other.Direccion;
+import es.remara.notacommonsnake.object.Food.FoodType;
+import es.remara.notacommonsnake.other.Direction;
 
 public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	
@@ -37,7 +35,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		attachChild(new Sprite(camera.getWidth()/2, camera.getHeight()/2,resourcesManager.background_grass_region, vbom));
 		
 		//Comida
-		food = new Food(resourcesManager.food_AUG_SPEED_region, vbom);
+		food = new Food(FoodType.getRandom(), resourcesManager, vbom);
 		attachChild(food);
 
 		//Serpiente
@@ -101,29 +99,29 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			
 			@Override
 			protected boolean onSwipeUp() {
-				if(snake.getDirec() != Direccion.opuesta(Direccion.ARRIBA))
-					snake.setDirec(Direccion.ARRIBA);
+				if(snake.getDirec() != Direction.opposite(Direction.TOP))
+					snake.setDirec(Direction.TOP);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeRight() {
-				if(snake.getDirec() != Direccion.opuesta(Direccion.DERECHA))
-					snake.setDirec(Direccion.DERECHA);
+				if(snake.getDirec() != Direction.opposite(Direction.RIGHT))
+					snake.setDirec(Direction.RIGHT);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeLeft() {
-				if(snake.getDirec() != Direccion.opuesta(Direccion.IZQUIERDA))
-					snake.setDirec(Direccion.IZQUIERDA);
+				if(snake.getDirec() != Direction.opposite(Direction.LEFT))
+					snake.setDirec(Direction.LEFT);
 				return false;
 			}
 			
 			@Override
 			protected boolean onSwipeDown() {
-				if(snake.getDirec() != Direccion.opuesta(Direccion.ABAJO))
-					snake.setDirec(Direccion.ABAJO);
+				if(snake.getDirec() != Direction.opposite(Direction.DOWN))
+					snake.setDirec(Direction.DOWN);
 				return false;
 			}
 			
@@ -146,11 +144,13 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 
 	protected void actualizaPantalla() {
 		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
-			snake.come(food);
-			food.setRandom();
+			snake.eat(food);
+			detachChild(food);
+			food = new Food(FoodType.getRandom(), resourcesManager, vbom);
+			attachChild(food);
 		}
-		if(!snake.suicidado())
-			snake.muevete();
+		if(!snake.suicide())
+			snake.move();
 	}
 
 
