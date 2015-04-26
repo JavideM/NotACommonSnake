@@ -10,7 +10,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
 import es.remara.notacommonsnake.manager.ResourcesManager;
-import es.remara.notacommonsnake.other.Direccion;
+import es.remara.notacommonsnake.other.Direction;
 
 
 public class Snake extends Entity{
@@ -26,7 +26,7 @@ public class Snake extends Entity{
 	/*
 	 * Snake atributes
 	 */
-	private Direccion direc;
+	private Direction direc;
 	private float speed;
 	
 	private float initial_speed;
@@ -40,8 +40,8 @@ public class Snake extends Entity{
 	/*
 	 * Snake dimensions
 	 */
-	private float ancho;
-	private float largo;
+	private float width;
+	private float height;
 
 	/*
 	 * Snake Textures
@@ -55,9 +55,9 @@ public class Snake extends Entity{
 			VertexBufferObjectManager vbom) {
 		super();
 		
-		this.direc = Direccion.DERECHA;
-		this.ancho = pWidth;
-		this.largo = pHeight;
+		this.direc = Direction.RIGHT;
+		this.width = pWidth;
+		this.height = pHeight;
 		this.speed = speed;
 		this.initial_speed = speed;
 		this.ghost_mode = false;
@@ -81,9 +81,9 @@ public class Snake extends Entity{
 			VertexBufferObjectManager vbom) {
 		super();
 		
-		this.direc = Direccion.DERECHA;
-		this.ancho = pWidth;
-		this.largo = pHeight;
+		this.direc = Direction.RIGHT;
+		this.width = pWidth;
+		this.height = pHeight;
 		this.speed = speed;
 		this.initial_speed = speed;
 		this.ghost_mode = false;
@@ -111,19 +111,19 @@ public class Snake extends Entity{
 		return this.speed;
 	}
 	
-	public Direccion getDirec() {
+	public Direction getDirec() {
 		return direc;
 	}
 
-	public void setDirec(Direccion direc) {
-		Direccion new_direc;
+	public void setDirec(Direction direc) {
+		Direction new_direc;
 		if(direc != this.direc)
 		{
-			new_direc = drunk? Direccion.opuesta(direc): direc;
-			if(Direccion.relative_left(direc) == this.direc){
+			new_direc = drunk? Direction.opposite(direc): direc;
+			if(Direction.relative_left(new_direc) == this.direc){
 				head.setRotation(head.getRotation() + 90.0f);
 			}
-			if(Direccion.relative_right(direc) == this.direc){
+			if(Direction.relative_right(new_direc) == this.direc){
 				head.setRotation(head.getRotation() - 90.0f);
 			}
 			this.direc = new_direc;
@@ -140,17 +140,21 @@ public class Snake extends Entity{
 	}
 	
 	//Añade secciones de cuerpo a la serpiente
-	public void crece() {
-		Sprite colanueva = new Sprite(body.getFirst().getX(), body.getFirst().getY(), 
+	public void grow() {
+		//New Sprite for the new body part
+		Sprite newtail = new Sprite(body.getFirst().getX(), body.getFirst().getY(), 
 				this.text_body, vbom);
-		attachChild(colanueva);
-		body.addFirst(colanueva);
+		//Set the rotation equal to the head rotation
+		newtail.setRotation(this.head.getRotation());
+		//attach the new body part in the Snake entity and add it to the body of the snake
+		attachChild(newtail);
+		body.addFirst(newtail);
 	}
 
-	public void come(Food food)
+	public void eat(Food food)
 	{
 		set_default_states();
-		crece();
+		grow();
 		switch(food.getType()){
 			case AUG_SPEED:
 				this.speed = this.speed * 2;
@@ -167,7 +171,7 @@ public class Snake extends Entity{
 				this.speed = this.speed/2;
 				break;
 			case SUPER_GROW:
-				crece();
+				grow();
 				break;
 			case X2:
 				break;
@@ -183,7 +187,7 @@ public class Snake extends Entity{
 		this.drunk = false;
 	}
 	
-	public void muevete()
+	public void move()
 	{
 		Entity new_tail = body.removeLast();
 		Entity new_body_part = body.removeLast();
@@ -196,37 +200,37 @@ public class Snake extends Entity{
 		body.addFirst(new_body_part);
 		
 		switch(this.direc){
-			case ARRIBA:
-				if(head.getY() < ResourcesManager.getInstance().camera.getHeight() - largo/2)
-					head.setPosition(head.getX(), head.getY() + largo);
+			case TOP:
+				if(head.getY() < ResourcesManager.getInstance().camera.getHeight() - height/2)
+					head.setPosition(head.getX(), head.getY() + height);
 				else
-					head.setPosition(head.getX(),  largo/2);
+					head.setPosition(head.getX(),  height/2);
 				break;
-			case ABAJO:
-				if(head.getY() > largo/2)
-					head.setPosition(head.getX(), head.getY() -  largo);
+			case DOWN:
+				if(head.getY() > height/2)
+					head.setPosition(head.getX(), head.getY() -  height);
 				else
-					head.setPosition(head.getX(), ResourcesManager.getInstance().camera.getHeight() -  largo/2);
+					head.setPosition(head.getX(), ResourcesManager.getInstance().camera.getHeight() -  height/2);
 				break;
-			case DERECHA:
-				if(head.getX() < ResourcesManager.getInstance().camera.getWidth() - ancho/2)
-					head.setPosition(head.getX() + ancho, head.getY());
+			case RIGHT:
+				if(head.getX() < ResourcesManager.getInstance().camera.getWidth() - width/2)
+					head.setPosition(head.getX() + width, head.getY());
 				else
-					head.setPosition(ancho/2, head.getY());
+					head.setPosition(width/2, head.getY());
 				break;
-			case IZQUIERDA:
-				if(head.getX() > ancho/2)
-					head.setPosition(head.getX() - ancho, head.getY() );
+			case LEFT:
+				if(head.getX() > width/2)
+					head.setPosition(head.getX() - width, head.getY() );
 				else
-					head.setPosition(ResourcesManager.getInstance().camera.getWidth() - ancho/2, head.getY() );
+					head.setPosition(ResourcesManager.getInstance().camera.getWidth() - width/2, head.getY() );
 				break; 
 		}
 	}
 	
-	public boolean suicidado()
+	public boolean suicide()
 	{
-		for (Entity parte : body) {
-			if(parte.getX() == head.getX() && parte.getY() == head.getY())
+		for (Entity part : body) {
+			if(part.getX() == head.getX() && part.getY() == head.getY())
 				return true;
 		}
 		return false;
