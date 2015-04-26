@@ -2,17 +2,16 @@ package es.remara.notacommonsnake.object;
 
 import java.util.Random;
 
-import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathUtils;
 
-public class Food extends Sprite{
+import es.remara.notacommonsnake.manager.ResourcesManager;
+
+public class Food extends Entity{
 	
-
-
 	public enum FoodType{
 		X2,
 		AUG_SPEED,
@@ -30,36 +29,45 @@ public class Food extends Sprite{
 	}
 	
 	private FoodType type;
+	private ResourcesManager resourcesManager;
+	private VertexBufferObjectManager vbom;
 	
-	public Food(ITextureRegion texture, VertexBufferObjectManager vbom){
-		super(10,10,texture, vbom);
+	public Food(FoodType type, ResourcesManager resourcesmanager, VertexBufferObjectManager vbom){
+		this.resourcesManager = resourcesmanager;
+		this.vbom = vbom;
+		this.type = type;
+		
+		Sprite foodtype = new Sprite(getX(), getY(), setRandomType(), this.vbom);
+		attachChild(foodtype);
 		setRandomPosition();
-		setRandomType();
 	}
 
 	public FoodType getType() {
 		return type;
 	}
 
-	private void setRandomType() {
-		this.type = FoodType.getRandom();
+	private ITextureRegion setRandomType() {
 		switch(this.type){
 			case AUG_SPEED:
-				break;
+				return resourcesManager.food_AUG_SPEED_region;
 			case CHG_GAME_MODE:
-				break;
+				return resourcesManager.food_CHG_GAME_MODE_region;
 			case GHOST_MODE:
-				break;
+				return resourcesManager.food_GHOST_MODE_region;
 			case INV_CONTROLS:
-				break;
+				return resourcesManager.food_INV_CONTROLS_region;
 			case REDUC_SPEED:
-				break;
+				return resourcesManager.food_REDUC_SPEED_region;
 			case SUPER_GROW:
-				break;
+				return resourcesManager.food_SUPER_GROW_region;
 			case X2:
-				break;
+				return resourcesManager.food_X2_region;
+			case NORMAL:
+				//Añadir nueva imagen
+				return resourcesManager.food_X2_region;
 			default:
-				break; 
+				//Añadir Normal
+				return resourcesManager.food_X2_region;
 		
 		}
 	}
@@ -68,10 +76,5 @@ public class Food extends Sprite{
 		setX(MathUtils.random(1, 38)*20 + 10);
 		setY(MathUtils.random(1, 22)*20 + 10);
 	}
-	
-	public void setRandom(){
-		setRandomPosition();
-		setRandomType();
-	}
-	
+		
 }
