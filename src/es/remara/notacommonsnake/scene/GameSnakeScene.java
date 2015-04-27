@@ -1,26 +1,13 @@
 package es.remara.notacommonsnake.scene;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.Entity;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.SurfaceGestureDetector;
-import org.andengine.util.SAXUtils;
-import org.andengine.util.level.EntityLoader;
-import org.andengine.util.level.constants.LevelConstants;
-import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
-import org.andengine.util.level.simple.SimpleLevelLoader;
-import org.xml.sax.Attributes;
 
-import android.R;
-import android.app.Activity;
 import android.os.Looper;
 
 import es.remara.notacommonsnake.base.BaseScene;
@@ -36,49 +23,54 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private Food food;
 	private Snake snake;
+	private Walls walls;
+	
+	private int points;
+	private int level;
 	
  	private SurfaceGestureDetector mSGD;
 
+ 	public GameSnakeScene(){
+ 		super();
+ 		this.level = 0;
+ 	}
+ 	
+ 	public GameSnakeScene(int level){
+ 		super();
+ 		this.level = level;
+ 	}
+ 	
+ 	public int getpoints(){
+ 		return this.points;
+ 	}
+ 	
+ 	public int getlevel()
+ 	{
+ 		return this.level;
+ 	}
+ 	
 	@Override
 	public void createScene() {
-		creacontroles();
+		createcontrols();
+		this.points = 0;
 		
 		//Background
 		attachChild(new Sprite(camera.getWidth()/2, camera.getHeight()/2,resourcesManager.background_grass_region,  vbom));
 		
+		createobjects();
 		
-		//Comida
-		food = new Food(FoodType.getRandom(), resourcesManager, vbom);
-		attachChild(food);
-
-		//Serpiente
-//		snake = new Snake( camera.getWidth()/16, camera.getHeight()*25/48, 
-//				camera.getWidth()/40, camera.getHeight()/24, 0.3f, vbom);
-//		attachChild(snake);
-
-		//Snake Sprites
-		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, camera.getWidth()/40, camera.getHeight()/24, 
-				resourcesManager.snake_body_region, 
-				resourcesManager.snake_head_region, 
-				resourcesManager.snake_tail_region, 
-				0.3f, vbom);
-		attachChild(snake);
-		
-		//Walls
-		Walls walls = new Walls(1, resourcesManager.wall_region, this, activity, vbom);
-		attachChild(walls);
 		
 		registerUpdateHandler(new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
-					actualizaPantalla();
+					updateScreen();
 				}
 			}
 		));
 		
-		
 		setOnSceneTouchListener(this);
 	}
+
 
 	@Override
 	public void onBackKeyPressed() {
@@ -111,7 +103,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	 * Metodos de creación de elementos
 	 * */
 	
-	private void creacontroles() {
+	private void createcontrols() {
 		Looper.prepare();
 		mSGD =  new SurfaceGestureDetector(resourcesManager.activity) {
 			
@@ -156,22 +148,82 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		mSGD.setEnabled(true);
 	}
 	
+	private void createobjects() {
+		//Serpiente
+//		snake = new Snake( camera.getWidth()/16, camera.getHeight()*25/48, 
+//				camera.getWidth()/40, camera.getHeight()/24, 0.3f, vbom);
+//		attachChild(snake);
+		
+		//Snake Sprites
+		snake = new Snake(camera.getWidth()/16, camera.getHeight()*25/48, camera.getWidth()/40, camera.getHeight()/24, 
+				resourcesManager.snake_body_region, 
+				resourcesManager.snake_head_region, 
+				resourcesManager.snake_tail_region,
+				resourcesManager.snake_corner_region,
+				0.3f, vbom);
+		attachChild(snake);
+		snake.setZIndex(2);
+		
+		//Walls
+		walls = new Walls(getlevel(), resourcesManager.wall_region, this, activity, vbom);
+		attachChild(walls);
+		walls.setZIndex(1);
+		
+		//Comida
+		food = new Food(FoodType.getRandom(), walls, resourcesManager, vbom);
+		attachChild(food);
+		food.setZIndex(0);
+		
+		sortChildren();
+	}
+	
 	/*
 	 *  Métodos 
 	 */
-
-	protected void actualizaPantalla() {
+ 
+	protected void updateScreen() {
 		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
 			snake.eat(food);
 			detachChild(food);
-			food = new Food(FoodType.getRandom(), resourcesManager, vbom);
+			points += (food.getType() == FoodType.X2)? 200:100;
+			food = new Food(FoodType.getRandom(), walls, resourcesManager, vbom);
 			attachChild(food);
+			food.setZIndex(0);
+			sortChildren();
 		}
-		if(!snake.suicide())
+		if(snake.is_ghost_mode() || (!snake.suicide() && !snake.hit_a_wall(walls)))
 			snake.move();
+		else{
+			
+			
+			//Mensaje de gameover
+		}
+		if(points > 200) resetScreen();
 	}
-
-
-
 	
+	protected void resetScreen() {
+		detachChild(snake);
+		snake = null;
+		detachChild(food);
+		food = null;
+		walls.disposeChilds();
+		walls.dispose();
+		walls.detachSelf();
+		points = 0;
+
+		
+		createobjects();
+	}
+	
+	private void nextlevel(){
+		switch(level){
+		case 0:
+			level = 1;
+			break;
+		case 1:
+			level = 0;
+			break;
+		}
+		
+	}
 }

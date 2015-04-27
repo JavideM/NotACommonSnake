@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -61,16 +60,36 @@ public class Walls extends Entity{
 							Sprite wall_section = new Sprite(x, y, txtWall, vbom);
 							wall_section.setPosition(x + i*direction_x*20, y + i*direction_y*20);
 							levelObject.attachChild(wall_section);
+							walls.add(wall_section);
 						}
 
 //						Entity levelObject = new Sprite(x,y, txtWall, vbom);
-						walls.add(levelObject);
-
+						
 						return levelObject;
 					}
 				});
 		levelloader.loadLevelFromAsset(activity.getAssets(), "level/" + level_id + ".lvl");
 			
+	}
+	
+	public boolean is_there_a_wall(Entity object){
+		for (Entity entity: this.walls){
+			if(entity.getX() == object.getX() && entity.getY() == object.getY()) return true;
+		}
+		return false;
+	}
+	
+	public boolean is_there_a_wall(float x, float y){
+		for (Entity entity: this.walls){
+			return entity.getX() == x && entity.getY() == y;
+		}
+		return false;
+	}
+	
+	public void disposeChilds(){
+		for(Entity entity: this.walls)
+			entity.detachSelf();
+	
 	}
 
 }

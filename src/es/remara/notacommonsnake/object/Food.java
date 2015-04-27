@@ -32,14 +32,14 @@ public class Food extends Entity{
 	private ResourcesManager resourcesManager;
 	private VertexBufferObjectManager vbom;
 	
-	public Food(FoodType type, ResourcesManager resourcesmanager, VertexBufferObjectManager vbom){
+	public Food(FoodType type, Walls walls, ResourcesManager resourcesmanager, VertexBufferObjectManager vbom){
 		this.resourcesManager = resourcesmanager;
 		this.vbom = vbom;
 		this.type = type;
 		
 		Sprite foodtype = new Sprite(getX(), getY(), setRandomType(), this.vbom);
 		attachChild(foodtype);
-		setRandomPosition();
+		setRandomPosition(walls);
 	}
 
 	public FoodType getType() {
@@ -72,9 +72,11 @@ public class Food extends Entity{
 		}
 	}
 
-	private void setRandomPosition() {
-		setX(MathUtils.random(1, 38)*20 + 10);
-		setY(MathUtils.random(1, 22)*20 + 10);
+	private void setRandomPosition(Walls walls) {
+		do{
+			setX(MathUtils.random(1, 38)*20 + 10);
+			setY(MathUtils.random(1, 22)*20 + 10);
+		}while(walls.is_there_a_wall(this));
 	}
 		
 }
