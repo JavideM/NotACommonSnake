@@ -221,6 +221,9 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 			level = 1; 
 			break;
 		case 1:
+			level = 2;
+			break;
+		case 2:
 			level = 0;
 			break;
 		}
