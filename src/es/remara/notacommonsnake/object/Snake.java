@@ -49,7 +49,7 @@ public class Snake extends Entity{
 	private ITextureRegion text_head;
 	private ITextureRegion text_body;
 	private ITextureRegion text_tail;
-		
+	private ITextureRegion text_corner;
 
 	public Snake(float pX, float pY, float pWidth, float pHeight, float speed,
 			VertexBufferObjectManager vbom) {
@@ -77,7 +77,7 @@ public class Snake extends Entity{
 	 * Constructor con texturas
 	 */
 	public Snake(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTexturaCuerpo, ITextureRegion pTexturaCabeza, ITextureRegion pTexturaCola, float speed,
+			ITextureRegion pTextureBody, ITextureRegion pTextureHead, ITextureRegion pTextureTail, ITextureRegion pTextureCorner, float speed,
 			VertexBufferObjectManager vbom) {
 		super();
 		
@@ -89,9 +89,10 @@ public class Snake extends Entity{
 		this.ghost_mode = false;
 		this.drunk = false;
 		
-		this.text_head = pTexturaCabeza;
-		this.text_body = pTexturaCuerpo;
-		this.text_tail = pTexturaCola;
+		this.text_head = pTextureHead;
+		this.text_body = pTextureBody;
+		this.text_tail = pTextureTail;
+		this.text_corner = pTextureCorner;
 		
 		
 		this.head = new Sprite(pX, pY, this.text_head, vbom);
@@ -144,8 +145,8 @@ public class Snake extends Entity{
 		//New Sprite for the new body part
 		Sprite newtail = new Sprite(body.getFirst().getX(), body.getFirst().getY(), 
 				this.text_body, vbom);
-		//Set the rotation equal to the head rotation
-		newtail.setRotation(this.head.getRotation());
+		//Set the rotation equal to the first part of the tail rotation
+		newtail.setRotation(this.body.getFirst().getRotation());
 		//attach the new body part in the Snake entity and add it to the body of the snake
 		attachChild(newtail);
 		body.addFirst(newtail);
@@ -195,7 +196,7 @@ public class Snake extends Entity{
 		new_tail.setRotation(new_body_part.getRotation());
 		new_body_part.setPosition(head);
 		new_body_part.setRotation(head.getRotation());
-
+		
 		body.addLast(new_tail);
 		body.addFirst(new_body_part);
 		
@@ -234,6 +235,10 @@ public class Snake extends Entity{
 				return true;
 		}
 		return false;
+	}
+
+	public boolean hit_a_wall(Walls walls) {
+		return walls.is_there_a_wall(head);
 	}
 	
 	
