@@ -47,7 +47,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
  	public int getlevel()
  	{
  		return this.level;
- 	}
+ 	} 
  	
 	@Override
 	public void createScene() {
@@ -211,14 +211,14 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		walls.detachSelf();
 		points = 0;
 
-		
+		nextlevel();
 		createobjects();
 	}
 	
 	private void nextlevel(){
 		switch(level){
 		case 0:
-			level = 1;
+			level = 1; 
 			break;
 		case 1:
 			level = 0;
