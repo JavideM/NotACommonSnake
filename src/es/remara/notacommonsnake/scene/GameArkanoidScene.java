@@ -88,9 +88,10 @@ public class GameArkanoidScene extends BaseScene implements
 		ballBody.setUserData("Ball");
 	}
 
-	// Se cambiara por sprite (plataforma)
+	// Se cambiara por sprite (plataforma
 	private void createPlatformSprite() {
-		platform = new Rectangle(camera.getHeight() / 2, 60, 64, 12,
+		platform = new Rectangle(camera.getWidth() - 60,
+				camera.getHeight() / 2, 12, 64,
 				engine.getVertexBufferObjectManager());
 		platformBody = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld,
 				platform, BodyType.KinematicBody, platFix);
@@ -156,23 +157,23 @@ public class GameArkanoidScene extends BaseScene implements
 	@Override
 	// Movimiento plataforma
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		if (pSceneTouchEvent.getX() > (10 + platform.getWidth() / 2)
-				&& pSceneTouchEvent.getX() < camera.getWidth()
-						- ((platform.getWidth() / 2) + 10)) {
+		if (pSceneTouchEvent.getY() > (10 + platform.getHeight() / 2)
+				&& pSceneTouchEvent.getY() < camera.getHeight()
+						- ((platform.getHeight() / 2) + 10)) {
 			if (pSceneTouchEvent.isActionUp()) {
 
 			} else {
-				platformBody.setTransform(pSceneTouchEvent.getX() / pmr,
-						platform.getY() / pmr, 0.0f);
+				platformBody.setTransform(platform.getX() / pmr,
+						pSceneTouchEvent.getY() / pmr, 0.0f);
 			}
 		} else {
-			if (pSceneTouchEvent.getX() < (10 + platform.getWidth() / 2)) {
-				platformBody.setTransform((10 + platform.getWidth() / 2) / pmr,
-						platform.getY() / pmr, 0.0f);
+			if (pSceneTouchEvent.getY() < (10 + platform.getHeight() / 2)) {
+				platformBody.setTransform(platform.getX() / pmr,
+						(10 + platform.getHeight() / 2) / pmr, 0.0f);
 			} else {
-				platformBody.setTransform(
-						(camera.getWidth() - (10 + platform.getWidth() / 2))
-								/ pmr, platform.getY() / pmr, 0.0f);
+				platformBody.setTransform(platform.getX() / pmr,
+						(camera.getHeight() - (10 + platform.getHeight() / 2))
+								/ pmr, 0.0f);
 			}
 
 		}
