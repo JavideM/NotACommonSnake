@@ -186,10 +186,10 @@ public class GameArkanoidScene extends BaseScene implements
 		if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("Platform")) {
 			float speedMagnitude1 = ballBody.getLinearVelocity().len();
-			float xCom = (contactPoints[0].x - platformBody.getPosition().x)
-					/ ((platform.getWidth() / 2) / pmr);
-			if (xCom < 1 && xCom > -1) {
-				float yCom = (float) (Math.sqrt(1 - (xCom * xCom)));
+			float yCom = (contactPoints[0].y - platformBody.getPosition().y)
+					/ ((platform.getHeight() / 2) / pmr);
+			if (yCom < 1 && yCom > -1) {
+				float xCom = (float) (Math.sqrt(1 - (yCom * yCom)));
 				Vector2 normVector = new Vector2(xCom, yCom);
 				ballBody.setLinearVelocity(normVector.mul(speedMagnitude1));
 				System.out.println("x: " + contactPoints[0].x * pmr + " || y:"
