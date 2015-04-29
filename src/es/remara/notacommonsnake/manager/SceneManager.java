@@ -91,12 +91,12 @@ public class SceneManager
 	{
 		ResourcesManager.getInstance().loadMenuResources();
 		menuScene = new MainMenuScene();
-	    setScene(menuScene);
+	    SceneManager.getInstance().setScene(menuScene);
 		switch(prescene.getSceneType()){
 			case SCENE_SNAKE:
 				gamesnakeScene.disposeScene();
 				gamesnakeScene = null;
-				//ResourcesManager.getInstance().unloadGameSnakeResources();
+				ResourcesManager.getInstance().unloadGameSnakeResources();
 				break;
 			case SCENE_ARKANOID:
 				arkanoidScene.disposeScene();
