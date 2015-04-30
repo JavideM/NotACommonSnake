@@ -74,7 +74,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 
 	@Override
 	public void onBackKeyPressed() {
-		SceneManager.getInstance().loadMenuScene(engine, this);		
+		
+		SceneManager.getInstance().loadMenuScene(engine, this);	
 	}
 
 	@Override
@@ -104,7 +105,10 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	 * */
 	
 	private void createcontrols() {
-		Looper.prepare();
+		 if (Looper.myLooper() == null)
+         {
+           Looper.prepare();
+         }
 		mSGD =  new SurfaceGestureDetector(resourcesManager.activity) {
 			
 			@Override

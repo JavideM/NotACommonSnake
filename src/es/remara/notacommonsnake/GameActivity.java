@@ -11,6 +11,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import android.view.KeyEvent;
+
 import es.remara.notacommonsnake.manager.DataManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
@@ -68,6 +70,26 @@ public class GameActivity extends BaseGameActivity
             }
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{  
+	    if (keyCode == KeyEvent.KEYCODE_BACK)
+	    {
+	    	SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+	    }
+	    return false; 
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		 if (SceneManager.getInstance().getCurrentScene() != null) {
+		        SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+		        return;
+		    }
+		    super.onBackPressed();
 	}
 
 }
