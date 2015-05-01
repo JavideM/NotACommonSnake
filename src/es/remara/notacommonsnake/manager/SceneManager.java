@@ -101,6 +101,7 @@ public class SceneManager
 			case SCENE_ARKANOID:
 				arkanoidScene.disposeScene();
 				arkanoidScene = null;
+				ResourcesManager.getInstance().unloadGameArkanoidResources();
 				break;
 			case SCENE_IN_PROGRESS:
 				disposeWorkInProgress();
@@ -109,7 +110,7 @@ public class SceneManager
 				break;
 		}
 		
-		
+		 
 	}
 	
 	//Metodo que crea una escena Splash
