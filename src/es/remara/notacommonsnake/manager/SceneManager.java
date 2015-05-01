@@ -91,16 +91,17 @@ public class SceneManager
 	{
 		ResourcesManager.getInstance().loadMenuResources();
 		menuScene = new MainMenuScene();
-	    setScene(menuScene);
+	    SceneManager.getInstance().setScene(menuScene);
 		switch(prescene.getSceneType()){
 			case SCENE_SNAKE:
 				gamesnakeScene.disposeScene();
 				gamesnakeScene = null;
-				//ResourcesManager.getInstance().unloadGameSnakeResources();
+				ResourcesManager.getInstance().unloadGameSnakeResources();
 				break;
 			case SCENE_ARKANOID:
 				arkanoidScene.disposeScene();
 				arkanoidScene = null;
+				ResourcesManager.getInstance().unloadGameArkanoidResources();
 				break;
 			case SCENE_IN_PROGRESS:
 				disposeWorkInProgress();
@@ -109,7 +110,7 @@ public class SceneManager
 				break;
 		}
 		
-		
+		 
 	}
 	
 	//Metodo que crea una escena Splash

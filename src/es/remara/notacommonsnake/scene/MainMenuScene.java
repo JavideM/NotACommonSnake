@@ -6,6 +6,7 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -91,8 +92,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 	
 	private void createBackground()	{
-		Background fondoMenu = new Background(Color.CYAN);
-		setBackground(fondoMenu);
+//		Background fondoMenu = new Background(Color.CYAN);
+//		setBackground(fondoMenu);
+		attachChild(new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.background_grass_region, vbom));
 	}
 
 	
@@ -105,7 +107,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.1f, 1.2f);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.1f, 1);
-		final IMenuItem achivementsMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_ACHIVEMENTS, resourcesManager.options_region, vbom), 1.2f, 1 );
+		final IMenuItem achivementsMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_ACHIVEMENTS, resourcesManager.achivements_region, vbom), 1.2f, 1 );
         final Text textPlay = new Text(0, 0, resourcesManager.font , activity.getString(R.string.play) , new TextOptions(HorizontalAlign.CENTER), this.vbom);
         final Text textOptions = new Text(0, 0, resourcesManager.font , activity.getString(R.string.options) , new TextOptions(HorizontalAlign.LEFT), this.vbom);
         final Text textAchivements = new Text(0, 0, resourcesManager.font , activity.getString(R.string.achivements) , new TextOptions(HorizontalAlign.RIGHT), this.vbom);

@@ -86,12 +86,24 @@ public void loadMenuResources()
         loadGameSnakeAudio();
     }
     
-    public void loadGameArkanoidResources() {
+    public void unloadGameSnakeResources()
+    {
+    	unloadGameSnakeGraphics();
+    }
+    
+    
+	public void loadGameArkanoidResources() {
 		loadGameArkanoidGraphics();
 		loadGameSnakeFonts();
 		loadGameArkanoidAudio();
 	}
-    
+	
+	public void unloadGameArkanoidResources() 
+	{
+		unloadGameArkanoidGraphics();
+	
+	}
+	
     private void loadGameArkanoidGraphics() {
 		// bola
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -106,6 +118,13 @@ public void loadMenuResources()
 		// muros textureAtlas y region pendiente
 	}
 
+    private void unloadGameArkanoidGraphics()
+	{
+		ark_ballTextureAtlas.unload();
+		ark_ball_region = null;
+	}
+    
+    
 	private void loadGameArkanoidAudio() {
 		// Audio
 	}
@@ -113,12 +132,13 @@ public void loadMenuResources()
     private void loadMenuGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-        menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 512, TextureOptions.BILINEAR);
         // menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
         play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_play.png");
         options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_options.png");
         achivements_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "icon_achivements.png");
-        
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+        background_grass_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "background/grass.png");
     	try 
     	{
 			this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -138,7 +158,7 @@ public void loadMenuResources()
     private void loadMenuFonts(){
     	this.mFontTexture = new BitmapTextureAtlas(this.engine.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-        this.font = new Font(this.engine.getFontManager(), this.mFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.BLACK);
+        this.font = new Font(this.engine.getFontManager(), this.mFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.WHITE);
 
         this.engine.getTextureManager().loadTexture(this.mFontTexture);
         this.engine.getFontManager().loadFont(this.font);
@@ -173,6 +193,25 @@ public void loadMenuResources()
 			Debug.e(e);
 		}
     }
+    
+    private void unloadGameSnakeGraphics() {
+		snakeTextureAtlas.unload();
+		background_grass_region = null;
+		food_X2_region = null;
+		food_AUG_SPEED_region = null;
+		food_REDUC_SPEED_region = null;
+		food_CHG_GAME_MODE_region = null;
+		food_GHOST_MODE_region = null;
+		food_SUPER_GROW_region = null;
+		food_INV_CONTROLS_region = null;
+		food_NORMAL_region = null;
+		snake_body_region = null;
+		snake_head_region = null;
+		snake_tail_region = null;
+		snake_corner_region = null;
+		wall_region = null;
+	}
+
     
     private void loadGameSnakeFonts()
     {

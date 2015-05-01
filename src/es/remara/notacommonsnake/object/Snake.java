@@ -32,7 +32,7 @@ public class Snake extends Entity{
 	private float initial_speed;
 	
 	/*
-	 * Snake states
+	 * Snake states 
 	 */
 	private boolean ghost_mode;
 	private boolean drunk;

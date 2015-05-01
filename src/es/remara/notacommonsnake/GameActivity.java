@@ -7,9 +7,12 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
+import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
+
+import android.view.KeyEvent;
 
 import es.remara.notacommonsnake.manager.DataManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
@@ -31,7 +34,8 @@ public class GameActivity extends BaseGameActivity
 	{
 		this.camera = new BoundCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT); 
 		this.engineoptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, 
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
+				new FillResolutionPolicy(), camera);
+		//new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
 		return this.engineoptions;
 	}
 
@@ -68,6 +72,26 @@ public class GameActivity extends BaseGameActivity
             }
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
+	}
+	
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) 
+//	{  
+//	    if (keyCode == KeyEvent.KEYCODE_BACK)
+//	    {
+//	    	SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+//	    }
+//	    return false; 
+//	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		 if (SceneManager.getInstance().getCurrentScene() != null) {
+		        SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+		        return;
+		    }
+		    super.onBackPressed();
 	}
 
 }
