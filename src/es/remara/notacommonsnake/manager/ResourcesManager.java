@@ -97,7 +97,13 @@ public void loadMenuResources()
 		loadGameSnakeFonts();
 		loadGameArkanoidAudio();
 	}
-    
+	
+	public void unloadGameArkanoidResources() 
+	{
+		unloadGameArkanoidGraphics();
+	
+	}
+	
     private void loadGameArkanoidGraphics() {
 		// bola
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -112,6 +118,13 @@ public void loadMenuResources()
 		// muros textureAtlas y region pendiente
 	}
 
+    private void unloadGameArkanoidGraphics()
+	{
+		ark_ballTextureAtlas.unload();
+		ark_ball_region = null;
+	}
+    
+    
 	private void loadGameArkanoidAudio() {
 		// Audio
 	}

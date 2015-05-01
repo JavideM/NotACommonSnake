@@ -133,8 +133,7 @@ public class GameArkanoidScene extends BaseScene implements
 
 	@Override
 	public SceneType getSceneType() {
-		// TODO Auto-generated method stub
-		return null;
+		return SceneType.SCENE_ARKANOID;
 	}
 
 	@Override
