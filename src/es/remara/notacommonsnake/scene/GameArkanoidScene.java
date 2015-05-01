@@ -26,7 +26,7 @@ import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 
 public class GameArkanoidScene extends BaseScene implements
-		IOnSceneTouchListener, ContactListener, ContactFilter {
+		IOnSceneTouchListener, ContactListener {
 
 	// Provisional. Se cambiara por sprites (supongo...)
 	private Rectangle[] walls;
@@ -71,7 +71,7 @@ public class GameArkanoidScene extends BaseScene implements
 			this.attachChild(walls[i]);
 		}
 	}
-
+	
 	private void createFixtures() {
 		wallFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		platFix = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
@@ -84,7 +84,6 @@ public class GameArkanoidScene extends BaseScene implements
 				engine.getVertexBufferObjectManager());
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
-		ballBody.setLinearVelocity(7.0f, 7.0f);
 		ballBody.setUserData("Ball");
 	}
 
@@ -125,7 +124,11 @@ public class GameArkanoidScene extends BaseScene implements
 			wall_body.setUserData("Wall");
 		}
 	}
-
+	
+	private void createBricks(){
+		
+	}
+	
 	@Override
 	public void onBackKeyPressed() {
 		SceneManager.getInstance().loadMenuScene(engine, this);
@@ -157,6 +160,10 @@ public class GameArkanoidScene extends BaseScene implements
 	@Override
 	// Movimiento plataforma
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		if (pSceneTouchEvent.isActionUp() && noIniciado) {
+			noIniciado = false;
+			ballBody.setLinearVelocity(7.0f, 7.0f);
+		}
 		if (pSceneTouchEvent.getY() > (10 + platform.getHeight() / 2)
 				&& pSceneTouchEvent.getY() < camera.getHeight()
 						- ((platform.getHeight() / 2) + 10)) {
@@ -220,9 +227,4 @@ public class GameArkanoidScene extends BaseScene implements
 
 	}
 
-	@Override
-	public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-		System.out.println(fixtureA.getBody().getUserData().toString());
-		return false;
-	}
 }
