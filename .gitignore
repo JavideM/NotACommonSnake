@@ -44,3 +44,6 @@ Temporary Items
 
 # Archivos de Bin que dan problemas
 bin/
+
+# Project propeties
+project.properties
