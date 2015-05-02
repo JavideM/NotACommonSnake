@@ -3,15 +3,12 @@ package es.remara.notacommonsnake.object;
 import java.util.Random;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.math.MathUtils;
 
 import es.remara.notacommonsnake.manager.ResourcesManager;
 
 public class Food extends Entity{
-	
 	public enum FoodType{
 		X2,
 		AUG_SPEED,
@@ -28,25 +25,22 @@ public class Food extends Entity{
 		
 	}
 	
-	private FoodType type;
-	private ResourcesManager resourcesManager;
-	private VertexBufferObjectManager vbom;
+	protected FoodType type;
+	protected ResourcesManager resourcesManager;
+	protected VertexBufferObjectManager vbom;
 	
 	public Food(FoodType type, Walls walls, ResourcesManager resourcesmanager, VertexBufferObjectManager vbom){
 		this.resourcesManager = resourcesmanager;
 		this.vbom = vbom;
 		this.type = type;
-		
-		Sprite foodtype = new Sprite(getX(), getY(), setRandomType(), this.vbom);
-		attachChild(foodtype);
-		setRandomPosition(walls);
 	}
-
+	
 	public FoodType getType() {
 		return type;
 	}
 
-	private ITextureRegion setRandomType() {
+	
+	protected ITextureRegion setRandomType() {
 		switch(this.type){
 			case AUG_SPEED:
 				return resourcesManager.food_AUG_SPEED_region;
@@ -62,21 +56,11 @@ public class Food extends Entity{
 				return resourcesManager.food_SUPER_GROW_region;
 			case X2:
 				return resourcesManager.food_X2_region;
-			case NORMAL:
-				//Añadir nueva imagen
-				return resourcesManager.food_X2_region;
 			default:
-				//Añadir Normal
-				return resourcesManager.food_X2_region;
+				return null;
 		
 		}
 	}
-
-	private void setRandomPosition(Walls walls) {
-		do{
-			setX(MathUtils.random(1, 38)*20 + 10);
-			setY(MathUtils.random(1, 22)*20 + 10);
-		}while(walls.is_there_a_wall(this));
-	}
-		
+	
+	
 }
