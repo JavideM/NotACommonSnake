@@ -105,7 +105,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
 		menuChildScene.setPosition(camera.getWidth()/2 , camera.getHeight()/2 );
 		
-		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.1f, 1.2f);
+		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.1f, 1);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.1f, 1);
 		final IMenuItem achivementsMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_ACHIVEMENTS, resourcesManager.achivements_region, vbom), 1.2f, 1 );
         final Text textPlay = new Text(0, 0, resourcesManager.font , activity.getString(R.string.play) , new TextOptions(HorizontalAlign.CENTER), this.vbom);
