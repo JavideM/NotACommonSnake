@@ -103,9 +103,16 @@ public class Foods extends Entity{
 		eatenfood = food;
 		SpecialFood newspecialfood = new SpecialFood(FoodType.getRandom(), walls, resourcesManager, vbom);
 		setRandomPosition(walls, newspecialfood);
-		detachChild(specialfood);
+		detachChild(food);
 		specialfood = newspecialfood;
 		attachChild(specialfood);
+	}
+	
+	public void disposeChilds(){
+		for(Entity nfood: normalfoods)
+			nfood.detachSelf();
+		specialfood.detachSelf();
+	
 	}
 	
 }
