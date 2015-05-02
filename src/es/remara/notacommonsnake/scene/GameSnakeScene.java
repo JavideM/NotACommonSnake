@@ -8,9 +8,13 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.SurfaceGestureDetector;
 
+import android.R;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Looper;
 
+import es.remara.notacommonsnake.GameActivity;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -31,6 +35,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	private int level;
 	
  	private SurfaceGestureDetector mSGD;
+	private TimerHandler utimehandler;
 
  	public GameSnakeScene(){
  		super();
@@ -61,15 +66,15 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		
 		createobjects();
 		
-		
-		registerUpdateHandler(new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
+		utimehandler = new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
 					updateScreen();
 					pTimerHandler.setTimerSeconds(snake.getSpeed());
 				}
-			}
-		));
+			});
+			
+		registerUpdateHandler(utimehandler);
 		
 		setOnSceneTouchListener(this);
 	}
@@ -196,14 +201,43 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		if(snake.is_ghost_mode() || (!snake.suicide() && !snake.hit_a_wall(walls)))
 			snake.move();
 		else{
-			
+			unregisterUpdateHandler(utimehandler);
+			activity.runOnUiThread(new Runnable() {
+			     @Override
+			     public void run() {
+
+
+			         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+			         alert.setTitle("GAME OVER");
+			         alert.setMessage("¿Play Again?");
+			         alert.setPositiveButton("OK", new OnClickListener() {
+			                 public void onClick(DialogInterface arg0, int arg1) {
+			                	 registerUpdateHandler(utimehandler);
+			                	 resetScreen();
+			                 }
+			         });
+			         alert.setNegativeButton("NO", new OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							onBackKeyPressed();
+							
+						}
+					});
+			         alert.show();
+			     }
+			    });
 		}
-		if(points > 200) resetScreen();
+		if(points > 2000) {
+			nextlevel();
+			resetScreen();
+		}
 	}
 	
 	protected void resetScreen() {
 		detachChild(snake);
 		snake = null;
+		foods.disposeChilds();
 		detachChild(foods);
 		foods = null;
 		walls.disposeChilds();
@@ -211,7 +245,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		walls.detachSelf();
 		points = 0;
 
-		nextlevel();
+		
 		createobjects();
 	}
 	
