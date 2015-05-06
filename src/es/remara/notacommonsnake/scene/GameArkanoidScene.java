@@ -33,13 +33,19 @@ public class GameArkanoidScene extends BaseScene implements
 
 	private Rectangle platform, brick, gORegion;
 
+	private Rectangle[][] lottaBricks;
+
 	private FixtureDef wallFix, ballFix, platFix, brickFix, gOFix;
 
 	private Body platformBody, ballBody, brickBody, gOBody;
 
 	private PhysicsWorld arkanoidPhysicsWorld;
 
-	private Boolean noIniciado = true;
+	private PhysicsConnector ballPC, platformPC;
+	
+	private boolean switchColor = true;
+
+	private Boolean notStarted = true;
 
 	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
 
@@ -59,7 +65,8 @@ public class GameArkanoidScene extends BaseScene implements
 		createBricks();
 		createGORegion();
 		setSBPhysicsConnectors();
-		setDKBPhysicsConnectors();
+		setBallPhysicsConnectors();
+		setPlatformPhysicsConnectors();
 		attachChilds();
 		this.setOnSceneTouchListener(this);
 		arkanoidPhysicsWorld.setContactListener(this);
@@ -109,11 +116,14 @@ public class GameArkanoidScene extends BaseScene implements
 				gORegion, gOBody, true, false));
 	}
 
-	private void setDKBPhysicsConnectors() {
-		arkanoidPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(
-				ballSprite, ballBody, true, false));
-		arkanoidPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(
-				platform, platformBody, true, false));
+	private void setBallPhysicsConnectors() {
+		ballPC = new PhysicsConnector(ballSprite, ballBody, true, false);
+		arkanoidPhysicsWorld.registerPhysicsConnector(ballPC);
+	}
+
+	private void setPlatformPhysicsConnectors() {
+		platformPC = new PhysicsConnector(platform, platformBody, true, false);
+		arkanoidPhysicsWorld.registerPhysicsConnector(platformPC);
 	}
 
 	private void createWallSprites() {
@@ -144,6 +154,10 @@ public class GameArkanoidScene extends BaseScene implements
 		brickBody.setUserData("Brick");
 	}
 
+	private void iLikeBricks() {
+		
+	}
+
 	private void createGORegion() {
 		gORegion = new Rectangle(
 				(camera.getWidth() - (120 - platform.getWidth() / 2)),
@@ -165,7 +179,15 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	public void resetArkanoid() {
-		
+		arkanoidPhysicsWorld.unregisterPhysicsConnector(ballPC);
+		ballPC = null;
+		ballBody.setLinearVelocity(0.0f, 0.0f);
+		arkanoidPhysicsWorld.destroyBody(ballBody);
+		ballBody = null;
+		SceneManager.getInstance().getCurrentScene().detachChild(ballSprite);
+		ballSprite.dispose();
+		ballSprite = null;
+		notStarted = true;
 	}
 
 	@Override
@@ -192,8 +214,8 @@ public class GameArkanoidScene extends BaseScene implements
 	@Override
 	// Movimiento plataforma
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		if (pSceneTouchEvent.isActionUp() && noIniciado) {
-			noIniciado = false;
+		if (pSceneTouchEvent.isActionUp() && notStarted) {
+			notStarted = false;
 			ballBody.setLinearVelocity(7.0f, 7.0f);
 		}
 		if (pSceneTouchEvent.getY() > (platform.getHeight() / 2)
@@ -236,10 +258,26 @@ public class GameArkanoidScene extends BaseScene implements
 			}
 		} else if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("Brick")) {
+			engine.runOnUpdateThread(new Runnable() {
 
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+
+				}
+			});
 		} else if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("GameOver")) {
-			resetArkanoid();
+			engine.runOnUpdateThread(new Runnable() {
+				@Override
+				public void run() {
+					resetArkanoid();
+					createBallSprite();
+					setBallPhysicsConnectors();
+					SceneManager.getInstance().getCurrentScene()
+							.attachChild(ballSprite);
+				}
+			});
 		}
 
 	}
