@@ -191,6 +191,9 @@ public class Snake extends Entity{
 	public void move()
 	{
 		Entity new_tail = body.removeLast();
+		detachChild(new_tail);
+		new_tail = new Sprite(0,0, text_tail, vbom);
+		attachChild(new_tail);
 		Entity new_body_part = body.removeLast();
 		new_tail.setPosition(new_body_part);
 		new_tail.setRotation(new_body_part.getRotation());

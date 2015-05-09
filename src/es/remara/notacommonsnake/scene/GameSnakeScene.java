@@ -8,12 +8,18 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.SurfaceGestureDetector;
 
+import android.R;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Looper;
 
+import es.remara.notacommonsnake.GameActivity;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
-import es.remara.notacommonsnake.object.Food;
+import es.remara.notacommonsnake.object.Foods;
+import es.remara.notacommonsnake.object.SpecialFood;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.object.Food.FoodType;
 import es.remara.notacommonsnake.object.Walls;
@@ -21,7 +27,7 @@ import es.remara.notacommonsnake.other.Direction;
 
 public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	
-	private Food food;
+	private Foods foods;
 	private Snake snake;
 	private Walls walls;
 	
@@ -29,6 +35,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	private int level;
 	
  	private SurfaceGestureDetector mSGD;
+	private TimerHandler utimehandler;
 
  	public GameSnakeScene(){
  		super();
@@ -59,14 +66,15 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		
 		createobjects();
 		
-		
-		registerUpdateHandler(new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
+		utimehandler = new TimerHandler(snake.getSpeed(), true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
 					updateScreen();
+					pTimerHandler.setTimerSeconds(snake.getSpeed());
 				}
-			}
-		));
+			});
+			
+		registerUpdateHandler(utimehandler);
 		
 		setOnSceneTouchListener(this);
 	}
@@ -87,8 +95,8 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	public void disposeScene() {
 		snake.dispose();
 		snake.detachSelf();
-		food.detachSelf();
-		food.dispose();
+		foods.detachSelf();
+		foods.dispose();
 		this.detachSelf();
 		this.dispose();
 		
@@ -166,17 +174,17 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 				resourcesManager.snake_corner_region,
 				0.3f, vbom);
 		attachChild(snake);
-		snake.setZIndex(2);
+		snake.setZIndex(1);
 		
 		//Walls
 		walls = new Walls(getlevel(), resourcesManager.wall_region, this, activity, vbom);
 		attachChild(walls);
-		walls.setZIndex(1);
+		walls.setZIndex(2);
 		
-		//Comida
-		food = new Food(FoodType.getRandom(), walls, resourcesManager, vbom);
-		attachChild(food);
-		food.setZIndex(0);
+		//Comida		
+		foods = new Foods(walls, resourcesManager, vbom);
+		attachChild(foods);
+		foods.setZIndex(0);
 		
 		sortChildren();
 	}
@@ -186,36 +194,58 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	 */
  
 	protected void updateScreen() {
-		if(snake.getHead().getX() == food.getX() && snake.getHead().getY() == food.getY()){
-			snake.eat(food);
-			detachChild(food);
-			points += (food.getType() == FoodType.X2)? 200:100;
-			food = new Food(FoodType.getRandom(), walls, resourcesManager, vbom);
-			attachChild(food);
-			food.setZIndex(0);
-			sortChildren();
+		if(foods.is_there_food(snake.getHead().getX(), snake.getHead().getY(), true)){
+			snake.eat(foods.get_eatenfood());
+			points += (foods.get_eatenfood().getType() == FoodType.X2)? 200:100;
 		}
 		if(snake.is_ghost_mode() || (!snake.suicide() && !snake.hit_a_wall(walls)))
 			snake.move();
 		else{
-			
-			
-			//Mensaje de gameover
+			unregisterUpdateHandler(utimehandler);
+			activity.runOnUiThread(new Runnable() {
+			     @Override
+			     public void run() {
+
+
+			         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+			         alert.setTitle("GAME OVER");
+			         alert.setMessage("¿Play Again?");
+			         alert.setPositiveButton("OK", new OnClickListener() {
+			                 public void onClick(DialogInterface arg0, int arg1) {
+			                	 registerUpdateHandler(utimehandler);
+			                	 resetScreen();
+			                 }
+			         });
+			         alert.setNegativeButton("NO", new OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							onBackKeyPressed();
+							
+						}
+					});
+			         alert.show();
+			     }
+			    });
 		}
-		if(points > 200) resetScreen();
+		if(points > 2000) {
+			nextlevel();
+			resetScreen();
+		}
 	}
 	
 	protected void resetScreen() {
 		detachChild(snake);
 		snake = null;
-		detachChild(food);
-		food = null;
+		foods.disposeChilds();
+		detachChild(foods);
+		foods = null;
 		walls.disposeChilds();
 		walls.dispose();
 		walls.detachSelf();
 		points = 0;
 
-		nextlevel();
+		
 		createobjects();
 	}
 	
