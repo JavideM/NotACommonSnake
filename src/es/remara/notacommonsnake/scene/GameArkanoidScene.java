@@ -3,7 +3,6 @@ package es.remara.notacommonsnake.scene;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -31,21 +30,29 @@ public class GameArkanoidScene extends BaseScene implements
 
 	private Body wall_body;
 
-	private Rectangle platform, brick, gORegion;
+	private Rectangle platform, gORegion;
 
-	private Rectangle[][] lottaBricks;
+	private Rectangle[] lottaBricks;
+
+	private int[][] grid;
+
+	private Body[] bricksBodies;
 
 	private FixtureDef wallFix, ballFix, platFix, brickFix, gOFix;
 
-	private Body platformBody, ballBody, brickBody, gOBody;
+	private Body platformBody, ballBody, gOBody;
 
 	private PhysicsWorld arkanoidPhysicsWorld;
 
 	private PhysicsConnector ballPC, platformPC;
-	
-	private boolean switchColor = true;
+
+	private PhysicsConnector[] bricksPC;
+
+	private boolean wannaBrick = false;
 
 	private Boolean notStarted = true;
+
+	private float initialX, initialY;
 
 	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
 
@@ -54,7 +61,8 @@ public class GameArkanoidScene extends BaseScene implements
 
 	@Override
 	public void createScene() {
-		setBackground(new Background(0, 100, 200));
+		attachChild(new Sprite(camera.getWidth() / 2, camera.getHeight() / 2,
+				resourcesManager.background_grass_region, vbom));
 		arkanoidPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
 		registerUpdateHandler(arkanoidPhysicsWorld);
 		createFixtures();
@@ -62,7 +70,7 @@ public class GameArkanoidScene extends BaseScene implements
 		createWallBodies();
 		createBallSprite();
 		createPlatformSprite();
-		createBricks();
+		iLikeBricks();
 		createGORegion();
 		setSBPhysicsConnectors();
 		setBallPhysicsConnectors();
@@ -75,10 +83,12 @@ public class GameArkanoidScene extends BaseScene implements
 	private void attachChilds() {
 		this.attachChild(ballSprite);
 		this.attachChild(platform);
-		this.attachChild(brick);
 		this.attachChild(gORegion);
 		for (int i = 0; i < walls.length; i++) {
 			this.attachChild(walls[i]);
+		}
+		for (int i = 0; i < lottaBricks.length; i++) {
+			this.attachChild(lottaBricks[i]);
 		}
 	}
 
@@ -110,8 +120,6 @@ public class GameArkanoidScene extends BaseScene implements
 	}
 
 	private void setSBPhysicsConnectors() {
-		arkanoidPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(
-				brick, brickBody, true, false));
 		arkanoidPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(
 				gORegion, gOBody, true, false));
 	}
@@ -147,15 +155,39 @@ public class GameArkanoidScene extends BaseScene implements
 		}
 	}
 
-	private void createBricks() {
-		brick = new Rectangle(120, camera.getHeight() / 2, 11, 24, vbom);
-		brickBody = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld, brick,
-				BodyType.KinematicBody, brickFix);
-		brickBody.setUserData("Brick");
-	}
-
+	// Sir Bricks-A-Lot method
 	private void iLikeBricks() {
-		
+		initialX = 120;
+		initialY = (camera.getHeight() / 2) - (6 * 22);
+		grid = new int[3][7];
+		lottaBricks = new Rectangle[10];
+		bricksBodies = new Body[lottaBricks.length];
+		bricksPC = new PhysicsConnector[lottaBricks.length];
+		int cont = 0;
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				if (wannaBrick) {
+					lottaBricks[cont] = new Rectangle(initialX, initialY, 11,
+							22, vbom);
+					bricksBodies[cont] = PhysicsFactory.createBoxBody(
+							arkanoidPhysicsWorld, lottaBricks[cont],
+							BodyType.KinematicBody, brickFix);
+					bricksBodies[cont].setUserData("Brick");
+					bricksPC[cont] = new PhysicsConnector(lottaBricks[cont],
+							bricksBodies[cont], true, false);
+					arkanoidPhysicsWorld
+							.registerPhysicsConnector(bricksPC[cont]);
+					wannaBrick = false;
+					cont += 1;
+				} else {
+					wannaBrick = true;
+				}
+				initialY = initialY + 44;
+			}
+			initialY = (camera.getHeight() / 2) - (6 * 22);
+			initialX = initialX + 22;
+		}
+		wannaBrick = false;
 	}
 
 	private void createGORegion() {
@@ -168,17 +200,7 @@ public class GameArkanoidScene extends BaseScene implements
 		gORegion.setVisible(false);
 	}
 
-	@Override
-	public void onBackKeyPressed() {
-		SceneManager.getInstance().loadMenuScene(engine, this);
-	}
-
-	@Override
-	public SceneType getSceneType() {
-		return SceneType.SCENE_ARKANOID;
-	}
-
-	public void resetArkanoid() {
+	private void resetArkanoid() {
 		arkanoidPhysicsWorld.unregisterPhysicsConnector(ballPC);
 		ballPC = null;
 		ballBody.setLinearVelocity(0.0f, 0.0f);
@@ -190,23 +212,41 @@ public class GameArkanoidScene extends BaseScene implements
 		notStarted = true;
 	}
 
+	private void deleteBrick() {
+
+	}
+
+	@Override
+	public void onBackKeyPressed() {
+		SceneManager.getInstance().loadMenuScene(engine, this);
+	}
+
+	@Override
+	public SceneType getSceneType() {
+		return SceneType.SCENE_ARKANOID;
+	}
+
 	@Override
 	public void disposeScene() {
 		arkanoidPhysicsWorld.clearForces();
 		arkanoidPhysicsWorld.destroyBody(wall_body);
 		arkanoidPhysicsWorld.destroyBody(platformBody);
 		arkanoidPhysicsWorld.destroyBody(ballBody);
-		arkanoidPhysicsWorld.destroyBody(brickBody);
+
 		this.detachChild(platform);
 		this.detachChild(ballSprite);
-		this.detachChild(brick);
+		for (int i = 0; i < lottaBricks.length; i++) {
+			arkanoidPhysicsWorld.destroyBody(bricksBodies[i]);
+			this.detachChild(lottaBricks[i]);
+			lottaBricks[i].dispose();
+		}
 		for (int i = 0; i < walls.length; i++) {
 			this.detachChild(walls[i]);
 			walls[i].dispose();
 		}
 		platform.dispose();
 		ballSprite.dispose();
-		brick.dispose();
+
 		this.detachSelf();
 		this.dispose();
 	}
@@ -257,16 +297,6 @@ public class GameArkanoidScene extends BaseScene implements
 				ballBody.setLinearVelocity(normVector.mul(speedMagnitude1));
 			}
 		} else if (contact.getFixtureA().getBody().getUserData().toString()
-				.equals("Brick")) {
-			engine.runOnUpdateThread(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-
-				}
-			});
-		} else if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("GameOver")) {
 			engine.runOnUpdateThread(new Runnable() {
 				@Override
@@ -282,10 +312,22 @@ public class GameArkanoidScene extends BaseScene implements
 
 	}
 
+	// Instante posterior a la colisión
 	@Override
 	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
+		if (contact.getFixtureA().getBody().getUserData().toString()
+				.equals("Brick")) {
+			final Contact contact_aux = contact;
+			engine.runOnUpdateThread(new Runnable() {
+				@Override
+				public void run() {
+					arkanoidPhysicsWorld.destroyBody(contact_aux.getFixtureA()
+							.getBody());
 
+					// SceneManager.getInstance().getCurrentScene().detachChild(platform);
+				}
+			});
+		}
 	}
 
 	@Override
