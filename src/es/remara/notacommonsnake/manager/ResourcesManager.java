@@ -60,7 +60,7 @@ public class ResourcesManager {
 	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
-	private BitmapTextureAtlas wipTextureAtlas;
+	private BuildableBitmapTextureAtlas wipTextureAtlas;
 	private BitmapTextureAtlas ark_ballTextureAtlas;
 	private BuildableBitmapTextureAtlas arkanoidBGAtlas;
 	private BuildableBitmapTextureAtlas snakeTextureAtlas;
@@ -287,16 +287,32 @@ public class ResourcesManager {
 	public void loadWorkInProgressScreen() {
 		BitmapTextureAtlasTextureRegionFactory
 				.setAssetBasePath("gfx/workinprogress/");
-		wipTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
-				512, 256, TextureOptions.BILINEAR);
+//		wipTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
+//				512, 256, TextureOptions.BILINEAR);
+		wipTextureAtlas = new BuildableBitmapTextureAtlas(
+				activity.getTextureManager(), 1024, 1024,
+				TextureOptions.BILINEAR);
 		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				wipTextureAtlas, activity, "workinprogress.png", 0, 0);
-		wipTextureAtlas.load();
+				wipTextureAtlas, activity, "workinprogress.png");
+		BitmapTextureAtlasTextureRegionFactory
+		.setAssetBasePath("gfx/background/");
+		background_grass_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(menuTextureAtlas, activity,
+						"grass.png");
+		try {
+			this.wipTextureAtlas
+					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
+							0, 1, 0));
+			this.wipTextureAtlas.load();
+		} catch (final TextureAtlasBuilderException e) {
+			Debug.e(e);
+		}
 	}
 
 	public void unloadWorkInProgressScreen() {
 		wipTextureAtlas.unload();
 		wip_region = null;
+		background_grass_region = null;
 	}
 
 	/*
