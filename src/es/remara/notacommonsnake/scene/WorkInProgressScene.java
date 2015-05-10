@@ -1,9 +1,6 @@
 package es.remara.notacommonsnake.scene;
 
-
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.util.adt.color.Color;
 
 import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
@@ -15,7 +12,7 @@ public class WorkInProgressScene extends BaseGameScene{
 	
 	@Override
 	public void createScene() {
-		setBackground(new Background(Color.CYAN));
+		attachChild(new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.background_grass_region, vbom));
 		createHUD();
 		
 		wip_sprite = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
