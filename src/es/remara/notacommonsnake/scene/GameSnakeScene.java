@@ -15,6 +15,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Looper;
 
 import es.remara.notacommonsnake.GameActivity;
+import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -25,7 +26,7 @@ import es.remara.notacommonsnake.object.Food.FoodType;
 import es.remara.notacommonsnake.object.Walls;
 import es.remara.notacommonsnake.other.Direction;
 
-public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
+public class GameSnakeScene extends BaseGameScene implements IOnSceneTouchListener{
 	
 	private Foods foods;
 	private Snake snake;
@@ -60,6 +61,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 	public void createScene() {
 		createcontrols();
 		this.points = 0;
+		createHUD();
 		
 		//Background
 		attachChild(new Sprite(camera.getWidth()/2, camera.getHeight()/2,resourcesManager.background_grass_region,  vbom));
@@ -93,6 +95,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 
 	@Override
 	public void disposeScene() {
+		camera.setHUD(null);
 		snake.dispose();
 		snake.detachSelf();
 		foods.detachSelf();
@@ -197,6 +200,7 @@ public class GameSnakeScene extends BaseScene implements IOnSceneTouchListener{
 		if(foods.is_there_food(snake.getHead().getX(), snake.getHead().getY(), true)){
 			snake.eat(foods.get_eatenfood());
 			points += (foods.get_eatenfood().getType() == FoodType.X2)? 200:100;
+			addScore((foods.get_eatenfood().getType() == FoodType.X2)? 200:100);
 		}
 		if(snake.is_ghost_mode() || (!snake.suicide() && !snake.hit_a_wall(walls)))
 			snake.move();
