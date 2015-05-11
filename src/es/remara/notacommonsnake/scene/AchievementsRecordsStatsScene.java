@@ -40,7 +40,7 @@ public class AchievementsRecordsStatsScene extends BaseScene{
 		ArrayList<Session> sessions = (ArrayList<Session>) dbmanager.getAllSessionsByScore();
 		for(Session session: sessions){
 			String textContent = count + "." +session.getPlayer_name() + " ........." + session.getScore() + "pts";
-			Text textPlay = new Text(200, camera.getHeight() - (camera.getHeight()/12 + camera.getHeight()/12*count), font ,textContent, new TextOptions(HorizontalAlign.RIGHT), this.vbom);
+			Text textPlay = new Text(camera.getHeight()/2, camera.getHeight() - (camera.getHeight()/12 + camera.getHeight()/12*count), font ,textContent, new TextOptions(HorizontalAlign.CENTER), this.vbom);
 			attachChild(textPlay);
 			if(count == 10)
 				break;

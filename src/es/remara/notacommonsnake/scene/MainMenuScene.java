@@ -78,8 +78,10 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 				return true;
 			case MENU_ACHIVEMENTS:
 				SceneManager.getInstance().createAchievementsRecordsStatsScene();
-//			case MENU_EXIT:
-//				System.exit(0);
+				return true;
+			case MENU_EXIT:
+				System.exit(0);
+				return true;
 			default:
 				return false;
 		}
