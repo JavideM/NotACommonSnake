@@ -39,6 +39,8 @@ public class ResourcesManager {
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
 	public ITextureRegion achivements_region;
+	public ITextureRegion title_region;
+	public ITextureRegion exit_region;
 
 	public ITextureRegion wip_region;
 	public ITextureRegion ark_ball_region;
@@ -141,17 +143,26 @@ public class ResourcesManager {
 		menuTextureAtlas = new BuildableBitmapTextureAtlas(
 				activity.getTextureManager(), 2048, 512,
 				TextureOptions.BILINEAR);
-		// menu_background_region =
-		// BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas,
-		// activity, "menu_background.png");
+		
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				menuTextureAtlas, activity, "icon_play.png");
+		
 		options_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity, "icon_options.png");
 		achivements_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity,
 						"icon_achivements.png");
+		
+		title_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(menuTextureAtlas, activity,
+						"title.png");
+		
+		exit_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(menuTextureAtlas, activity,
+						"exit.png");
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity,
 						"background/grass.png");
