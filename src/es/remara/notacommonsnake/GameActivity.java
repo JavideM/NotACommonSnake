@@ -14,7 +14,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 
 import android.view.KeyEvent;
 
-import es.remara.notacommonsnake.manager.DataManager;
+import es.remara.notacommonsnake.manager.DBManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 
@@ -27,7 +27,7 @@ public class GameActivity extends BaseGameActivity
 	private BoundCamera camera;
 	private EngineOptions engineoptions;
 	private ResourcesManager resourcesmanager;
-	private DataManager datamanager;
+	private DBManager datamanager;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() 

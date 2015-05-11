@@ -26,6 +26,7 @@ public class ResourcesManager {
 	public GameActivity activity;
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
+	public DBManager dbmanager;
 
 	public Font font;
 
@@ -342,6 +343,7 @@ public class ResourcesManager {
 		getInstance().activity = activity;
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
+		getInstance().dbmanager = new DBManager(activity);
 	}
 
 	public static ResourcesManager getInstance() {

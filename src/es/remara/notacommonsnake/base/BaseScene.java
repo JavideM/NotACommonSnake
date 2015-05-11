@@ -8,6 +8,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import android.app.Activity;
 
 
+import es.remara.notacommonsnake.manager.DBManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 
@@ -19,6 +20,7 @@ public abstract class BaseScene extends Scene{
 	protected ResourcesManager resourcesManager;
 	protected VertexBufferObjectManager vbom;
 	protected BoundCamera camera;
+	protected DBManager dbmanager;
 	
 	/*
 	 	CONSTRUCTOR
@@ -31,6 +33,7 @@ public abstract class BaseScene extends Scene{
 		this.activity = resourcesManager.activity;
 		this.vbom = resourcesManager.vbom;
 		this.camera = resourcesManager.camera;
+		this.dbmanager = resourcesManager.dbmanager;
 		createScene();
 	}
 	
