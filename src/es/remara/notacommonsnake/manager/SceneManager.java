@@ -8,6 +8,7 @@ import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.scene.MainMenuScene;
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.scene.AchievementsRecordsStatsScene;
 import es.remara.notacommonsnake.scene.GameArkanoidScene;
 import es.remara.notacommonsnake.scene.GameSnakeScene;
 import es.remara.notacommonsnake.scene.SplashScene;
@@ -25,11 +26,13 @@ public class SceneManager
 	private BaseScene gamesnakeScene;
 	private BaseScene workInProgressScene;
 	private BaseScene arkanoidScene;
+	private BaseScene arsScene;
 	
 	private BaseScene currentScene;
 	private SceneType currentSceneType;
 	
 	private Engine engine = ResourcesManager.getInstance().engine;
+
 	
 
 	
@@ -39,7 +42,8 @@ public class SceneManager
 		SCENE_MENU,
 		SCENE_SNAKE,
 		SCENE_IN_PROGRESS,
-		SCENE_ARKANOID
+		SCENE_ARKANOID,
+		SCENE_ARS
 	};
 	
 	public static SceneManager getInstance()
@@ -73,6 +77,8 @@ public class SceneManager
 		case SCENE_ARKANOID:
 			setScene(arkanoidScene);
 			break;
+		case SCENE_ARS:
+			setScene(arsScene);
 		}
 	}
 
@@ -105,7 +111,9 @@ public class SceneManager
 				break;
 			case SCENE_IN_PROGRESS:
 				disposeWorkInProgress();
-				break;	
+				break;
+			case SCENE_ARS:
+				disposeARSScene();
 			default:
 				break;
 		}
@@ -113,6 +121,7 @@ public class SceneManager
 		 
 	}
 	
+
 	//Metodo que crea una escena Splash
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
 	{
@@ -167,6 +176,21 @@ public class SceneManager
 		ResourcesManager.getInstance().unloadWorkInProgressScreen();
 		workInProgressScene.disposeScene();
 		workInProgressScene = null;
+	}
+	
+	/*
+	 *  ARSScene (Achievements, Records, Stats)
+	 */
+	public void createAchievementsRecordsStatsScene(){
+		ResourcesManager.getInstance().loadARSResources();
+		arsScene = new AchievementsRecordsStatsScene();
+		SceneManager.getInstance().setScene(arsScene);
+	}
+	
+	private void disposeARSScene() {
+		ResourcesManager.getInstance().unloadARSResources();
+		arsScene.disposeScene();
+		arsScene = null;
 	}
 	
 	/*
