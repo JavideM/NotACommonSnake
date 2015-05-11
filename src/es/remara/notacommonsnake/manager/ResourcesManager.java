@@ -39,9 +39,13 @@ public class ResourcesManager {
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
 	public ITextureRegion achivements_region;
+	public ITextureRegion title_region;
+	public ITextureRegion exit_region;
 
 	public ITextureRegion wip_region;
 	public ITextureRegion ark_ball_region;
+	public ITextureRegion ark_platform_region;
+	public ITextureRegion ark_brick_region;
 	public ITextureRegion background_grass_region;
 	public ITextureRegion food_X2_region;
 	public ITextureRegion food_AUG_SPEED_region;
@@ -61,7 +65,6 @@ public class ResourcesManager {
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	private BuildableBitmapTextureAtlas wipTextureAtlas;
-	private BitmapTextureAtlas ark_ballTextureAtlas;
 	private BuildableBitmapTextureAtlas arkanoidBGAtlas;
 	private BuildableBitmapTextureAtlas snakeTextureAtlas;
 	private BitmapTextureAtlas mFontTexture;
@@ -101,15 +104,19 @@ public class ResourcesManager {
 		// bola
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		arkanoidBGAtlas = new BuildableBitmapTextureAtlas(
-				activity.getTextureManager(), 1024, 512,
+				activity.getTextureManager(), 2048, 2048,
 				TextureOptions.BILINEAR);
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arkanoidBGAtlas, activity,
 						"background/grass.png");
-		ark_ballTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), 16, 16);
 		ark_ball_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arkanoidBGAtlas, activity, "arkanoid/ball.png");
+		ark_platform_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arkanoidBGAtlas, activity,
+						"arkanoid/platform.png");
+		ark_brick_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arkanoidBGAtlas, activity,
+						"arkanoid/brick.png");
 
 		try {
 			arkanoidBGAtlas
@@ -128,7 +135,7 @@ public class ResourcesManager {
 	private void unloadGameArkanoidGraphics() {
 		arkanoidBGAtlas.unload();
 		background_grass_region = null;
-		ark_ballTextureAtlas.unload();
+		ark_platform_region = null;
 		ark_ball_region = null;
 	}
 
@@ -141,17 +148,26 @@ public class ResourcesManager {
 		menuTextureAtlas = new BuildableBitmapTextureAtlas(
 				activity.getTextureManager(), 2048, 512,
 				TextureOptions.BILINEAR);
-		// menu_background_region =
-		// BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas,
-		// activity, "menu_background.png");
+		
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				menuTextureAtlas, activity, "icon_play.png");
+		
 		options_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity, "icon_options.png");
 		achivements_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity,
 						"icon_achivements.png");
+		
+		title_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(menuTextureAtlas, activity,
+						"title.png");
+		
+		exit_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(menuTextureAtlas, activity,
+						"exit.png");
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity,
 						"background/grass.png");
@@ -287,18 +303,18 @@ public class ResourcesManager {
 	public void loadWorkInProgressScreen() {
 		BitmapTextureAtlasTextureRegionFactory
 				.setAssetBasePath("gfx/workinprogress/");
-//		wipTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
-//				512, 256, TextureOptions.BILINEAR);
+		// wipTextureAtlas = new
+		// BitmapTextureAtlas(activity.getTextureManager(),
+		// 512, 256, TextureOptions.BILINEAR);
 		wipTextureAtlas = new BuildableBitmapTextureAtlas(
 				activity.getTextureManager(), 1024, 1024,
 				TextureOptions.BILINEAR);
 		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				wipTextureAtlas, activity, "workinprogress.png");
 		BitmapTextureAtlasTextureRegionFactory
-		.setAssetBasePath("gfx/background/");
+				.setAssetBasePath("gfx/background/");
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(menuTextureAtlas, activity,
-						"grass.png");
+				.createFromAsset(menuTextureAtlas, activity, "grass.png");
 		try {
 			this.wipTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
