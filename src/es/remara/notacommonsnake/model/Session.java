@@ -42,13 +42,17 @@ public class Session {
 	}
 
 	
-		
+	//Constructor
 	public Session()
 	{
 		//
 		// Constructor logic
 		//
 	}
+	
+	/*
+	 * Methods
+	 */
 	
 	public void save(DBManager dbmanager)
 	{

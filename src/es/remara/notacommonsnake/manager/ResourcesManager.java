@@ -70,6 +70,8 @@ public class ResourcesManager {
 	private BuildableBitmapTextureAtlas snakeTextureAtlas;
 	private BitmapTextureAtlas mFontTexture;
 
+	private BuildableBitmapTextureAtlas arsTextureAtlas;
+
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -315,7 +317,7 @@ public class ResourcesManager {
 		BitmapTextureAtlasTextureRegionFactory
 				.setAssetBasePath("gfx/background/");
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(menuTextureAtlas, activity, "grass.png");
+				.createFromAsset(wipTextureAtlas, activity, "grass.png");
 		try {
 			this.wipTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
@@ -333,6 +335,34 @@ public class ResourcesManager {
 	}
 
 	/*
+	 * Achievements, Records, Stats Scene Resources
+	 */
+	
+	public void loadARSResources()
+	{
+		arsTextureAtlas = new BuildableBitmapTextureAtlas(
+				activity.getTextureManager(), 1024, 1024,
+				TextureOptions.BILINEAR);
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/background/");
+		background_grass_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "grass.png");
+		try {
+			this.arsTextureAtlas
+					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
+							0, 1, 0));
+			this.arsTextureAtlas.load();
+		} catch (final TextureAtlasBuilderException e) {
+			Debug.e(e);
+}
+	}
+	
+	public void unloadARSResources() {
+		arsTextureAtlas.unload();
+		background_grass_region = null;
+	}
+	
+	/*
 	 * Esta clase prepara todos los parametros de ResourcesManager al cargar el
 	 * juego para que después sean accesibles desde las distintas clases,
 	 * escenas
@@ -349,5 +379,7 @@ public class ResourcesManager {
 	public static ResourcesManager getInstance() {
 		return INSTANCE;
 	}
+
+	
 
 }

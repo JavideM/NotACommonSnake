@@ -1,8 +1,12 @@
 package es.remara.notacommonsnake.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.remara.notacommonsnake.model.Session;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -46,7 +50,9 @@ public class DBManager extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		db.execSQL("DROP TABLE IF EXIST " + SESSIONS_TABLE);
 		
+		onCreate(db);
 	}
 
 	/*
@@ -64,4 +70,29 @@ public class DBManager extends SQLiteOpenHelper {
         db.insert(SESSIONS_TABLE, null, values);
         db.close();
 	}
+	
+	public List<Session> getAllSessionsByScore() {
+        List<Session> sessionList = new ArrayList<Session>();
+        // Select All Query
+        String selectQuery = "SELECT * " +
+    						" FROM " + SESSIONS_TABLE + " ORDER BY SCORE DESC";
+ 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+ 
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Session session = new Session();
+                session.setIdSession(Integer.parseInt(cursor.getString(0)));
+                session.setPlayer_name(cursor.getString(1));
+                session.setScore(Integer.parseInt(cursor.getString(2)));
+                // Adding session to list
+                sessionList.add(session);
+            } while (cursor.moveToNext());
+        }
+       
+        // return contact list
+        return sessionList;
+    }
 }
