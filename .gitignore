@@ -43,14 +43,7 @@ Temporary Items
 .apdisk
 
 # Archivos de Bin que dan problemas
-bin/NotACommonSnake.apk
-bin/classes.dex
-bin/resources.ap_
+bin/
 
 # Project propeties
 project.properties
-
-# Clases compiladas en Bin
-bin/*
-*.class
-=======
