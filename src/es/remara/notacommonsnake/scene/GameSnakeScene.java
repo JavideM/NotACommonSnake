@@ -221,7 +221,7 @@ public class GameSnakeScene extends BaseGameScene implements IOnSceneTouchListen
 		         final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 		         alert.setCancelable(false);
 		         alert.setTitle("GAME OVER");
-		         alert.setMessage("Score:" + points + "\nDo you want to save your score?");
+		         alert.setMessage("You have score: " + points + " points" + "\nDo you want to save your score?");
 		         alert.setView(ed);
 		         alert.setPositiveButton("OK", new OnClickListener() {
 		                 public void onClick(DialogInterface arg0, int arg1) {

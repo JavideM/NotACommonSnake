@@ -107,7 +107,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.1f, 1);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.1f, 1);
 		final IMenuItem achivementsMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_ACHIVEMENTS, resourcesManager.achivements_region, vbom), 1.2f, 1 );
-//		final IMenuItem exitMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_EXIT, resourcesManager.exit_region, vbom), 1, 1 );
+		final IMenuItem exitMenuItem = new ScaleMenuItemDecorator (new SpriteMenuItem(MENU_EXIT, resourcesManager.exit_region, vbom), 1.0f, 1 );
 		
 		final Text textPlay = new Text(0, 0, resourcesManager.font , activity.getString(R.string.play) , new TextOptions(HorizontalAlign.CENTER), this.vbom);
         final Text textOptions = new Text(0, 0, resourcesManager.font , activity.getString(R.string.options) , new TextOptions(HorizontalAlign.LEFT), this.vbom);
@@ -118,9 +118,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		menuChildScene.attachChild(textPlay);
 		menuChildScene.addMenuItem(optionsMenuItem);		
 		menuChildScene.attachChild(textOptions);
+		menuChildScene.addMenuItem(exitMenuItem);
 		menuChildScene.addMenuItem(achivementsMenuItem);
 		menuChildScene.attachChild(textAchivements);
-//		menuChildScene.addMenuItem(exitMenuItem);
 		menuChildScene.setBackgroundEnabled(false);
 		menuChildScene.attachChild(new Sprite(-55, camera.getHeight()/8 + playMenuItem.getHeight()/2, resourcesManager.title_region, vbom) );
 		
@@ -130,7 +130,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		textPlay.setPosition(playMenuItem.getX(), playMenuItem.getY() - playMenuItem.getHeight() / 2 - 40);
 		textOptions.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - optionsMenuItem.getHeight() / 2 - 40);
 		textAchivements.setPosition(achivementsMenuItem.getX(), achivementsMenuItem.getY() - achivementsMenuItem.getHeight() / 2 - 40);
-//		exitMenuItem.setPosition(exitMenuItem.getX() + camera.getWidth()/2 - exitMenuItem.getWidth()/2, exitMenuItem.getY() + camera.getHeight()/2 - exitMenuItem.getHeight()/2 );
+		exitMenuItem.setPosition(exitMenuItem.getX() + camera.getWidth()/2 - exitMenuItem.getWidth()/2, exitMenuItem.getY() + camera.getHeight()/2 - exitMenuItem.getHeight()/2 );
 		
 		menuChildScene.setOnMenuItemClickListener(this);
 		
