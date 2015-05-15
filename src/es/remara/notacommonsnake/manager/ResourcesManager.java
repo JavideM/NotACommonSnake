@@ -62,6 +62,13 @@ public class ResourcesManager {
 	public ITextureRegion snake_corner_region;
 	public ITextureRegion wall_region;
 
+	public ITextureRegion orange_pannel_region;
+	public ITextureRegion blue_pannel_region;
+	public ITextureRegion salmon_pannel_region;
+	public ITextureRegion trophy_region;
+	public ITextureRegion stats_region;
+	public ITextureRegion medal_region;
+	
 	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -71,6 +78,8 @@ public class ResourcesManager {
 	private BitmapTextureAtlas mFontTexture;
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
+
+	
 
 	// ---------------------------------------------
 	// CLASS LOGIC
@@ -341,12 +350,26 @@ public class ResourcesManager {
 	public void loadARSResources()
 	{
 		arsTextureAtlas = new BuildableBitmapTextureAtlas(
-				activity.getTextureManager(), 1024, 1024,
+				activity.getTextureManager(), 2048, 2048,
 				TextureOptions.BILINEAR);
 		BitmapTextureAtlasTextureRegionFactory
 				.setAssetBasePath("gfx/background/");
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arsTextureAtlas, activity, "grass.png");
+		BitmapTextureAtlasTextureRegionFactory
+		.setAssetBasePath("gfx/ars/");
+		orange_pannel_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "orangepannel.png");
+		blue_pannel_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "bluepannel.png");
+		salmon_pannel_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "salmonpannel.png");
+		trophy_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "trophy.png");
+		stats_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "stats.png");
+		medal_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(arsTextureAtlas, activity, "medal.png");
 		try {
 			this.arsTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
@@ -360,6 +383,12 @@ public class ResourcesManager {
 	public void unloadARSResources() {
 		arsTextureAtlas.unload();
 		background_grass_region = null;
+		orange_pannel_region = null;
+		salmon_pannel_region = null;
+		blue_pannel_region = null;
+		trophy_region = null;
+		medal_region = null;
+		stats_region = null;
 	}
 	
 	/*
