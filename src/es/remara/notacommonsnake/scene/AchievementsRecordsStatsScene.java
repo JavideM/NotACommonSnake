@@ -8,13 +8,9 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.util.adt.align.HorizontalAlign;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
+import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -99,16 +95,32 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 
 	private void createAchievementsPannel() {
 		achievementsPannel = new Entity();
+		/*
+		 * Pannel
+		 */
 		Sprite pannel = new Sprite(camera.getWidth() / 2,
 				camera.getHeight() / 2 + 30,
 				resourcesManager.orange_pannel_region, vbom);
 		achievementsPannel.attachChild(pannel);
 		attachChild(achievementsPannel);
 		achievementsPannel.setVisible(false);
+		
+		/*
+		 *  Pannel Content
+		 */
+		//Title
+		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
+				- camera.getHeight() / 12, resourcesManager.fonttitle,
+				activity.getString(R.string.achievements_title), new TextOptions(HorizontalAlign.CENTER),
+				this.vbom);
+		achievementsPannel.attachChild(text);
 	}
 
 	private void createRecordsPannel() {
 		recordsPannel = new Entity();
+		/*
+		 *  Color Pannel
+		 */
 		Sprite pannel = new Sprite(camera.getWidth() / 2,
 				camera.getHeight() / 2 + 30,
 				resourcesManager.salmon_pannel_region, vbom) {
@@ -117,17 +129,17 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				// Scroll functionality
 				if (pSceneTouchEvent.isActionDown())
 					positionIn = pTouchAreaLocalY;
-				float new_Y = textlist.get(0).getY()
-						+ (positionIn - pTouchAreaLocalY) / 10;
-				if (new_Y >= top_ini_position - 5
-						&& (textlist.get(textlist.size() - 1).getY() + (positionIn - pTouchAreaLocalY) / 10) <= bottom_ini_position + 5) {
+				float distance = (positionIn - pTouchAreaLocalY) / 10;
+				if ((textlist.get(0).getY() - distance) >= top_ini_position - 5
+						&& (textlist.get(textlist.size() - 1).getY() - distance <= bottom_ini_position + 5)) {
 					for (int i = 0; i < textlist.size(); i++) {
 						textlist.get(i).setPosition(
 								textlist.get(i).getX(),
 								textlist.get(i).getY()
-										+ (positionIn - pTouchAreaLocalY) / 10);
+										- distance);
 						if (textlist.get(i).getY() >= top_ini_position + 5
 								|| textlist.get(i).getY() <= bottom_ini_position - 5) {
 							textlist.get(i).setVisible(false);
@@ -141,49 +153,38 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 		};
 		recordsPannel.attachChild(pannel);
 		registerTouchArea(pannel);
-		BitmapTextureAtlas mFontTexture = new BitmapTextureAtlas(
-				this.engine.getTextureManager(), 256, 256,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		BitmapTextureAtlas mFontTitleTexture = new BitmapTextureAtlas(
-				this.engine.getTextureManager(), 256, 256,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
-		Font fonttitle = new Font(this.engine.getFontManager(),
-				mFontTitleTexture, Typeface.create(Typeface.DEFAULT,
-						Typeface.BOLD), 32, true, Color.WHITE);
-
-		Font font = new Font(this.engine.getFontManager(), mFontTexture,
-				Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 20,
-				true, Color.WHITE);
-
-		engine.getTextureManager().loadTexture(mFontTexture);
-		engine.getTextureManager().loadTexture(mFontTitleTexture);
-		engine.getFontManager().loadFont(font);
-		engine.getFontManager().loadFont(fonttitle);
+		/*
+		 *  Pannel Content
+		 */
+		//Title
 		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
-				- camera.getHeight() / 12, fonttitle, "TOP SCORES",
-				new TextOptions(HorizontalAlign.CENTER), this.vbom);
+				- camera.getHeight() / 12, resourcesManager.fonttitle,
+				activity.getString(R.string.records_title), new TextOptions(HorizontalAlign.CENTER),
+				this.vbom);
 		recordsPannel.attachChild(text);
-
+		
+		//Records
 		int count = 1;
 		textlist = new ArrayList<Text>();
 		ArrayList<Session> sessions = (ArrayList<Session>) dbmanager
 				.getAllSessionsByScore();
 		for (Session session : sessions) {
 			String content = count + ". " + session.getPlayer_name();
+			//Name and position
 			Text textPlayer = new Text(camera.getHeight() / 2,
 					camera.getHeight()
 							- (camera.getHeight() / 12 + camera.getHeight()
-									/ 12 * count), font, content,
-					new TextOptions(HorizontalAlign.LEFT), this.vbom);
+									/ 12 * count), resourcesManager.fontARS,
+					content, new TextOptions(HorizontalAlign.LEFT), this.vbom);
 			textPlayer.setPosition(textPlayer.getX() + textPlayer.getWidth()
 					/ 2, textPlayer.getY());
+			//Score
 			content = session.getScore() + "ptos";
 			Text textScore = new Text(600, camera.getHeight()
 					- (camera.getHeight() / 12 + camera.getHeight() / 12
-							* count), font, content, new TextOptions(
-					HorizontalAlign.LEFT), this.vbom);
+							* count), resourcesManager.fontARS, content,
+					new TextOptions(HorizontalAlign.LEFT), this.vbom);
 			textScore.setPosition(textScore.getX() - textScore.getWidth() / 2,
 					textScore.getY());
 			recordsPannel.attachChild(textPlayer);
@@ -196,18 +197,30 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			}
 			count++;
 		}
-
 		attachChild(recordsPannel);
 	}
 
 	private void createStatsPannel() {
 		statisticPannel = new Entity();
+		/*
+		 * Color Pannel
+		 */
 		Sprite pannel = new Sprite(camera.getWidth() / 2,
 				camera.getHeight() / 2 + 30,
 				resourcesManager.blue_pannel_region, vbom);
 		statisticPannel.attachChild(pannel);
 		attachChild(statisticPannel);
 		statisticPannel.setVisible(false);
+		
+		/*
+		 * Pannel Content
+		 */
+		//Title
+		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
+				- camera.getHeight() / 12, resourcesManager.fonttitle,
+				activity.getString(R.string.stats_title), new TextOptions(HorizontalAlign.CENTER),
+				this.vbom);
+		statisticPannel.attachChild(text);
 	}
 
 	@Override
