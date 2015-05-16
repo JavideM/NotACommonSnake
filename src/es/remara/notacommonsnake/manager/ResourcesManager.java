@@ -29,7 +29,9 @@ public class ResourcesManager {
 	public DBManager dbmanager;
 
 	public Font font;
-
+	public Font fonttitle;
+	public Font fontARS;
+	
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
 	// ---------------------------------------------
@@ -69,6 +71,9 @@ public class ResourcesManager {
 	public ITextureRegion stats_region;
 	public ITextureRegion medal_region;
 	
+	private BitmapTextureAtlas mFontArsTexture;
+	private BitmapTextureAtlas mFontTitleTexture;
+	
 	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -78,6 +83,8 @@ public class ResourcesManager {
 	private BitmapTextureAtlas mFontTexture;
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
+
+	
 
 	
 
@@ -349,6 +356,11 @@ public class ResourcesManager {
 	
 	public void loadARSResources()
 	{
+		loadARSGraphics();
+		loadARSFonts();
+	}
+	
+	public void loadARSGraphics(){
 		arsTextureAtlas = new BuildableBitmapTextureAtlas(
 				activity.getTextureManager(), 2048, 2048,
 				TextureOptions.BILINEAR);
@@ -377,7 +389,31 @@ public class ResourcesManager {
 			this.arsTextureAtlas.load();
 		} catch (final TextureAtlasBuilderException e) {
 			Debug.e(e);
-}
+		}
+	}
+	
+	public void loadARSFonts()
+	{
+		mFontArsTexture = new BitmapTextureAtlas(
+				this.engine.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		mFontTitleTexture = new BitmapTextureAtlas(
+				this.engine.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		fonttitle = new Font(this.engine.getFontManager(),
+				mFontTitleTexture, Typeface.create(Typeface.DEFAULT,
+						Typeface.BOLD), 32, true, Color.WHITE);
+
+		fontARS = new Font(this.engine.getFontManager(), mFontTexture,
+				Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 20,
+				true, Color.WHITE);
+
+		engine.getTextureManager().loadTexture(mFontArsTexture);
+		engine.getTextureManager().loadTexture(mFontTitleTexture);
+		engine.getFontManager().loadFont(fontARS);
+		engine.getFontManager().loadFont(fonttitle);
 	}
 	
 	public void unloadARSResources() {
