@@ -1,9 +1,15 @@
 <resources>
-
+	<!-- General Strings -->
     <string name="app_name">Not A Common Snake</string>
-
+    
+	<!-- Menu Strings  -->
     <string name="play">PLAY</string>
     <string name="options">SETTINGS</string>
     <string name="achivements">ACHIVEMENTS</string>
+    
+    <!-- Achievements Scene Strings  -->
+    <string name="stats_title">STATISTICS</string>
+    <string name="records_title">TOP SCORES</string>
+    <string name="achievements_title">ACHIEVEMENTS</string>
     
 </resources>

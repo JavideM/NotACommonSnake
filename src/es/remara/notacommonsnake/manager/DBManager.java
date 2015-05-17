@@ -18,7 +18,7 @@ public class DBManager extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "contactsManager";
 	
-	/*
+	/**
 	 * Tablas
 	 */
 	
@@ -38,6 +38,27 @@ public class DBManager extends SQLiteOpenHelper {
 												PLAYER_NAME + " TEXT not null, " +
 												SCORE + " INTEGER not null)";
 	
+	/*
+	 * Achievements
+	 */
+	//Table Name
+	private final String ACHIEVEMENTS_TABLE = "ACHIEVEMENTS";
+	
+	//Columns
+	private final String IDACHIEVEMENT = "IDACHIEVEMENT";
+	private final String ACH_NAME = "NAME";
+	private final String ACH_DESCRIP = "DESCRIPTION";
+	private final String ACH_DONE = "DONE";
+	private final String ACH_IDSESSION = IDSESSION;
+	
+	private String achievementsCreate = "CREATE TABLE " + ACHIEVEMENTS_TABLE + 
+											" ("+IDACHIEVEMENT + " INTEGER primary key, " +
+												ACH_NAME + " TEXT not null, " +
+												ACH_DESCRIP + " TEXT, " +
+												ACH_DONE + " TEXT, " +
+												ACH_IDSESSION + " INTEGER, " +
+												"FOREIGN KEY("+ACH_IDSESSION+") REFERENCES "+ SESSIONS_TABLE +"("+IDSESSION+"))";
+	
 	
 	public DBManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,11 +67,13 @@ public class DBManager extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(sessionsCreate);
+		db.execSQL(achievementsCreate);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXIST " + SESSIONS_TABLE);
+		db.execSQL("DROP TABLE IF EXIST " + ACHIEVEMENTS_TABLE);
 		
 		onCreate(db);
 	}

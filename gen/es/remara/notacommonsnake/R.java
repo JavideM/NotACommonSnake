@@ -15,10 +15,19 @@ public final class R {
         public static final int icon_play=0x7f020001;
     }
     public static final class string {
+        public static final int achievements_title=0x7f030006;
         public static final int achivements=0x7f030003;
+        /**  General Strings 
+         */
         public static final int app_name=0x7f030000;
         public static final int options=0x7f030002;
+        /**  Menu Strings  
+         */
         public static final int play=0x7f030001;
+        public static final int records_title=0x7f030005;
+        /**  Achievements Scene Strings  
+         */
+        public static final int stats_title=0x7f030004;
     }
     public static final class style {
         /** 
