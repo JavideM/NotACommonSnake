@@ -2,13 +2,12 @@ package es.remara.notacommonsnake.model;
 
 import es.remara.notacommonsnake.manager.DBManager;
 
-
 public class Session {
 
 	/*
 	 * Parameters
 	 */
-	
+
 	private int idSession;
 	private String player_name;
 	private int score;
@@ -16,7 +15,7 @@ public class Session {
 	/*
 	 * Getters setters
 	 */
-	
+
 	public int getIdSession() {
 		return idSession;
 	}
@@ -41,26 +40,22 @@ public class Session {
 		this.score = score;
 	}
 
-	
-	//Constructor
-	public Session()
-	{
+	// Constructor
+	public Session() {
 		//
 		// Constructor logic
 		//
 	}
-	
+
 	/*
 	 * Methods
 	 */
-	
-	public void save(DBManager dbmanager)
-	{
+
+	public void save(DBManager dbmanager) {
 		dbmanager.saveSession(this);
 	}
-	
-	public void update(DBManager dbmanager)
-	{
-		
+
+	public void update(DBManager dbmanager) {
+
 	}
 }

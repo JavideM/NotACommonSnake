@@ -5,33 +5,29 @@ import org.andengine.entity.sprite.Sprite;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 
-public class SplashScene extends BaseScene{
-	
+public class SplashScene extends BaseScene {
+
 	private Sprite splash;
-	
+
 	@Override
-	public void createScene()
-	{
+	public void createScene() {
 		splash = new Sprite(400, 240, resourcesManager.splash_region, vbom);
-    	
-    	attachChild(splash);
+
+		attachChild(splash);
 	}
 
 	@Override
-	public void onBackKeyPressed()
-	{
+	public void onBackKeyPressed() {
 		return;
 	}
 
 	@Override
-	public SceneType getSceneType()
-	{
+	public SceneType getSceneType() {
 		return SceneType.SCENE_SPLASH;
 	}
 
 	@Override
-	public void disposeScene()
-	{
+	public void disposeScene() {
 		splash.detachSelf();
 		splash.dispose();
 		this.detachSelf();
