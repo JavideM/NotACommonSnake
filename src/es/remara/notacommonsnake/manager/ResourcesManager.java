@@ -31,7 +31,7 @@ public class ResourcesManager {
 	public Font font;
 	public Font fonttitle;
 	public Font fontARS;
-	
+
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
 	// ---------------------------------------------
@@ -70,10 +70,10 @@ public class ResourcesManager {
 	public ITextureRegion trophy_region;
 	public ITextureRegion stats_region;
 	public ITextureRegion medal_region;
-	
+
 	private BitmapTextureAtlas mFontArsTexture;
 	private BitmapTextureAtlas mFontTitleTexture;
-	
+
 	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -83,10 +83,6 @@ public class ResourcesManager {
 	private BitmapTextureAtlas mFontTexture;
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
-
-	
-
-	
 
 	// ---------------------------------------------
 	// CLASS LOGIC
@@ -129,7 +125,8 @@ public class ResourcesManager {
 				.createFromAsset(arkanoidBGAtlas, activity,
 						"background/grass.png");
 		ark_ball_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(arkanoidBGAtlas, activity, "arkanoid/ball.png");
+				.createFromAsset(arkanoidBGAtlas, activity,
+						"arkanoid/ball_01.png");
 		ark_platform_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arkanoidBGAtlas, activity,
 						"arkanoid/platform.png");
@@ -167,26 +164,24 @@ public class ResourcesManager {
 		menuTextureAtlas = new BuildableBitmapTextureAtlas(
 				activity.getTextureManager(), 2048, 512,
 				TextureOptions.BILINEAR);
-		
+
 		play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				menuTextureAtlas, activity, "icon_play.png");
-		
+
 		options_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity, "icon_options.png");
 		achivements_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity,
 						"icon_achivements.png");
-		
-		title_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(menuTextureAtlas, activity,
-						"title.png");
-		
-		exit_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(menuTextureAtlas, activity,
-						"exit.png");
-		
+
+		title_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuTextureAtlas, activity, "title.png");
+
+		exit_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuTextureAtlas, activity, "exit.png");
+
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		
+
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity,
 						"background/grass.png");
@@ -353,14 +348,13 @@ public class ResourcesManager {
 	/*
 	 * Achievements, Records, Stats Scene Resources
 	 */
-	
-	public void loadARSResources()
-	{
+
+	public void loadARSResources() {
 		loadARSGraphics();
 		loadARSFonts();
 	}
-	
-	public void loadARSGraphics(){
+
+	public void loadARSGraphics() {
 		arsTextureAtlas = new BuildableBitmapTextureAtlas(
 				activity.getTextureManager(), 2048, 2048,
 				TextureOptions.BILINEAR);
@@ -368,20 +362,19 @@ public class ResourcesManager {
 				.setAssetBasePath("gfx/background/");
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arsTextureAtlas, activity, "grass.png");
-		BitmapTextureAtlasTextureRegionFactory
-		.setAssetBasePath("gfx/ars/");
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/ars/");
 		orange_pannel_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arsTextureAtlas, activity, "orangepannel.png");
 		blue_pannel_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arsTextureAtlas, activity, "bluepannel.png");
 		salmon_pannel_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arsTextureAtlas, activity, "salmonpannel.png");
-		trophy_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(arsTextureAtlas, activity, "trophy.png");
-		stats_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(arsTextureAtlas, activity, "stats.png");
-		medal_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(arsTextureAtlas, activity, "medal.png");
+		trophy_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				arsTextureAtlas, activity, "trophy.png");
+		stats_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				arsTextureAtlas, activity, "stats.png");
+		medal_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				arsTextureAtlas, activity, "medal.png");
 		try {
 			this.arsTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
@@ -391,9 +384,8 @@ public class ResourcesManager {
 			Debug.e(e);
 		}
 	}
-	
-	public void loadARSFonts()
-	{
+
+	public void loadARSFonts() {
 		mFontArsTexture = new BitmapTextureAtlas(
 				this.engine.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -402,9 +394,9 @@ public class ResourcesManager {
 				this.engine.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		fonttitle = new Font(this.engine.getFontManager(),
-				mFontTitleTexture, Typeface.create(Typeface.DEFAULT,
-						Typeface.BOLD), 32, true, Color.WHITE);
+		fonttitle = new Font(this.engine.getFontManager(), mFontTitleTexture,
+				Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true,
+				Color.WHITE);
 
 		fontARS = new Font(this.engine.getFontManager(), mFontTexture,
 				Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 20,
@@ -415,7 +407,7 @@ public class ResourcesManager {
 		engine.getFontManager().loadFont(fontARS);
 		engine.getFontManager().loadFont(fonttitle);
 	}
-	
+
 	public void unloadARSResources() {
 		arsTextureAtlas.unload();
 		background_grass_region = null;
@@ -426,7 +418,7 @@ public class ResourcesManager {
 		medal_region = null;
 		stats_region = null;
 	}
-	
+
 	/*
 	 * Esta clase prepara todos los parametros de ResourcesManager al cargar el
 	 * juego para que después sean accesibles desde las distintas clases,
@@ -444,7 +436,5 @@ public class ResourcesManager {
 	public static ResourcesManager getInstance() {
 		return INSTANCE;
 	}
-
-	
 
 }

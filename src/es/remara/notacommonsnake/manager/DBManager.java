@@ -12,54 +12,51 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBManager extends SQLiteOpenHelper {
 
-	 // Database Version
-    private static final int DATABASE_VERSION = 1;
- 
-    // Database Name
-    private static final String DATABASE_NAME = "contactsManager";
-	
+	// Database Version
+	private static final int DATABASE_VERSION = 1;
+
+	// Database Name
+	private static final String DATABASE_NAME = "contactsManager";
+
 	/**
 	 * Tablas
 	 */
-	
+
 	/*
 	 * Session
 	 */
 	// Table Name
 	private final String SESSIONS_TABLE = "SESSIONS";
-	
-	//Columns
+
+	// Columns
 	private final String IDSESSION = "IDSESSION";
 	private final String PLAYER_NAME = "PLAYER_NAME";
 	private final String SCORE = "SCORE";
-	
-	private final String sessionsCreate = "CREATE TABLE " + SESSIONS_TABLE  +
-												" ("+ IDSESSION + " INTEGER primary key not null, " +
-												PLAYER_NAME + " TEXT not null, " +
-												SCORE + " INTEGER not null)";
-	
+
+	private final String sessionsCreate = "CREATE TABLE " + SESSIONS_TABLE
+			+ " (" + IDSESSION + " INTEGER primary key not null, "
+			+ PLAYER_NAME + " TEXT not null, " + SCORE + " INTEGER not null)";
+
 	/*
 	 * Achievements
 	 */
-	//Table Name
+	// Table Name
 	private final String ACHIEVEMENTS_TABLE = "ACHIEVEMENTS";
-	
-	//Columns
+
+	// Columns
 	private final String IDACHIEVEMENT = "IDACHIEVEMENT";
 	private final String ACH_NAME = "NAME";
 	private final String ACH_DESCRIP = "DESCRIPTION";
 	private final String ACH_DONE = "DONE";
 	private final String ACH_IDSESSION = IDSESSION;
-	
-	private String achievementsCreate = "CREATE TABLE " + ACHIEVEMENTS_TABLE + 
-											" ("+IDACHIEVEMENT + " INTEGER primary key, " +
-												ACH_NAME + " TEXT not null, " +
-												ACH_DESCRIP + " TEXT, " +
-												ACH_DONE + " TEXT, " +
-												ACH_IDSESSION + " INTEGER, " +
-												"FOREIGN KEY("+ACH_IDSESSION+") REFERENCES "+ SESSIONS_TABLE +"("+IDSESSION+"))";
-	
-	
+
+	private String achievementsCreate = "CREATE TABLE " + ACHIEVEMENTS_TABLE
+			+ " (" + IDACHIEVEMENT + " INTEGER primary key, " + ACH_NAME
+			+ " TEXT not null, " + ACH_DESCRIP + " TEXT, " + ACH_DONE
+			+ " TEXT, " + ACH_IDSESSION + " INTEGER, " + "FOREIGN KEY("
+			+ ACH_IDSESSION + ") REFERENCES " + SESSIONS_TABLE + "("
+			+ IDSESSION + "))";
+
 	public DBManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -74,48 +71,47 @@ public class DBManager extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXIST " + SESSIONS_TABLE);
 		db.execSQL("DROP TABLE IF EXIST " + ACHIEVEMENTS_TABLE);
-		
+
 		onCreate(db);
 	}
 
 	/*
-	 * Table Sessions CRUD 
+	 * Table Sessions CRUD
 	 */
-	
-	public void saveSession(Session session)
-	{
+
+	public void saveSession(Session session) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		 
-        ContentValues values = new ContentValues();
-        values.put(PLAYER_NAME, session.getPlayer_name()); 
-        values.put(SCORE, session.getScore());
-        
-        db.insert(SESSIONS_TABLE, null, values);
-        db.close();
+
+		ContentValues values = new ContentValues();
+		values.put(PLAYER_NAME, session.getPlayer_name());
+		values.put(SCORE, session.getScore());
+
+		db.insert(SESSIONS_TABLE, null, values);
+		db.close();
 	}
-	
+
 	public List<Session> getAllSessionsByScore() {
-        List<Session> sessionList = new ArrayList<Session>();
-        // Select All Query
-        String selectQuery = "SELECT * " +
-    						" FROM " + SESSIONS_TABLE + " ORDER BY SCORE DESC";
- 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
- 
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Session session = new Session();
-                session.setIdSession(Integer.parseInt(cursor.getString(0)));
-                session.setPlayer_name(cursor.getString(1));
-                session.setScore(Integer.parseInt(cursor.getString(2)));
-                // Adding session to list
-                sessionList.add(session);
-            } while (cursor.moveToNext());
-        }
-       
-        // return contact list
-        return sessionList;
-    }
+		List<Session> sessionList = new ArrayList<Session>();
+		// Select All Query
+		String selectQuery = "SELECT * " + " FROM " + SESSIONS_TABLE
+				+ " ORDER BY SCORE DESC";
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Session session = new Session();
+				session.setIdSession(Integer.parseInt(cursor.getString(0)));
+				session.setPlayer_name(cursor.getString(1));
+				session.setScore(Integer.parseInt(cursor.getString(2)));
+				// Adding session to list
+				sessionList.add(session);
+			} while (cursor.moveToNext());
+		}
+
+		// return contact list
+		return sessionList;
+	}
 }
