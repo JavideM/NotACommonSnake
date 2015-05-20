@@ -104,22 +104,22 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 		achievementsPannel.attachChild(pannel);
 		attachChild(achievementsPannel);
 		achievementsPannel.setVisible(false);
-		
+
 		/*
-		 *  Pannel Content
+		 * Pannel Content
 		 */
-		//Title
+		// Title
 		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
 				- camera.getHeight() / 12, resourcesManager.fonttitle,
-				activity.getString(R.string.achievements_title), new TextOptions(HorizontalAlign.CENTER),
-				this.vbom);
+				activity.getString(R.string.achievements_title),
+				new TextOptions(HorizontalAlign.CENTER), this.vbom);
 		achievementsPannel.attachChild(text);
 	}
 
 	private void createRecordsPannel() {
 		recordsPannel = new Entity();
 		/*
-		 *  Color Pannel
+		 * Color Pannel
 		 */
 		Sprite pannel = new Sprite(camera.getWidth() / 2,
 				camera.getHeight() / 2 + 30,
@@ -136,10 +136,8 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				if ((textlist.get(0).getY() - distance) >= top_ini_position - 5
 						&& (textlist.get(textlist.size() - 1).getY() - distance <= bottom_ini_position + 5)) {
 					for (int i = 0; i < textlist.size(); i++) {
-						textlist.get(i).setPosition(
-								textlist.get(i).getX(),
-								textlist.get(i).getY()
-										- distance);
+						textlist.get(i).setPosition(textlist.get(i).getX(),
+								textlist.get(i).getY() - distance);
 						if (textlist.get(i).getY() >= top_ini_position + 5
 								|| textlist.get(i).getY() <= bottom_ini_position - 5) {
 							textlist.get(i).setVisible(false);
@@ -155,23 +153,23 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 		registerTouchArea(pannel);
 
 		/*
-		 *  Pannel Content
+		 * Pannel Content
 		 */
-		//Title
+		// Title
 		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
 				- camera.getHeight() / 12, resourcesManager.fonttitle,
-				activity.getString(R.string.records_title), new TextOptions(HorizontalAlign.CENTER),
-				this.vbom);
+				activity.getString(R.string.records_title), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
 		recordsPannel.attachChild(text);
-		
-		//Records
+
+		// Records
 		int count = 1;
 		textlist = new ArrayList<Text>();
 		ArrayList<Session> sessions = (ArrayList<Session>) dbmanager
 				.getAllSessionsByScore();
 		for (Session session : sessions) {
 			String content = count + ". " + session.getPlayer_name();
-			//Name and position
+			// Name and position
 			Text textPlayer = new Text(camera.getHeight() / 2,
 					camera.getHeight()
 							- (camera.getHeight() / 12 + camera.getHeight()
@@ -179,7 +177,7 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 					content, new TextOptions(HorizontalAlign.LEFT), this.vbom);
 			textPlayer.setPosition(textPlayer.getX() + textPlayer.getWidth()
 					/ 2, textPlayer.getY());
-			//Score
+			// Score
 			content = session.getScore() + "ptos";
 			Text textScore = new Text(600, camera.getHeight()
 					- (camera.getHeight() / 12 + camera.getHeight() / 12
@@ -211,15 +209,15 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 		statisticPannel.attachChild(pannel);
 		attachChild(statisticPannel);
 		statisticPannel.setVisible(false);
-		
+
 		/*
 		 * Pannel Content
 		 */
-		//Title
+		// Title
 		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
 				- camera.getHeight() / 12, resourcesManager.fonttitle,
-				activity.getString(R.string.stats_title), new TextOptions(HorizontalAlign.CENTER),
-				this.vbom);
+				activity.getString(R.string.stats_title), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
 		statisticPannel.attachChild(text);
 	}
 

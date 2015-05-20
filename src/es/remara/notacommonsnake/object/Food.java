@@ -57,7 +57,7 @@ public class Food extends Entity{
 			case X2:
 				return resourcesManager.food_X2_region;
 			default:
-				return null;
+				return resourcesManager.food_NORMAL_region;
 		
 		}
 	}
