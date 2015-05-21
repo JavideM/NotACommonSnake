@@ -151,7 +151,7 @@ public class DBManager extends SQLiteOpenHelper {
                 achievement.setName(cursor.getString(1));
                 achievement.setDescription(cursor.getString(2));
                 achievement.setCheck(Integer.parseInt(cursor.getString(3)));
-//                achievement.setIdSession(Integer.parseInt(cursor.getString(4)));
+                achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
                 // Adding session to list
                 achievementList.add(achievement);
             } while (cursor.moveToNext());
