@@ -32,6 +32,12 @@ public class Profile{
   public void setActive(boolean active){
     this.active = active;
   }
+  public ArrayList<Session> getSessions(){
+	  return this.sessions;
+  }
+  public void addSession(Session session){
+	  this.sessions.add(session);
+  }
   /*
   * Contructor
   */
@@ -39,5 +45,6 @@ public class Profile{
     //
     // Contructor Logic Here
     //
+	this.sessions = new ArrayList<Session>();
   }
 }

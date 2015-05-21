@@ -48,17 +48,24 @@ public class Session {
 		this.snake_levels.add(snake_level);
 	}
 	
+	public ArrayList<Achievement> getAchievements_achieved() {
+		return this.achievements_achieved;
+	}
+
 	public ArrayList<Snake_Level> getSnake_levels() {
 		return snake_levels;
 	}
 
-
+	public void addAchievement(Achievement achievement) {
+		this.achievements_achieved.add(achievement);
+	}
 	// Constructor
 	public Session() {
 		//
 		// Constructor logic
 		//
 		this.snake_levels = new ArrayList<Snake_Level>();
+		this.achievements_achieved = new ArrayList<Achievement>();
 	}
 
 	/*
