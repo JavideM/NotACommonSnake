@@ -38,8 +38,8 @@ public class Achievement {
 		this.description = description;
 	}
 
-	public int getSession() {
-		return this.Session;
+	public Session getSession() {
+		return this.session;
 	}
 
 	public void setSession(Session session) {
