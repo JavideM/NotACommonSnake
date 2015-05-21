@@ -7,7 +7,7 @@ public class Achievement {
 	private int id;
 	private String name;
 	private String description;
-	private Session session;
+	private int idsession;
 	private int check;
 
 	/*
@@ -38,12 +38,12 @@ public class Achievement {
 		this.description = description;
 	}
 
-	public Session getSession() {
-		return this.session;
+	public int getIdsession() {
+		return this.idsession;
 	}
 
-	public void setSession(Session session) {
-		this.session = session;
+	public void setIdsession(int idsession) {
+		this.idsession = idsession;
 	}
 
 	public int getCheck() {
