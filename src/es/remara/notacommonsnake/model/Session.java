@@ -14,6 +14,7 @@ public class Session {
 	private String player_name;
 	private int score;
 	private ArrayList<Snake_Level> snake_levels;
+	private ArrayList<Achievement> achievements_achieved;
 
 	/*
 	 * Getters setters
