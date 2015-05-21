@@ -13,6 +13,7 @@ public class Session {
 	private int idSession;
 	private String player_name;
 	private int score;
+	private int level;
 	private ArrayList<Snake_Level> snake_levels;
 	private ArrayList<Achievement> achievements_achieved;
 
@@ -37,11 +38,19 @@ public class Session {
 	}
 
 	public int getScore() {
-		return score;
+		return this.score;
 	}
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public int getLevel() {
+		return this.level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public void AddSnake_Level(Snake_Level snake_level){

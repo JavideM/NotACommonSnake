@@ -190,7 +190,7 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			textPlayer.setPosition(textPlayer.getX() + textPlayer.getWidth()
 					/ 2, textPlayer.getY());
 			// Score
-			content = session.getScore() + "ptos";
+			content = session.getScore() + "pts";
 			Text textScore = new Text(600, camera.getHeight()
 					- (camera.getHeight() / 12 + camera.getHeight() / 12
 							* count), resourcesManager.fontARS, content,

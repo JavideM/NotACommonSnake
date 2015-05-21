@@ -18,6 +18,7 @@ import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.model.Session;
+import es.remara.notacommonsnake.model.Snake_Level;
 import es.remara.notacommonsnake.object.Foods;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.object.Food.FoodType;
@@ -45,18 +46,30 @@ public class GameSnakeScene extends BaseGameScene implements
 	private SurfaceGestureDetector mSGD;
 	private TimerHandler utimehandler;
 	private Session session;
+	private Snake_Level snake_level;
 
 	/**
 	 * Constructors
-	 */
+	 */ 
 	public GameSnakeScene() {
 		super();
-		this.level = 0;
+		session = new Session();
+		session.setLevel(0);
+		snake_level = new Snake_Level();
+		snake_level.setScore(0);
+		session.AddSnake_Level(snake_level);
+		this.level = this.session.getLevel();
 	}
 
-	public GameSnakeScene(int level) {
+	public GameSnakeScene(Session session) {
 		super();
-		this.level = level;
+		this.session = session;
+		snake_level = new Snake_Level();
+		snake_level.setScore(0);
+		session.AddSnake_Level(snake_level);
+		this.level = this.session.getLevel();
+		
+		createobjects();
 	}
 
 	public int getpoints() {
@@ -229,7 +242,7 @@ public class GameSnakeScene extends BaseGameScene implements
 
 						} else
 							session.setPlayer_name("player1");
-						session.setScore(points);
+						session.setLevel(points);
 						session.save(dbmanager);
 						playAgain();
 					}
