@@ -1,5 +1,7 @@
 package es.remara.notacommonsnake.model;
 
+import java.util.ArrayList;
+
 public class Profile{
   /*
   * Parameters
