@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
@@ -70,6 +71,7 @@ public class ResourcesManager {
 	public ITextureRegion trophy_region;
 	public ITextureRegion stats_region;
 	public ITextureRegion medal_region;
+	public ITextureRegion back_region;
 
 	private BitmapTextureAtlas mFontArsTexture;
 	private BitmapTextureAtlas mFontTitleTexture;
@@ -83,6 +85,8 @@ public class ResourcesManager {
 	private BitmapTextureAtlas mFontTexture;
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
+
+
 
 	// ---------------------------------------------
 	// CLASS LOGIC
@@ -375,6 +379,8 @@ public class ResourcesManager {
 				arsTextureAtlas, activity, "stats.png");
 		medal_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				arsTextureAtlas, activity, "medal.png");
+		back_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				arsTextureAtlas, activity, "back.png");
 		try {
 			this.arsTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
