@@ -5,6 +5,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
+import es.remara.notacommonsnake.model.Session;
 import es.remara.notacommonsnake.scene.MainMenuScene;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.scene.AchievementsRecordsStatsScene;
@@ -130,11 +131,20 @@ public class SceneManager {
 	// Método que crea la escena Arkanoid
 	public void createArkanoidScene() {
 		ResourcesManager.getInstance().loadGameArkanoidResources();
-		arkanoidScene = new GameArkanoidScene();
+		arkanoidScene = new GameArkanoidScene(null);
 		currentScene = arkanoidScene;
 		SceneManager.getInstance().setScene(arkanoidScene);
 		ResourcesManager.getInstance().unloadMenuTextures();
 	}
+	
+	// Método que crea la escena Arkanoid
+		public void createArkanoidScene(Session session) {
+			ResourcesManager.getInstance().loadGameArkanoidResources();
+			arkanoidScene = new GameArkanoidScene(session);
+			currentScene = arkanoidScene;
+			SceneManager.getInstance().setScene(arkanoidScene);
+			ResourcesManager.getInstance().unloadMenuTextures();
+		}
 
 	@SuppressWarnings("unused")
 	private void disposeArkanoidScene() {
