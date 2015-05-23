@@ -31,13 +31,15 @@ public class DBManager extends SQLiteOpenHelper {
 	
 	//Columns
 	private final String IDSESSION = "IDSESSION";
-	private final String PLAYER_NAME = "PLAYER_NAME";
-	private final String SCORE = "SCORE";
+	private final String SESSION_PLAYER_NAME = "PLAYER_NAME";
+	private final String SESSION_SCORE = "SCORE";
+	private final String SESSION_LEVEL = "LEVEL";
 	
 	private final String sessionsCreate = "CREATE TABLE " + SESSIONS_TABLE  +
 												" ("+ IDSESSION + " INTEGER primary key not null, " +
-												PLAYER_NAME + " TEXT not null, " +
-												SCORE + " INTEGER not null)";
+												SESSION_PLAYER_NAME + " TEXT not null, " +
+												SESSION_SCORE + " INTEGER not null, " +
+												SESSION_LEVEL + " INTEGER not null)";
 	
 	/*
 	 * Achievements
@@ -89,8 +91,9 @@ public class DBManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		 
         ContentValues values = new ContentValues();
-        values.put(PLAYER_NAME, session.getPlayer_name()); 
-        values.put(SCORE, session.getScore());
+        values.put(SESSION_PLAYER_NAME, session.getPlayer_name()); 
+        values.put(SESSION_LEVEL, session.getLevel());
+        values.put(SESSION_SCORE, session.getScore());
         
         db.insert(SESSIONS_TABLE, null, values);
         db.close();
@@ -100,7 +103,7 @@ public class DBManager extends SQLiteOpenHelper {
         List<Session> sessionList = new ArrayList<Session>();
         // Select All Query
         String selectQuery = "SELECT * " +
-    						" FROM " + SESSIONS_TABLE + " ORDER BY " +SCORE+ " DESC";
+    						" FROM " + SESSIONS_TABLE + " ORDER BY " +SESSION_SCORE+ " DESC";
  
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -112,6 +115,7 @@ public class DBManager extends SQLiteOpenHelper {
                 session.setIdSession(Integer.parseInt(cursor.getString(0)));
                 session.setPlayer_name(cursor.getString(1));
                 session.setScore(Integer.parseInt(cursor.getString(2)));
+                session.setLevel(Integer.parseInt(cursor.getString(3)));
                 // Adding session to list
                 sessionList.add(session);
             } while (cursor.moveToNext());
@@ -152,7 +156,7 @@ public class DBManager extends SQLiteOpenHelper {
                 achievement.setDescription(cursor.getString(2));
                 achievement.setCheck(Integer.parseInt(cursor.getString(3)));
                 achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
-                // Adding session to list
+                // Adding achievement to list
                 achievementList.add(achievement);
             } while (cursor.moveToNext());
         }

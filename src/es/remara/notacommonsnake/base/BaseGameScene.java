@@ -12,6 +12,10 @@ public abstract class BaseGameScene extends BaseScene {
 	private HUD gameHUD;
 	private Text scoreText;
 
+	public int getScore(){
+		return score;
+	}
+	
 	public void createHUD() {
 		gameHUD = new HUD();
 

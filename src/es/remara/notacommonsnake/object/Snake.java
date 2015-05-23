@@ -27,6 +27,7 @@ public class Snake extends Entity {
 	 * Snake atributes
 	 */
 	private Direction direc;
+	private Direction actual_direc;
 	private float speed;
 
 	private float initial_speed;
@@ -36,6 +37,7 @@ public class Snake extends Entity {
 	 */
 	private boolean ghost_mode;
 	private boolean drunk;
+	private boolean moving_through_worlds;
 
 	/*
 	 * Snake dimensions
@@ -51,59 +53,37 @@ public class Snake extends Entity {
 	private ITextureRegion text_tail;
 	private ITextureRegion text_corner;
 
-	public Snake(float pX, float pY, float pWidth, float pHeight, float speed,
-			VertexBufferObjectManager vbom) {
-		super();
-
-		this.direc = Direction.RIGHT;
-		this.width = pWidth;
-		this.height = pHeight;
-		this.speed = speed;
-		this.initial_speed = speed;
-		this.ghost_mode = false;
-		this.drunk = false;
-
-		this.head = new Rectangle(pX, pY, pWidth, pHeight, vbom);
-		head.setColor(Color.RED);
-		attachChild(head);
-
-		Rectangle cola = new Rectangle(pX - pWidth, pY, pWidth, pHeight, vbom);
-		cola.setColor(Color.BLUE);
-		this.body.addFirst(cola);
-		attachChild(cola);
-	}
-
 	/*
 	 * Constructor con texturas
 	 */
 	public Snake(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureBody, ITextureRegion pTextureHead,
-			ITextureRegion pTextureTail, ITextureRegion pTextureCorner,
 			float speed, VertexBufferObjectManager vbom) {
 		super();
 
-		this.direc = Direction.RIGHT;
+		this.actual_direc = Direction.RIGHT;
+		this.direc = this.actual_direc;
 		this.width = pWidth;
 		this.height = pHeight;
 		this.speed = speed;
 		this.initial_speed = speed;
 		this.ghost_mode = false;
 		this.drunk = false;
+		this.moving_through_worlds = false;
 
-		this.text_head = pTextureHead;
-		this.text_body = pTextureBody;
-		this.text_tail = pTextureTail;
-		this.text_corner = pTextureCorner;
+		this.text_head = ResourcesManager.getInstance().snake_head_region;
+		this.text_body = ResourcesManager.getInstance().snake_body_region;
+		this.text_tail = ResourcesManager.getInstance().snake_tail_region;
+		this.text_corner = ResourcesManager.getInstance().snake_corner_region;
 
 		this.head = new Sprite(pX, pY, this.text_head, vbom);
 		attachChild(head);
 
-		Entity cola = new Sprite(pX - pWidth, pY, pWidth, pHeight,
+		Entity cola = new Sprite(pX - pWidth, pY, 
 				this.text_tail, vbom);
 		body.addFirst(cola);
 		attachChild(cola);
 
-		Entity body_part = new Sprite(pX - pWidth, pY, pWidth, pHeight,
+		Entity body_part = new Snake_Body_Part(pX - pWidth, pY, 
 				this.text_body, vbom);
 		body.addFirst(body_part);
 		attachChild(body_part);
@@ -118,16 +98,8 @@ public class Snake extends Entity {
 	}
 
 	public void setDirec(Direction direc) {
-		Direction new_direc;
 		if (direc != this.direc) {
-			new_direc = drunk ? Direction.opposite(direc) : direc;
-			if (Direction.relative_left(new_direc) == this.direc) {
-				head.setRotation(head.getRotation() + 90.0f);
-			}
-			if (Direction.relative_right(new_direc) == this.direc) {
-				head.setRotation(head.getRotation() - 90.0f);
-			}
-			this.direc = new_direc;
+			this.direc = drunk ? Direction.opposite(direc) : direc;
 		}
 
 	}
@@ -139,11 +111,15 @@ public class Snake extends Entity {
 	public boolean is_ghost_mode() {
 		return this.ghost_mode;
 	}
+	
+	public boolean is_moving_through_worlds() {
+		return this.moving_through_worlds;
+	}
 
 	// Añade secciones de cuerpo a la serpiente
 	public void grow() {
 		// New Sprite for the new body part
-		Sprite newtail = new Sprite(body.getFirst().getX(), body.getFirst()
+		Entity newtail = new Snake_Body_Part(body.getFirst().getX(), body.getFirst()
 				.getY(), this.text_body, vbom);
 		// Set the rotation equal to the first part of the tail rotation
 		newtail.setRotation(this.body.getFirst().getRotation());
@@ -161,9 +137,7 @@ public class Snake extends Entity {
 			this.speed = this.speed * 2;
 			break;
 		case CHG_GAME_MODE:
-			SceneManager.getInstance().getCurrentScene().disposeScene();
-			ResourcesManager.getInstance().unloadGameSnakeResources();
-			SceneManager.getInstance().createArkanoidScene();
+			this.moving_through_worlds = true;
 			break;
 		case GHOST_MODE:
 			this.ghost_mode = true;
@@ -188,23 +162,47 @@ public class Snake extends Entity {
 		this.speed = this.initial_speed;
 		this.ghost_mode = false;
 		this.drunk = false;
+		this.moving_through_worlds = false;
 	}
 
 	public void move() {
+		//Turns the snake head
+		if (Direction.relative_left(this.direc) == this.actual_direc) {
+			head.setRotation(head.getRotation() + 90.0f);
+		}
+		if (Direction.relative_right(this.direc) == this.actual_direc) {
+			head.setRotation(head.getRotation() - 90.0f);
+		}
+		this.actual_direc = this.direc;
+		
+		//Moves the body
 		Entity new_tail = body.removeLast();
 		detachChild(new_tail);
 		new_tail = new Sprite(0, 0, text_tail, vbom);
 		attachChild(new_tail);
-		Entity new_body_part = body.removeLast();
+		Snake_Body_Part new_body_part = (Snake_Body_Part) body.removeLast();
 		new_tail.setPosition(new_body_part);
-		new_tail.setRotation(new_body_part.getRotation());
-		new_body_part.setPosition(head);
-		new_body_part.setRotation(head.getRotation());
+		new_tail.setRotation(new_body_part.getTrue_rotation());
+		if(new_body_part.getTrue_rotation() != head.getRotation()){
+			detachChild(new_body_part);
+			new_body_part = new Snake_Body_Part(head.getX(), head.getY(), text_corner, vbom);
+			new_body_part.setRotation(90 - head.getRotation());
+			new_body_part.setTrue_rotation(head.getRotation());
+			attachChild(new_body_part);
+		}else{
+			detachChild(new_body_part);
+			new_body_part = new Snake_Body_Part(head.getX(), head.getY(), text_body, vbom);	
+			new_body_part.setPosition(head);
+			new_body_part.setTrue_rotation(head.getRotation());
+			new_body_part.setRotation(head.getRotation());
+			attachChild(new_body_part);
+		}
 
 		body.addLast(new_tail);
 		body.addFirst(new_body_part);
-
-		switch (this.direc) {
+		
+		//Moves the head
+		switch (this.actual_direc) {
 		case TOP:
 			if (head.getY() < ResourcesManager.getInstance().camera.getHeight()
 					- height / 2)
