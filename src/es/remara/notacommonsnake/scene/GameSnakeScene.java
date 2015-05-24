@@ -34,11 +34,11 @@ public class GameSnakeScene extends BaseGameScene implements
 	private Foods foods;
 	private Snake snake;
 	private Walls walls;
+	private Sprite door;
 
 	/*
 	 * Parameters
 	 */
-	private int points;
 	private int level;
 
 	/*
@@ -100,10 +100,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		//Create the scene handlers
 		createHandlers();
 	}
-	
-	public int getpoints() {
-		return this.points;
-	}
+
 
 	public int getlevel() {
 		return this.level;
@@ -120,6 +117,12 @@ public class GameSnakeScene extends BaseGameScene implements
 		// Background
 		attachChild(new Sprite(camera.getWidth() / 2, camera.getHeight() / 2,
 				resourcesManager.background_grass_region, vbom));
+		
+		//Doors
+		door = new Sprite(camera.getWidth()/2 -10, camera.getHeight() - 30, resourcesManager.door_region, vbom);
+		door.setVisible(false);
+		door.setZIndex(5);
+		attachChild(door);
 	}
 	
 	/*
@@ -188,7 +191,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		walls = new Walls(getlevel(), resourcesManager.wall_region, this,
 				activity, vbom);
 		attachChild(walls);
-		walls.setZIndex(2);
+		walls.setZIndex(3);
 
 		// Comida
 		foods = new Foods(walls, resourcesManager, vbom);
@@ -229,15 +232,20 @@ public class GameSnakeScene extends BaseGameScene implements
 			ResourcesManager.getInstance().unloadGameSnakeResources();
 			SceneManager.getInstance().createArkanoidScene(session);
 		}
+		if(door.isVisible() && snake.getHead().getX() == (camera.getWidth()/2 - 10) && snake.getHead().getY() == (camera.getHeight() - 50)){
+			nextlevel();
+			resetScreen();
+			door.setVisible(false);
+		}
 		if (snake.is_ghost_mode()
 				|| (!snake.suicide() && !snake.hit_a_wall(walls)))
 			snake.move();
 		else {
 			gameOver();
 		}
-		if (getScore() > 2000 + session.getScore()) {
-			nextlevel();
-			resetScreen();
+		if (getScore() > 500 + session.getScore()) {
+			door.setVisible(true);
+			
 		}
 	}
 

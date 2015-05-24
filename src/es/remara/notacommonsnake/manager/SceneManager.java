@@ -127,6 +127,16 @@ public class SceneManager {
 		// disposeSplashScene();
 
 	}
+	
+	public void createSnakeGameScene(Session session) {
+		ResourcesManager.getInstance().loadGameSnakeResources();
+		gamesnakeScene = new GameSnakeScene();
+		SceneManager.getInstance().setScene(gamesnakeScene);
+		arkanoidScene.disposeScene();
+		ResourcesManager.getInstance().unloadGameArkanoidResources();
+		// disposeSplashScene();
+
+	}
 
 	// Método que crea la escena Arkanoid
 	public void createArkanoidScene() {
@@ -143,7 +153,9 @@ public class SceneManager {
 			arkanoidScene = new GameArkanoidScene(session);
 			currentScene = arkanoidScene;
 			SceneManager.getInstance().setScene(arkanoidScene);
-			ResourcesManager.getInstance().unloadMenuTextures();
+			gamesnakeScene.disposeScene();
+			gamesnakeScene = null;
+			ResourcesManager.getInstance().unloadGameSnakeResources();
 		}
 
 	@SuppressWarnings("unused")
