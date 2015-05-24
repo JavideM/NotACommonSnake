@@ -27,6 +27,7 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 	private Sprite btnstats;
 	private Sprite btntrophy;
 	private Sprite btnmedal;
+	private Sprite btnback;
 
 	private List<Text> textlist;
 
@@ -34,6 +35,7 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			- (camera.getHeight() / 12 + camera.getHeight() / 12);
 	private final float bottom_ini_position = camera.getHeight()
 			- (camera.getHeight() / 12 + camera.getHeight() / 12 * 8);
+	
 
 	@Override
 	public void createScene() {
@@ -85,12 +87,22 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				return true;
 			}
 		};
+		btnback = new Sprite(45, 35, resourcesManager.back_region, vbom){
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				onBackKeyPressed();
+				return true;
+			}
+		};
 		attachChild(btntrophy);
 		registerTouchArea(btntrophy);
 		attachChild(btnstats);
 		registerTouchArea(btnstats);
 		attachChild(btnmedal);
 		registerTouchArea(btnmedal);
+		attachChild(btnback);
+		registerTouchArea(btnback);
 	}
 
 	private void createAchievementsPannel() {
@@ -178,7 +190,7 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			textPlayer.setPosition(textPlayer.getX() + textPlayer.getWidth()
 					/ 2, textPlayer.getY());
 			// Score
-			content = session.getScore() + "ptos";
+			content = session.getScore() + "pts";
 			Text textScore = new Text(600, camera.getHeight()
 					- (camera.getHeight() / 12 + camera.getHeight() / 12
 							* count), resourcesManager.fontARS, content,

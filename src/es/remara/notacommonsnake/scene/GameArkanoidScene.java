@@ -25,6 +25,7 @@ import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
+import es.remara.notacommonsnake.model.Session;
 import es.remara.notacommonsnake.object.Brick;
 
 public class GameArkanoidScene extends BaseGameScene implements
@@ -71,6 +72,13 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private Sprite platformSprite, ballSprite;
 
+	public GameArkanoidScene(Session session){
+		super();
+		if(session != null){
+			addScore(session.getScore());
+		}
+	}
+	
 	@Override
 	public void createScene() {
 		newGame = true;
