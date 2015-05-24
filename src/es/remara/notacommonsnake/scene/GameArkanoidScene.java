@@ -67,7 +67,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 	private WeldJointDef ball_plat_JointDef;
 
 	private Joint ball_plat_Joint;
-	
+
 	private Session session;
 
 	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
@@ -210,28 +210,22 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 */
 	private void iLikeBricks() {
 		initialX = 120;
-		initialY = (camera.getHeight() / 2) - (6 * 22);
-		grid = new int[3][7];
-		bricks = new Brick[10];
+		initialY = 16;
+		grid = new int[2][15];
+		bricks = new Brick[30];
 		bricksAmount = bricks.length;
 		int cont = 0;
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				if (brickTime) {
-					bricks[cont] = new Brick(initialX, initialY,
-							resourcesManager.ark_brick_region, vbom,
-							arkanoidPhysicsWorld);
-					brickTime = false;
-					cont += 1;
-				} else {
-					brickTime = true;
-				}
-				initialY = initialY + 44;
+				bricks[cont] = new Brick(initialX, initialY,
+						resourcesManager.ark_brick_region, vbom,
+						arkanoidPhysicsWorld);
+				initialY = initialY + 32;
+				cont = cont + 1;
 			}
-			initialY = (camera.getHeight() / 2) - (6 * 22);
-			initialX = initialX + 22;
+			initialX = initialX + 16;
+			initialY = 16;
 		}
-		brickTime = false;
 	}
 
 	/*
