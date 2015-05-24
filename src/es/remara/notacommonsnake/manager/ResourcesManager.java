@@ -72,6 +72,7 @@ public class ResourcesManager {
 	public ITextureRegion stats_region;
 	public ITextureRegion medal_region;
 	public ITextureRegion back_region;
+	public ITextureRegion door_region;
 
 	private BitmapTextureAtlas mFontArsTexture;
 	private BitmapTextureAtlas mFontTitleTexture;
@@ -85,6 +86,8 @@ public class ResourcesManager {
 	private BitmapTextureAtlas mFontTexture;
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
+
+	
 
 
 
@@ -263,6 +266,8 @@ public class ResourcesManager {
 						"snake/snake_corner.png");
 		wall_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				snakeTextureAtlas, activity, "snake/wall.png");
+		door_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				snakeTextureAtlas, activity, "snake/door.png");
 		try {
 			this.snakeTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
