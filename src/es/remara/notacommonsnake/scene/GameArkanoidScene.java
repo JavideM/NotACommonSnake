@@ -68,17 +68,20 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private Joint ball_plat_Joint;
 
+	private Session session;
+
 	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
 
 	private Sprite platformSprite, ballSprite;
 
-	public GameArkanoidScene(Session session){
+	public GameArkanoidScene(Session session) {
 		super();
-		if(session != null){
+		if (session != null) {
+			this.session = session;
 			addScore(session.getScore());
 		}
 	}
-	
+
 	@Override
 	public void createScene() {
 		newGame = true;
@@ -157,7 +160,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 	private void createBallSprite() {
 		float yPos = (newGame) ? (camera.getHeight() / 2) : (platformBody
 				.getPosition().y * pmr);
-		ballSprite = new Sprite((camera.getWidth() - 120) - 14, yPos,
+		ballSprite = new Sprite((camera.getWidth() - 120) - 16, yPos,
 				resourcesManager.ark_ball_region, vbom);
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
@@ -207,28 +210,22 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 */
 	private void iLikeBricks() {
 		initialX = 120;
-		initialY = (camera.getHeight() / 2) - (6 * 22);
-		grid = new int[3][7];
-		bricks = new Brick[10];
+		initialY = 16;
+		grid = new int[2][15];
+		bricks = new Brick[30];
 		bricksAmount = bricks.length;
 		int cont = 0;
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				if (brickTime) {
-					bricks[cont] = new Brick(initialX, initialY,
-							resourcesManager.ark_brick_region, vbom,
-							arkanoidPhysicsWorld);
-					brickTime = false;
-					cont += 1;
-				} else {
-					brickTime = true;
-				}
-				initialY = initialY + 44;
+				bricks[cont] = new Brick(initialX, initialY,
+						resourcesManager.ark_brick_region, vbom,
+						arkanoidPhysicsWorld);
+				initialY = initialY + 32;
+				cont = cont + 1;
 			}
-			initialY = (camera.getHeight() / 2) - (6 * 22);
-			initialX = initialX + 22;
+			initialX = initialX + 16;
+			initialY = 16;
 		}
-		brickTime = false;
 	}
 
 	/*
@@ -249,15 +246,26 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 * Elimina el sprite de la bola y cambia el valor del booleano "notStarted".
 	 */
 	private void resetArkanoid() {
-		arkanoidPhysicsWorld.unregisterPhysicsConnector(ballPC);
-		ballPC = null;
-		ballBody.setLinearVelocity(0.0f, 0.0f);
-		arkanoidPhysicsWorld.destroyBody(ballBody);
-		ballBody = null;
-		SceneManager.getInstance().getCurrentScene().detachChild(ballSprite);
-		ballSprite.dispose();
-		ballSprite = null;
+		destSprite(ballSprite, ballBody, ballPC);
+		destSprite(platformSprite, platformBody, platformPC);
+		createPlatformSprite();
+		setPlatformPhysicsConnectors();
+		createBallSprite();
+		setBallPhysicsConnectors();
+		SceneManager.getInstance().getCurrentScene().attachChild(ballSprite);
+		createJoint();
 		notStarted = true;
+	}
+
+	private void destSprite(Sprite sprite, Body body, PhysicsConnector pc) {
+		arkanoidPhysicsWorld.unregisterPhysicsConnector(pc);
+		pc = null;
+		body.setLinearVelocity(0.0f, 0.0f);
+		arkanoidPhysicsWorld.destroyBody(body);
+		body = null;
+		SceneManager.getInstance().getCurrentScene().detachChild(sprite);
+		sprite.dispose();
+		sprite = null;
 	}
 
 	/*
@@ -432,12 +440,14 @@ public class GameArkanoidScene extends BaseGameScene implements
 			engine.runOnUpdateThread(new Runnable() {
 				@Override
 				public void run() {
-					resetArkanoid();
+					destSprite(ballSprite, ballBody, ballPC);
+					notStarted = true;
 					createBallSprite();
 					setBallPhysicsConnectors();
 					createJoint();
 					SceneManager.getInstance().getCurrentScene()
 							.attachChild(ballSprite);
+
 				}
 			});
 		}
@@ -465,13 +475,24 @@ public class GameArkanoidScene extends BaseGameScene implements
 					arkanoidPhysicsWorld.destroyBody(contact_aux.getFixtureA()
 							.getBody());
 					addScore(100);
-					bricksAmount = bricksAmount - 1;
+
 				}
 			});
-		}
-		// Cuando la cantidad llegué a cero se habrá completado el nivel.
-		if (bricksAmount == 0) {
-
+			bricksAmount = bricksAmount - 1;
+			// Cuando la cantidad llegué a cero se habrá completado el nivel.
+			if (bricksAmount == 0) {
+				if (bricksAmount <= 0) {
+					engine.runOnUpdateThread(new Runnable() {
+						@Override
+						public void run() {
+							if (session != null) {
+								session.setScore(getScore());
+							}
+							resetArkanoid();
+						}
+					});
+				}
+			}
 		}
 	}
 
