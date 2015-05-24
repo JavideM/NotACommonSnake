@@ -125,7 +125,7 @@ public class Snake extends Entity {
 		Entity newtail = new Snake_Body_Part(body.getFirst().getX(), body.getFirst()
 				.getY(), this.text_body, vbom);
 		// Set the rotation equal to the first part of the tail rotation
-		newtail.setRotation(this.body.getFirst().getRotation());
+		newtail.setRotation(((Snake_Body_Part) this.body.getFirst()).getRotation());
 		// attach the new body part in the Snake entity and add it to the body
 		// of the snake
 		attachChild(newtail);
