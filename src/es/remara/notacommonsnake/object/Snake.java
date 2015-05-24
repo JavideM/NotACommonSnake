@@ -38,6 +38,9 @@ public class Snake extends Entity {
 	private boolean ghost_mode;
 	private boolean drunk;
 	private boolean moving_through_worlds;
+	
+	private boolean has_rotate_left;
+	private boolean has_rotate_right;
 
 	/*
 	 * Snake dimensions
@@ -169,9 +172,16 @@ public class Snake extends Entity {
 		//Turns the snake head
 		if (Direction.relative_left(this.direc) == this.actual_direc) {
 			head.setRotation(head.getRotation() + 90.0f);
+			has_rotate_left = true;
+		}else{
+			has_rotate_left = false;
 		}
 		if (Direction.relative_right(this.direc) == this.actual_direc) {
 			head.setRotation(head.getRotation() - 90.0f);
+			has_rotate_right = true;
+		}
+		else{
+			has_rotate_right = false;
 		}
 		this.actual_direc = this.direc;
 		
@@ -183,10 +193,10 @@ public class Snake extends Entity {
 		Snake_Body_Part new_body_part = (Snake_Body_Part) body.removeLast();
 		new_tail.setPosition(new_body_part);
 		new_tail.setRotation(new_body_part.getTrue_rotation());
-		if(new_body_part.getTrue_rotation() != head.getRotation()){
+		if(has_rotate_left || has_rotate_right){
 			detachChild(new_body_part);
 			new_body_part = new Snake_Body_Part(head.getX(), head.getY(), text_corner, vbom);
-			new_body_part.setRotation(90 - head.getRotation());
+			new_body_part.setRotation(has_rotate_left?  180+head.getRotation():head.getRotation() +90);
 			new_body_part.setTrue_rotation(head.getRotation());
 			attachChild(new_body_part);
 		}else{
