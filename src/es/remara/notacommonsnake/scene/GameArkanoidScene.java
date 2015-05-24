@@ -1,5 +1,6 @@
 package es.remara.notacommonsnake.scene;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.entity.primitive.Rectangle;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Joint;
@@ -38,7 +40,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private Rectangle gORegion;
 
-	private Brick[] bricks;
+	private ArrayList<Brick> bricks;
 
 	private int[][] grid;
 
@@ -51,8 +53,6 @@ public class GameArkanoidScene extends BaseGameScene implements
 	private PhysicsConnector ballPC, platformPC;
 
 	private final Vector2 SPEED = new Vector2(7.0f, 7.0f);
-
-	private boolean brickTime = false;
 
 	private boolean notStarted = true;
 
@@ -105,6 +105,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 		setPlatformPhysicsConnectors();
 		createJoint();
 		attachChilds();
+		bricksAmount = bricks.size();
 		// Listeners
 		this.setOnSceneTouchListener(this);
 		arkanoidPhysicsWorld.setContactListener(this);
@@ -116,8 +117,15 @@ public class GameArkanoidScene extends BaseGameScene implements
 		for (int i = 0; i < walls.length; i++) {
 			this.attachChild(walls[i]);
 		}
-		for (int i = 0; i < bricks.length; i++) {
-			this.attachChild(bricks[i]);
+		for (Brick brk : bricks) {
+			System.out.println(brk.brickBody + " || ");
+			System.out.println("-------------------");
+			for (Fixture fix : brk.brickBody.getFixtureList()) {
+				System.out.println(fix);
+			}
+			System.out.println("-------------------");
+			System.out.println("-------------------");
+			this.attachChild(brk);
 		}
 	}
 
@@ -212,14 +220,13 @@ public class GameArkanoidScene extends BaseGameScene implements
 		initialX = 120;
 		initialY = 16;
 		grid = new int[2][15];
-		bricks = new Brick[30];
-		bricksAmount = bricks.length;
 		int cont = 0;
+		bricks = new ArrayList<Brick>(30);
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				bricks[cont] = new Brick(initialX, initialY,
+				bricks.add(new Brick(initialX, initialY,
 						resourcesManager.ark_brick_region, vbom,
-						arkanoidPhysicsWorld);
+						arkanoidPhysicsWorld));
 				initialY = initialY + 32;
 				cont = cont + 1;
 			}
@@ -273,9 +280,9 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 * variable dentro de la clase coincide con el proporcionado como parámetro.
 	 */
 	private Brick getBrick(int hashCode) {
-		for (int i = 0; i < bricks.length; i++) {
-			if (bricks[i].brickBody.hashCode() == hashCode) {
-				return bricks[i];
+		for (Brick brk : bricks) {
+			if (brk.brickBody.hashCode() == hashCode) {
+				return brk;
 			}
 		}
 		return null;
@@ -334,10 +341,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 		this.detachChild(platformSprite);
 		this.detachChild(ballSprite);
-		for (int i = 0; i < bricks.length; i++) {
-			SceneManager.getInstance().getCurrentScene().detachChild(bricks[i]);
-			bricks[i].dispose();
-		}
+		bricks.clear();
 		for (int i = 0; i < walls.length; i++) {
 			this.detachChild(walls[i]);
 			walls[i].dispose();
@@ -474,10 +478,9 @@ public class GameArkanoidScene extends BaseGameScene implements
 											.getBody().hashCode()));
 					arkanoidPhysicsWorld.destroyBody(contact_aux.getFixtureA()
 							.getBody());
-					addScore(100);
-
 				}
 			});
+			addScore(100);
 			bricksAmount = bricksAmount - 1;
 			// Cuando la cantidad llegué a cero se habrá completado el nivel.
 			if (bricksAmount == 0) {
