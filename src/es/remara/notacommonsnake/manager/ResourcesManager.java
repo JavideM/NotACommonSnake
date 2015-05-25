@@ -87,10 +87,6 @@ public class ResourcesManager {
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
 
-	
-
-
-
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -130,10 +126,9 @@ public class ResourcesManager {
 				TextureOptions.BILINEAR);
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arkanoidBGAtlas, activity,
-						"background/grass.png");
+						"background/dirt.png");
 		ark_ball_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(arkanoidBGAtlas, activity,
-						"arkanoid/ball_01.png");
+				.createFromAsset(arkanoidBGAtlas, activity, "arkanoid/ball.png");
 		ark_platform_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(arkanoidBGAtlas, activity,
 						"arkanoid/platform.png");
