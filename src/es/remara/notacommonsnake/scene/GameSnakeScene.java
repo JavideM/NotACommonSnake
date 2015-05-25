@@ -315,13 +315,15 @@ public class GameSnakeScene extends BaseGameScene implements
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						onBackKeyPressed();
+						playAgain();
 					}
 				});
 
 				alert.show();
+				
 			}
 		});
+		
 	}
 
 	public void playAgain() {
