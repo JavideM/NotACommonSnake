@@ -1,7 +1,9 @@
 package es.remara.notacommonsnake.scene;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -38,7 +40,9 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private Rectangle gORegion;
 
-	private Brick[] bricks;
+	private ArrayList<Brick> bricks;
+
+	private ArrayList<Brick> bricksRem;
 
 	private int[][] grid;
 
@@ -51,8 +55,6 @@ public class GameArkanoidScene extends BaseGameScene implements
 	private PhysicsConnector ballPC, platformPC;
 
 	private final Vector2 SPEED = new Vector2(7.0f, 7.0f);
-
-	private boolean brickTime = false;
 
 	private boolean notStarted = true;
 
@@ -68,17 +70,26 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private Joint ball_plat_Joint;
 
+	private Session session;
+
 	float pmr = PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT;
 
 	private Sprite platformSprite, ballSprite;
 
-	public GameArkanoidScene(Session session){
+	private float a, b;
+
+	private double y;
+
+	private Vector2 test;
+
+	public GameArkanoidScene(Session session) {
 		super();
-		if(session != null){
+		if (session != null) {
+			this.session = session;
 			addScore(session.getScore());
 		}
 	}
-	
+
 	@Override
 	public void createScene() {
 		newGame = true;
@@ -102,9 +113,24 @@ public class GameArkanoidScene extends BaseGameScene implements
 		setPlatformPhysicsConnectors();
 		createJoint();
 		attachChilds();
+		bricksAmount = bricks.size();
 		// Listeners
 		this.setOnSceneTouchListener(this);
 		arkanoidPhysicsWorld.setContactListener(this);
+		this.registerUpdateHandler(new IUpdateHandler() {
+
+			@Override
+			public void reset() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				// TODO Auto-generated method stub
+				removeBricks(bricksRem);
+			}
+		});
 	}
 
 	private void attachChilds() {
@@ -113,8 +139,8 @@ public class GameArkanoidScene extends BaseGameScene implements
 		for (int i = 0; i < walls.length; i++) {
 			this.attachChild(walls[i]);
 		}
-		for (int i = 0; i < bricks.length; i++) {
-			this.attachChild(bricks[i]);
+		for (Brick brk : bricks) {
+			this.attachChild(brk);
 		}
 	}
 
@@ -157,7 +183,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 	private void createBallSprite() {
 		float yPos = (newGame) ? (camera.getHeight() / 2) : (platformBody
 				.getPosition().y * pmr);
-		ballSprite = new Sprite((camera.getWidth() - 120) - 14, yPos,
+		ballSprite = new Sprite((camera.getWidth() - 120) - 16, yPos,
 				resourcesManager.ark_ball_region, vbom);
 		ballBody = PhysicsFactory.createCircleBody(arkanoidPhysicsWorld,
 				ballSprite, BodyType.DynamicBody, ballFix);
@@ -207,28 +233,22 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 */
 	private void iLikeBricks() {
 		initialX = 120;
-		initialY = (camera.getHeight() / 2) - (6 * 22);
-		grid = new int[3][7];
-		bricks = new Brick[10];
-		bricksAmount = bricks.length;
+		initialY = 16;
+		grid = new int[2][15];
 		int cont = 0;
+		bricks = new ArrayList<Brick>(30);
+		bricksRem = new ArrayList<Brick>(bricks.size());
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				if (brickTime) {
-					bricks[cont] = new Brick(initialX, initialY,
-							resourcesManager.ark_brick_region, vbom,
-							arkanoidPhysicsWorld);
-					brickTime = false;
-					cont += 1;
-				} else {
-					brickTime = true;
-				}
-				initialY = initialY + 44;
+				bricks.add(new Brick(initialX, initialY,
+						resourcesManager.ark_brick_region, vbom,
+						arkanoidPhysicsWorld));
+				initialY = initialY + 32;
+				cont = cont + 1;
 			}
-			initialY = (camera.getHeight() / 2) - (6 * 22);
-			initialX = initialX + 22;
+			initialX = initialX + 16;
+			initialY = 16;
 		}
-		brickTime = false;
 	}
 
 	/*
@@ -242,22 +262,44 @@ public class GameArkanoidScene extends BaseGameScene implements
 		gOBody = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld, gORegion,
 				BodyType.StaticBody, gOFix);
 		gOBody.setUserData("GameOver");
-		gORegion.setVisible(false);
+		gORegion.setVisible(true);
 	}
 
 	/*
 	 * Elimina el sprite de la bola y cambia el valor del booleano "notStarted".
 	 */
 	private void resetArkanoid() {
-		arkanoidPhysicsWorld.unregisterPhysicsConnector(ballPC);
-		ballPC = null;
-		ballBody.setLinearVelocity(0.0f, 0.0f);
-		arkanoidPhysicsWorld.destroyBody(ballBody);
-		ballBody = null;
-		SceneManager.getInstance().getCurrentScene().detachChild(ballSprite);
-		ballSprite.dispose();
-		ballSprite = null;
+		destSprite(ballSprite, ballBody, ballPC);
+		destSprite(platformSprite, platformBody, platformPC);
+		createPlatformSprite();
+		setPlatformPhysicsConnectors();
+		createBallSprite();
+		setBallPhysicsConnectors();
+		SceneManager.getInstance().getCurrentScene().attachChild(ballSprite);
+		createJoint();
 		notStarted = true;
+	}
+
+	private void destSprite(Sprite sprite, Body body, PhysicsConnector pc) {
+		arkanoidPhysicsWorld.unregisterPhysicsConnector(pc);
+		pc = null;
+		body.setLinearVelocity(0.0f, 0.0f);
+		arkanoidPhysicsWorld.destroyBody(body);
+		body = null;
+		SceneManager.getInstance().getCurrentScene().detachChild(sprite);
+		sprite.dispose();
+		sprite = null;
+	}
+
+	// Elimina los ladrillos del PhysicsWorld (cuerpos) y de la escena (sprites)
+	private void removeBricks(ArrayList<Brick> bricksToRemove) {
+		for (Brick brick : bricksToRemove) {
+			arkanoidPhysicsWorld.destroyBody(brick.brickBody);
+			this.detachChild(brick);
+		}
+		bricksToRemove.clear();
+		bricksToRemove = null;
+		bricksToRemove = new ArrayList<Brick>(bricks.size());
 	}
 
 	/*
@@ -265,9 +307,9 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 * variable dentro de la clase coincide con el proporcionado como parámetro.
 	 */
 	private Brick getBrick(int hashCode) {
-		for (int i = 0; i < bricks.length; i++) {
-			if (bricks[i].brickBody.hashCode() == hashCode) {
-				return bricks[i];
+		for (Brick brk : bricks) {
+			if (brk.brickBody.hashCode() == hashCode) {
+				return brk;
 			}
 		}
 		return null;
@@ -317,28 +359,37 @@ public class GameArkanoidScene extends BaseGameScene implements
 	 */
 	@Override
 	public void disposeScene() {
-		arkanoidPhysicsWorld.clearForces();
-		for (int i = 0; i < wallBodies.length; i++) {
-			arkanoidPhysicsWorld.destroyBody(wallBodies[i]);
-		}
-		arkanoidPhysicsWorld.destroyBody(platformBody);
-		arkanoidPhysicsWorld.destroyBody(ballBody);
+		engine.runOnUpdateThread(new Runnable() {
 
-		this.detachChild(platformSprite);
-		this.detachChild(ballSprite);
-		for (int i = 0; i < bricks.length; i++) {
-			SceneManager.getInstance().getCurrentScene().detachChild(bricks[i]);
-			bricks[i].dispose();
-		}
-		for (int i = 0; i < walls.length; i++) {
-			this.detachChild(walls[i]);
-			walls[i].dispose();
-		}
-		platformSprite.dispose();
-		ballSprite.dispose();
+			@Override
+			public void run() {
+				arkanoidPhysicsWorld.clearForces();
+				for (int i = 0; i < wallBodies.length; i++) {
+					arkanoidPhysicsWorld.destroyBody(wallBodies[i]);
+				}
+				arkanoidPhysicsWorld.destroyBody(platformBody);
+				arkanoidPhysicsWorld.destroyBody(ballBody);
 
-		this.detachSelf();
-		this.dispose();
+				SceneManager.getInstance().getCurrentScene()
+						.detachChild(platformSprite);
+				SceneManager.getInstance().getCurrentScene()
+						.detachChild(ballSprite);
+				removeBricks(bricks);
+				bricks.clear();
+				for (int i = 0; i < walls.length; i++) {
+					SceneManager.getInstance().getCurrentScene()
+							.detachChild(walls[i]);
+					walls[i].dispose();
+				}
+				platformSprite.dispose();
+				ballSprite.dispose();
+
+				SceneManager.getInstance().getCurrentScene().detachSelf();
+				SceneManager.getInstance().getCurrentScene().dispose();
+
+			}
+		});
+
 	}
 
 	// "Listener" de interacción con la pantalla
@@ -350,8 +401,15 @@ public class GameArkanoidScene extends BaseGameScene implements
 		 */
 		if (pSceneTouchEvent.isActionUp() && notStarted) {
 			modSpeed = SPEED.len();
+			a = (platformSprite.getX() - bricks.get(22).getX() - 16) / pmr;
+			b = (bricks.get(22).getHeight() / 2) / pmr;
+			y = Math.sqrt(a * a + b * b);
+
+			test = new Vector2(-(float) ((modSpeed * a) / y),
+					(float) ((modSpeed * b) / y));
 			notStarted = false;
 			ballBody.setLinearVelocity(normVecGen().mul(modSpeed));
+			// ballBody.setLinearVelocity(test);
 			engine.runOnUpdateThread(new Runnable() {
 				@Override
 				public void run() {
@@ -432,12 +490,14 @@ public class GameArkanoidScene extends BaseGameScene implements
 			engine.runOnUpdateThread(new Runnable() {
 				@Override
 				public void run() {
-					resetArkanoid();
+					destSprite(ballSprite, ballBody, ballPC);
+					notStarted = true;
 					createBallSprite();
 					setBallPhysicsConnectors();
 					createJoint();
 					SceneManager.getInstance().getCurrentScene()
 							.attachChild(ballSprite);
+
 				}
 			});
 		}
@@ -446,32 +506,33 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	@Override
 	public void endContact(Contact contact) {
+
 		/*
 		 * Al terminar el contacto con una objeto "Brick", este se destruye, se
 		 * suma la puntuación y se resta a la cantidad total de objetos "Brick".
 		 */
 		if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("Brick")) {
-			final Contact contact_aux = contact;
-			engine.runOnUpdateThread(new Runnable() {
-				@Override
-				public void run() {
-					SceneManager
-							.getInstance()
-							.getCurrentScene()
-							.detachChild(
-									getBrick(contact_aux.getFixtureA()
-											.getBody().hashCode()));
-					arkanoidPhysicsWorld.destroyBody(contact_aux.getFixtureA()
-							.getBody());
-					addScore(100);
-					bricksAmount = bricksAmount - 1;
-				}
-			});
-		}
-		// Cuando la cantidad llegué a cero se habrá completado el nivel.
-		if (bricksAmount == 0) {
 
+			bricksRem.add(getBrick(contact.getFixtureA().getBody().hashCode()));
+
+			addScore(100);
+
+			bricksAmount = bricksAmount - 1;
+			// Cuando la cantidad llegué a cero se habrá completado el nivel.
+			if (bricksAmount == 0) {
+				if (bricksAmount <= 0) {
+					engine.runOnUpdateThread(new Runnable() {
+						@Override
+						public void run() {
+							if (session != null) {
+								session.setScore(getScore());
+							}
+							resetArkanoid();
+						}
+					});
+				}
+			}
 		}
 	}
 

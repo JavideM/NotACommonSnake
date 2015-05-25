@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.remara.notacommonsnake.model.Achievement;
+import es.remara.notacommonsnake.model.Profile;
 import es.remara.notacommonsnake.model.Session;
 import android.content.ContentValues;
 import android.content.Context;
@@ -62,6 +63,18 @@ public class DBManager extends SQLiteOpenHelper {
 												ACH_IDSESSION + " INTEGER, " +
 												"FOREIGN KEY("+ACH_IDSESSION+") REFERENCES "+ SESSIONS_TABLE +"("+IDSESSION+"))";
 	
+	// Table name
+    private final String PROFILES_TABLE = "PROFILES";
+
+    // Columns
+    private final String IDPROFILE = "IDPROFILE";
+    private final String NAME = "NAME";
+    private final String ACTIVE = "ACTIVE";
+
+    // Sript
+    private String profilesCreate = "CREATE TABLE " + PROFILES_TABLE + "("
+            + IDPROFILE + "INTEGER primary key, " + NAME + " TEXT NOT NULL, "
+            + ACTIVE + " TEXT)";
 	
 	public DBManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -71,6 +84,7 @@ public class DBManager extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(sessionsCreate);
 		db.execSQL(achievementsCreate);
+		db.execSQL(profilesCreate);
 		insertAchievements(db);
 	}
 
@@ -78,6 +92,7 @@ public class DBManager extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXIST " + SESSIONS_TABLE);
 		db.execSQL("DROP TABLE IF EXIST " + ACHIEVEMENTS_TABLE);
+		db.execSQL("DROP TABLE IF EXIST " + PROFILES_TABLE);
 		
 		onCreate(db);
 	}
@@ -98,6 +113,17 @@ public class DBManager extends SQLiteOpenHelper {
         db.insert(SESSIONS_TABLE, null, values);
         db.close();
 	}
+	
+	public void saveProfile(Profile profile) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(NAME, profile.getName());
+        values.put(ACTIVE, profile.isActive());
+
+        db.insert(PROFILES_TABLE, null, values);
+        db.close();
+    }
 	
 	public List<Session> getAllSessionsByScore() {
         List<Session> sessionList = new ArrayList<Session>();
