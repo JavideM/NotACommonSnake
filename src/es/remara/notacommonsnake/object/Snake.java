@@ -9,6 +9,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
+import android.util.Log;
+
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.other.Direction;
@@ -97,7 +99,7 @@ public class Snake extends Entity {
 	}
 
 	public Direction getDirec() {
-		return direc;
+		return actual_direc;
 	}
 
 	public void setDirec(Direction direc) {
@@ -122,8 +124,7 @@ public class Snake extends Entity {
 	// Añade secciones de cuerpo a la serpiente
 	public void grow() {
 		// New Sprite for the new body part
-		Entity newtail = new Snake_Body_Part(body.getFirst().getX(), body.getFirst()
-				.getY(), this.text_body, vbom);
+		Entity newtail = ((Snake_Body_Part)body.getFirst()).clone();
 		// Set the rotation equal to the first part of the tail rotation
 		newtail.setRotation(((Snake_Body_Part) this.body.getFirst()).getRotation());
 		// attach the new body part in the Snake entity and add it to the body
@@ -256,6 +257,59 @@ public class Snake extends Entity {
 
 	public boolean hit_a_wall(Walls walls) {
 		return walls.is_there_a_wall(head);
+	}
+
+	public boolean go_through_portal() {
+		if (head != null) {
+			// Moves the body to the heads position
+			Entity new_tail = body.removeLast();
+			detachChild(new_tail);
+			new_tail = new Sprite(0, 0, text_tail, vbom);
+			attachChild(new_tail);
+			Snake_Body_Part new_body_part = (Snake_Body_Part) body.removeLast();
+			new_tail.setPosition(new_body_part);
+			new_tail.setRotation(new_body_part.getTrue_rotation());
+			if (has_rotate_left || has_rotate_right) {
+				detachChild(new_body_part);
+				new_body_part = new Snake_Body_Part(head.getX(), head.getY(),
+						text_corner, vbom);
+				new_body_part.setRotation(has_rotate_left ? 180 + head
+						.getRotation() : head.getRotation() + 90);
+				new_body_part.setTrue_rotation(head.getRotation());
+				attachChild(new_body_part);
+			} else {
+				detachChild(new_body_part);
+				new_body_part = new Snake_Body_Part(head.getX(), head.getY(),
+						text_body, vbom);
+				new_body_part.setPosition(head);
+				new_body_part.setTrue_rotation(head.getRotation());
+				new_body_part.setRotation(head.getRotation());
+				attachChild(new_body_part);
+			}
+
+			body.addLast(new_tail);
+			body.addFirst(new_body_part);
+			
+
+			detachChild(head);
+			head = null;
+			return false;
+		} else {
+			if (body.size() > 1) {
+				Entity new_tail = body.removeLast();
+				Snake_Body_Part new_body_part = (Snake_Body_Part) body
+						.removeLast();
+				new_tail.setPosition(new_body_part);
+				new_tail.setRotation(new_body_part.getTrue_rotation());
+				detachChild(new_body_part);
+				body.addLast(new_tail);
+				return false;
+
+			}else{
+				return true;
+			}
+		}
+
 	}
 
 }

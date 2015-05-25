@@ -8,7 +8,7 @@ public class Achievement {
 	private String name;
 	private String description;
 	private int idsession;
-	private int check;
+	private boolean check;
 
 	/*
 	 * Getters & Setters
@@ -46,11 +46,11 @@ public class Achievement {
 		this.idsession = idsession;
 	}
 
-	public int getCheck() {
+	public boolean getCheck() {
 		return check;
 	}
 
-	public void setCheck(int check) {
+	public void setCheck(boolean check) {
 		this.check = check;
 	}
 

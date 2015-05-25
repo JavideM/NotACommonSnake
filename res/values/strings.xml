@@ -12,4 +12,9 @@
     <string name="records_title">TOP SCORES</string>
     <string name="achievements_title">ACHIEVEMENTS</string>
     
+    <!-- Settings Scene Strings -->
+    <string name="profile_title">PROFILES</string>
+    <string name="difficulty_title">OPTIONS</string>
+    <string name="sound_title">SOUND</string>
+    
 </resources>

@@ -11,6 +11,7 @@ import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.scene.AchievementsRecordsStatsScene;
 import es.remara.notacommonsnake.scene.GameArkanoidScene;
 import es.remara.notacommonsnake.scene.GameSnakeScene;
+import es.remara.notacommonsnake.scene.SettingsScene;
 import es.remara.notacommonsnake.scene.SplashScene;
 import es.remara.notacommonsnake.scene.WorkInProgressScene;
 
@@ -26,6 +27,7 @@ public class SceneManager {
 	private BaseScene workInProgressScene;
 	private BaseScene arkanoidScene;
 	private BaseScene arsScene;
+	private BaseScene settingsScene;
 
 	private BaseScene currentScene;
 	private SceneType currentSceneType;
@@ -33,7 +35,7 @@ public class SceneManager {
 	private Engine engine = ResourcesManager.getInstance().engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_SNAKE, SCENE_IN_PROGRESS, SCENE_ARKANOID, SCENE_ARS
+		SCENE_SPLASH, SCENE_MENU, SCENE_SNAKE, SCENE_IN_PROGRESS, SCENE_ARKANOID, SCENE_ARS, SCENE_SETTINGS
 	};
 
 	public static SceneManager getInstance() {
@@ -65,6 +67,10 @@ public class SceneManager {
 			break;
 		case SCENE_ARS:
 			setScene(arsScene);
+			break;
+		case SCENE_SETTINGS:
+			setScene(settingsScene);
+			break;
 		}
 	}
 
@@ -98,6 +104,10 @@ public class SceneManager {
 			break;
 		case SCENE_ARS:
 			disposeARSScene();
+			break;
+		case SCENE_SETTINGS:
+			disposeSettingsScene();
+			break;
 		default:
 			break;
 		}
@@ -189,6 +199,21 @@ public class SceneManager {
 		ResourcesManager.getInstance().unloadARSResources();
 		arsScene.disposeScene();
 		arsScene = null;
+	}
+	
+	/*
+	 * Settings Scene
+	 */
+	public void createSettingsScene(){
+		ResourcesManager.getInstance().loadSettingsResources();
+		settingsScene = new SettingsScene();
+		SceneManager.getInstance().setScene(settingsScene);
+	}
+	
+	private void disposeSettingsScene(){
+		ResourcesManager.getInstance().unloadSettingsResources();
+		settingsScene.disposeScene();
+		settingsScene = null;
 	}
 
 	/*

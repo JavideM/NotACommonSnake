@@ -73,7 +73,7 @@ public class MainMenuScene extends BaseScene implements
 			SceneManager.getInstance().createSnakeGameScene();
 			return true;
 		case MENU_OPTIONS:
-			SceneManager.getInstance().createArkanoidScene();
+			SceneManager.getInstance().createSettingsScene();
 			return true;
 		case MENU_ACHIVEMENTS:
 			SceneManager.getInstance().createAchievementsRecordsStatsScene();
