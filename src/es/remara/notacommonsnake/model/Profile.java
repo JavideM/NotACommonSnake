@@ -2,6 +2,8 @@ package es.remara.notacommonsnake.model;
 
 import java.util.ArrayList;
 
+import es.remara.notacommonsnake.manager.DBManager;
+
 public class Profile{
   /*
   * Parameters
@@ -47,4 +49,8 @@ public class Profile{
     //
 	this.sessions = new ArrayList<Session>();
   }
+  
+  public void save(DBManager dbmanager) {
+		dbmanager.saveProfile(this);
+	}
 }
