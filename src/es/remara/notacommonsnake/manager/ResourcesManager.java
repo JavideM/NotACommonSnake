@@ -73,6 +73,9 @@ public class ResourcesManager {
 	public ITextureRegion medal_region;
 	public ITextureRegion back_region;
 	public ITextureRegion door_region;
+	public ITextureRegion profile_region;
+	public ITextureRegion gamepad_region;
+	public ITextureRegion music_region;
 
 	private BitmapTextureAtlas mFontArsTexture;
 	private BitmapTextureAtlas mFontTitleTexture;
@@ -86,6 +89,9 @@ public class ResourcesManager {
 	private BitmapTextureAtlas mFontTexture;
 
 	private BuildableBitmapTextureAtlas arsTextureAtlas;
+	private BuildableBitmapTextureAtlas settingsTextureAtlas;
+
+	
 
 	// ---------------------------------------------
 	// CLASS LOGIC
@@ -425,6 +431,81 @@ public class ResourcesManager {
 		stats_region = null;
 	}
 
+	/*
+	 * Settings Scene
+	 */
+	
+	public void loadSettingsResources() {
+		loadSettingsGraphics();
+		loadSettingsFonts();
+	}
+
+	public void loadSettingsGraphics() {
+		settingsTextureAtlas = new BuildableBitmapTextureAtlas(
+				activity.getTextureManager(), 2048, 2048,
+				TextureOptions.BILINEAR);
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/");
+		background_grass_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(settingsTextureAtlas, activity, "background/grass.png");
+		orange_pannel_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(settingsTextureAtlas, activity, "ars/orangepannel.png");
+		blue_pannel_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(settingsTextureAtlas, activity, "ars/bluepannel.png");
+		salmon_pannel_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(settingsTextureAtlas, activity, "ars/salmonpannel.png");
+		profile_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "settings/profiles.png");
+		gamepad_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "settings/gamepad.png");
+		music_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "settings/music.png");
+		back_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "ars/back.png");
+		try {
+			this.settingsTextureAtlas
+					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
+							0, 1, 0));
+			this.settingsTextureAtlas.load();
+		} catch (final TextureAtlasBuilderException e) {
+			Debug.e(e);
+		}
+	}
+
+	public void loadSettingsFonts() {
+		mFontArsTexture = new BitmapTextureAtlas(
+				this.engine.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		mFontTitleTexture = new BitmapTextureAtlas(
+				this.engine.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		fonttitle = new Font(this.engine.getFontManager(), mFontTitleTexture,
+				Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true,
+				Color.WHITE);
+
+		fontARS = new Font(this.engine.getFontManager(), mFontTexture,
+				Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 20,
+				true, Color.WHITE);
+
+		engine.getTextureManager().loadTexture(mFontArsTexture);
+		engine.getTextureManager().loadTexture(mFontTitleTexture);
+		engine.getFontManager().loadFont(fontARS);
+		engine.getFontManager().loadFont(fonttitle);
+	}
+
+	public void unloadSettingsResources() {
+		settingsTextureAtlas.unload();
+		background_grass_region = null;
+		orange_pannel_region = null;
+		salmon_pannel_region = null;
+		blue_pannel_region = null;
+		profile_region = null;
+		gamepad_region = null;
+		music_region = null;
+	}
+	
 	/*
 	 * Esta clase prepara todos los parametros de ResourcesManager al cargar el
 	 * juego para que después sean accesibles desde las distintas clases,

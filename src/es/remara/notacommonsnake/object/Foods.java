@@ -104,12 +104,14 @@ public class Foods extends Entity {
 
 	private void food_got_eaten(SpecialFood food) {
 		eatenfood = food;
-		SpecialFood newspecialfood = new SpecialFood(FoodType.getRandom(),
-				walls, resourcesManager, vbom);
-		setRandomPosition(walls, newspecialfood);
-		detachChild(food);
-		specialfood = newspecialfood;
-		attachChild(specialfood);
+		if(!(eatenfood.getType() == FoodType.CHG_GAME_MODE)){
+			SpecialFood newspecialfood = new SpecialFood(FoodType.getRandom(),
+					walls, resourcesManager, vbom);
+			setRandomPosition(walls, newspecialfood);
+			detachChild(food);
+			specialfood = newspecialfood;
+			attachChild(specialfood);
+		}
 	}
 
 	public void disposeChilds() {
