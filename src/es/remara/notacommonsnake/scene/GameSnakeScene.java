@@ -228,8 +228,6 @@ public class GameSnakeScene extends BaseGameScene implements
 		}
 		if(snake.is_moving_through_worlds()){
 			session.setScore(getScore());
-			SceneManager.getInstance().getCurrentScene().disposeScene();
-			ResourcesManager.getInstance().unloadGameSnakeResources();
 			SceneManager.getInstance().createArkanoidScene(session);
 		}
 		if(door.isVisible() && snake.getHead().getX() == (camera.getWidth()/2 - 10) && snake.getHead().getY() == (camera.getHeight() - 50)){

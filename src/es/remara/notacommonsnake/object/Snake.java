@@ -137,7 +137,7 @@ public class Snake extends Entity {
 		grow();
 		switch (food.getType()) {
 		case AUG_SPEED:
-			this.speed = this.speed * 2;
+			this.speed = this.speed * 1.5f;
 			break;
 		case CHG_GAME_MODE:
 			this.moving_through_worlds = true;
@@ -149,7 +149,7 @@ public class Snake extends Entity {
 			this.drunk = true;
 			break;
 		case REDUC_SPEED:
-			this.speed = this.speed / 2;
+			this.speed = this.speed / 1.8f;
 			break;
 		case SUPER_GROW:
 			grow();
