@@ -387,6 +387,11 @@ public class ResourcesManager {
 				arsTextureAtlas, activity, "medal.png");
 		back_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				arsTextureAtlas, activity, "back.png");
+		//Work in progress
+		BitmapTextureAtlasTextureRegionFactory
+		.setAssetBasePath("gfx/workinprogress/");
+		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				arsTextureAtlas, activity, "workinprogress.png");
 		try {
 			this.arsTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(
@@ -462,6 +467,11 @@ public class ResourcesManager {
 				settingsTextureAtlas, activity, "settings/music.png");
 		back_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				settingsTextureAtlas, activity, "ars/back.png");
+		//Work in progress
+		BitmapTextureAtlasTextureRegionFactory
+		.setAssetBasePath("gfx/workinprogress/");
+		wip_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "workinprogress.png");
 		try {
 			this.settingsTextureAtlas
 					.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(

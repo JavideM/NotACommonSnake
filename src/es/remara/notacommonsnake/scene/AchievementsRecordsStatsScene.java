@@ -161,6 +161,9 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			}
 			count++;
 		}
+		//Main Content
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		achievementsPannel.attachChild(wip);
 	}
 
 	private void createRecordsPannel() {
@@ -266,6 +269,8 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				activity.getString(R.string.stats_title), new TextOptions(
 						HorizontalAlign.CENTER), this.vbom);
 		statisticPannel.attachChild(text);
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		statisticPannel.attachChild(wip);
 	}
 
 	@Override

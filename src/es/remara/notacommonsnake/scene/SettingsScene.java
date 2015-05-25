@@ -12,6 +12,7 @@ import org.andengine.util.adt.align.HorizontalAlign;
 
 import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.base.BaseScene;
+import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.model.Session;
@@ -91,7 +92,9 @@ public class SettingsScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				onBackKeyPressed();
+				ResourcesManager.getInstance().unloadSettingsResources();
+				disposeScene();
+				SceneManager.getInstance().createArkanoidScene();
 				return true;
 			}
 		};
@@ -126,6 +129,9 @@ public class SettingsScene extends BaseScene {
 				activity.getString(R.string.profile_title),
 				new TextOptions(HorizontalAlign.CENTER), this.vbom);
 		profilesPannel.attachChild(text);
+		//Main Content
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		profilesPannel.attachChild(wip);
 	}
 
 	private void createSoundsPannel() {
@@ -148,6 +154,9 @@ public class SettingsScene extends BaseScene {
 						HorizontalAlign.CENTER), this.vbom);
 		soundsPannel.attachChild(text);
 		attachChild(soundsPannel);
+		//Main Content
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		soundsPannel.attachChild(wip);
 	}
 
 	private void createDifficultiesPannel() {
@@ -171,6 +180,9 @@ public class SettingsScene extends BaseScene {
 				activity.getString(R.string.difficulty_title), new TextOptions(
 						HorizontalAlign.CENTER), this.vbom);
 		difficultiesPannel.attachChild(text);
+		//Main Content
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		difficultiesPannel.attachChild(wip);
 	}
 
 	@Override
