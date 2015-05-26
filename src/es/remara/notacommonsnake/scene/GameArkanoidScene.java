@@ -262,7 +262,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 		gOBody = PhysicsFactory.createBoxBody(arkanoidPhysicsWorld, gORegion,
 				BodyType.StaticBody, gOFix);
 		gOBody.setUserData("GameOver");
-		gORegion.setVisible(true);
+		gORegion.setVisible(false);
 	}
 
 	/*
@@ -520,19 +520,16 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 			bricksAmount = bricksAmount - 1;
 			// Cuando la cantidad llegué a cero se habrá completado el nivel.
-			if (bricksAmount == 0) {
-				if (bricksAmount <= 0) {
-					engine.runOnUpdateThread(new Runnable() {
-						@Override
-						public void run() {
-							if (session != null) {
-								session.setScore(getScore());
-							}
-							resetArkanoid();
-						}
-					});
+
+			if (bricksAmount <= 0) {
+
+				if (session != null) {
+					session.setScore(getScore());
+					SceneManager.getInstance().createSnakeGameScene(session);
 				}
+
 			}
+
 		}
 	}
 
