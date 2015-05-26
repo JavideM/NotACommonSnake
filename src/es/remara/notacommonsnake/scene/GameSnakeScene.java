@@ -15,7 +15,6 @@ import android.os.Looper;
 import android.widget.EditText;
 
 import es.remara.notacommonsnake.base.BaseGameScene;
-import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.model.Session;
@@ -79,7 +78,6 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
 		this.level = this.session.getLevel();
-		
 		// Create all objects: Snake, Food and walls
 		createobjects();
 		//Create the scene handlers
@@ -327,25 +325,30 @@ public class GameSnakeScene extends BaseGameScene implements
 	}
 
 	public void playAgain() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-		alert.setCancelable(false);
-		alert.setMessage("Play Again?");
-		alert.setPositiveButton("OK", new OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				registerUpdateHandler(utimehandler);
-				resetScreen();
-			}
-		});
-
-		alert.setNegativeButton("NO", new OnClickListener() {
-
+		activity.runOnUiThread(new Runnable() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				onBackKeyPressed();
+			public void run() {
+				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+				alert.setCancelable(false);
+				alert.setMessage("Play Again?");
+				alert.setPositiveButton("OK", new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						registerUpdateHandler(utimehandler);
+						resetScreen();
+					}
+				});
+
+				alert.setNegativeButton("NO", new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						onBackKeyPressed();
+					}
+				});
+
+				alert.show();
 			}
 		});
-
-		alert.show();
 	}
 
 	// Resets objects on screen

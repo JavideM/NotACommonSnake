@@ -170,11 +170,10 @@ public class DBManager extends SQLiteOpenHelper {
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
 		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
-				" INSERT ON " + SESSIONS_TABLE +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 100 " +
 				" BEGIN " +
-				"   UPDATE " + ACHIEVEMENTS_TABLE +
-					" SET " + ACH_DONE + " = 1" + " WHERE ID = 1 AND " +
-								"new." + SESSION_SCORE + ">100;" +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1" + " WHERE "+ IDACHIEVEMENT +" = 1;" +
 				"END;");
 	}
 	
@@ -222,7 +221,7 @@ public class DBManager extends SQLiteOpenHelper {
                 achievement.setName(cursor.getString(1));
                 achievement.setDescription(cursor.getString(2));
                 achievement.setCheck(Integer.parseInt(cursor.getString(3)) == 1);
-                achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
+//                achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
                 // Adding achievement to list
                 achievementList.add(achievement);
             } while (cursor.moveToNext());
