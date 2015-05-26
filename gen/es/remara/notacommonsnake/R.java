@@ -20,11 +20,16 @@ public final class R {
         /**  General Strings 
          */
         public static final int app_name=0x7f030000;
+        public static final int difficulty_title=0x7f030008;
         public static final int options=0x7f030002;
         /**  Menu Strings  
          */
         public static final int play=0x7f030001;
+        /**  Settings Scene Strings 
+         */
+        public static final int profile_title=0x7f030007;
         public static final int records_title=0x7f030005;
+        public static final int sound_title=0x7f030009;
         /**  Achievements Scene Strings  
          */
         public static final int stats_title=0x7f030004;

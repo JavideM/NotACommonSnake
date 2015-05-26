@@ -3,9 +3,12 @@ int drawable icon_play 0x7f020001
 int string achievements_title 0x7f030006
 int string achivements 0x7f030003
 int string app_name 0x7f030000
+int string difficulty_title 0x7f030008
 int string options 0x7f030002
 int string play 0x7f030001
+int string profile_title 0x7f030007
 int string records_title 0x7f030005
+int string sound_title 0x7f030009
 int string stats_title 0x7f030004
 int style AppBaseTheme 0x7f040000
 int style AppTheme 0x7f040001

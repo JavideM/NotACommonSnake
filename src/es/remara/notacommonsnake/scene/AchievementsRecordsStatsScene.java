@@ -14,6 +14,7 @@ import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
+import es.remara.notacommonsnake.model.Achievement;
 import es.remara.notacommonsnake.model.Session;
 
 public class AchievementsRecordsStatsScene extends BaseScene {
@@ -29,7 +30,8 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 	private Sprite btnmedal;
 	private Sprite btnback;
 
-	private List<Text> textlist;
+	private List<Text> recordslist;
+	private List<Text> achievementslist;
 
 	private final float top_ini_position = camera.getHeight()
 			- (camera.getHeight() / 12 + camera.getHeight() / 12);
@@ -126,6 +128,42 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				activity.getString(R.string.achievements_title),
 				new TextOptions(HorizontalAlign.CENTER), this.vbom);
 		achievementsPannel.attachChild(text);
+		//Achievements
+		int count = 1;
+		achievementslist = new ArrayList<Text>();
+		ArrayList<Achievement> achievements = (ArrayList<Achievement>) dbmanager
+				.getAllAchievementsDone();
+		for (Achievement achievement : achievements) {
+			String content = count + ". " + achievement.getName();
+			// Name and position
+			Text textName = new Text(camera.getHeight() / 2,
+					camera.getHeight()
+							- (camera.getHeight() / 12 + camera.getHeight()
+									/ 12 * count), resourcesManager.fontARS,
+					content, new TextOptions(HorizontalAlign.LEFT), this.vbom);
+			textName.setPosition(textName.getX() + textName.getWidth()
+					/ 2, textName.getY());
+			// Description
+			content = achievement.getDescription();
+			Text textDescript = new Text(600, camera.getHeight()
+					- (camera.getHeight() / 12 + camera.getHeight() / 12
+							* count), resourcesManager.fontARS, content,
+					new TextOptions(HorizontalAlign.LEFT), this.vbom);
+			textDescript.setPosition(textDescript.getX() - textDescript.getWidth() / 2,
+					textDescript.getY());
+			achievementsPannel.attachChild(textName);
+			achievementsPannel.attachChild(textDescript);
+			achievementslist.add(textName);
+			achievementslist.add(textDescript);
+			if (count > 8) {
+				textName.setVisible(false);
+				textDescript.setVisible(false);
+			}
+			count++;
+		}
+		//Main Content
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		achievementsPannel.attachChild(wip);
 	}
 
 	private void createRecordsPannel() {
@@ -145,16 +183,16 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				if (pSceneTouchEvent.isActionDown())
 					positionIn = pTouchAreaLocalY;
 				float distance = (positionIn - pTouchAreaLocalY) / 10;
-				if ((textlist.get(0).getY() - distance) >= top_ini_position - 5
-						&& (textlist.get(textlist.size() - 1).getY() - distance <= bottom_ini_position + 5)) {
-					for (int i = 0; i < textlist.size(); i++) {
-						textlist.get(i).setPosition(textlist.get(i).getX(),
-								textlist.get(i).getY() - distance);
-						if (textlist.get(i).getY() >= top_ini_position + 5
-								|| textlist.get(i).getY() <= bottom_ini_position - 5) {
-							textlist.get(i).setVisible(false);
+				if ((recordslist.get(0).getY() - distance) >= top_ini_position - 5
+						&& (recordslist.get(recordslist.size() - 1).getY() - distance <= bottom_ini_position + 5)) {
+					for (int i = 0; i < recordslist.size(); i++) {
+						recordslist.get(i).setPosition(recordslist.get(i).getX(),
+								recordslist.get(i).getY() - distance);
+						if (recordslist.get(i).getY() >= top_ini_position + 5
+								|| recordslist.get(i).getY() <= bottom_ini_position - 5) {
+							recordslist.get(i).setVisible(false);
 						} else {
-							textlist.get(i).setVisible(true);
+							recordslist.get(i).setVisible(true);
 						}
 					}
 				}
@@ -162,7 +200,6 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			}
 		};
 		recordsPannel.attachChild(pannel);
-		registerTouchArea(pannel);
 
 		/*
 		 * Pannel Content
@@ -176,7 +213,7 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 
 		// Records
 		int count = 1;
-		textlist = new ArrayList<Text>();
+		recordslist = new ArrayList<Text>();
 		ArrayList<Session> sessions = (ArrayList<Session>) dbmanager
 				.getAllSessionsByScore();
 		for (Session session : sessions) {
@@ -199,14 +236,16 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 					textScore.getY());
 			recordsPannel.attachChild(textPlayer);
 			recordsPannel.attachChild(textScore);
-			textlist.add(textPlayer);
-			textlist.add(textScore);
+			recordslist.add(textPlayer);
+			recordslist.add(textScore);
 			if (count > 8) {
 				textPlayer.setVisible(false);
 				textScore.setVisible(false);
 			}
 			count++;
 		}
+		if(count > 1)
+			registerTouchArea(pannel);
 		attachChild(recordsPannel);
 	}
 
@@ -231,6 +270,8 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				activity.getString(R.string.stats_title), new TextOptions(
 						HorizontalAlign.CENTER), this.vbom);
 		statisticPannel.attachChild(text);
+		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
+		statisticPannel.attachChild(wip);
 	}
 
 	@Override

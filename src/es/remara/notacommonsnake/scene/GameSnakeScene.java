@@ -15,7 +15,6 @@ import android.os.Looper;
 import android.widget.EditText;
 
 import es.remara.notacommonsnake.base.BaseGameScene;
-import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.model.Session;
@@ -46,8 +45,10 @@ public class GameSnakeScene extends BaseGameScene implements
 	 */
 	private SurfaceGestureDetector mSGD;
 	private TimerHandler utimehandler;
+	private TimerHandler chg_level_timehandler;
 	private Session session;
 	private Snake_Level snake_level;
+	
 
 	/**
 	 * Constructors
@@ -77,7 +78,6 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
 		this.level = this.session.getLevel();
-		
 		// Create all objects: Snake, Food and walls
 		createobjects();
 		//Create the scene handlers
@@ -206,6 +206,7 @@ public class GameSnakeScene extends BaseGameScene implements
 				new ITimerCallback() {
 					@Override
 					public void onTimePassed(final TimerHandler pTimerHandler) {
+						unregisterUpdateHandler(utimehandler);
 						updateScreen();
 						pTimerHandler.setTimerSeconds(snake.getSpeed());
 					}
@@ -214,6 +215,32 @@ public class GameSnakeScene extends BaseGameScene implements
 		registerUpdateHandler(utimehandler);
 
 		setOnSceneTouchListener(this);
+	}
+	
+	private void create_levelChangeHandler(){
+		chg_level_timehandler = new TimerHandler(snake.getSpeed(), true,
+				new ITimerCallback() {
+					@Override
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						
+						
+						
+						if(snake.go_through_portal()){
+							unregisterUpdateHandler(chg_level_timehandler);
+							if(snake.is_moving_through_worlds())
+								SceneManager.getInstance().createArkanoidScene(session);
+							else{
+								nextlevel();
+								resetScreen();
+								door.setVisible(false);
+								registerUpdateHandler(utimehandler);
+							}
+						}
+						pTimerHandler.setTimerSeconds(snake.getSpeed()*2);
+					}
+				});
+
+		registerUpdateHandler(chg_level_timehandler);
 	}
 	/*
 	 * Métodos
@@ -226,24 +253,31 @@ public class GameSnakeScene extends BaseGameScene implements
 			addScore((foods.get_eatenfood().getType() == FoodType.X2) ? 200
 					: 100);
 		}
-		if(snake.is_moving_through_worlds()){
+		if (snake.is_moving_through_worlds()) {
 			session.setScore(getScore());
-			SceneManager.getInstance().createArkanoidScene(session);
-		}
-		if(door.isVisible() && snake.getHead().getX() == (camera.getWidth()/2 - 10) && snake.getHead().getY() == (camera.getHeight() - 50)){
-			nextlevel();
-			resetScreen();
-			door.setVisible(false);
-		}
-		if (snake.is_ghost_mode()
-				|| (!snake.suicide() && !snake.hit_a_wall(walls)))
-			snake.move();
-		else {
-			gameOver();
-		}
-		if (getScore() > 500 + session.getScore()) {
-			door.setVisible(true);
-			
+			// it unregisters the snake update handler and register the changing
+			// level animations
+			create_levelChangeHandler();
+		} else {
+			if (door.isVisible()
+					&& snake.getHead().getX() == (camera.getWidth() / 2 - 10)
+					&& snake.getHead().getY() == (camera.getHeight() - 50)) {
+				// it unregisters the snake update handler and register the
+				// changing level animations
+				create_levelChangeHandler();
+			} else {
+				if (snake.is_ghost_mode()
+						|| (!snake.suicide() && !snake.hit_a_wall(walls))) {
+					snake.move();
+					registerUpdateHandler(utimehandler);
+				} else {
+					gameOver();
+				}
+				if (getScore() > 500 + session.getScore()) {
+					door.setVisible(true);
+
+				}
+			}
 		}
 	}
 
@@ -251,7 +285,6 @@ public class GameSnakeScene extends BaseGameScene implements
 		final EditText ed = new EditText(activity);
 		ed.setHint("Player Namer");
 
-		unregisterUpdateHandler(utimehandler);
 		activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -280,6 +313,35 @@ public class GameSnakeScene extends BaseGameScene implements
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						playAgain();
+					}
+				});
+
+				alert.show();
+				
+			}
+		});
+		
+	}
+
+	public void playAgain() {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+				alert.setCancelable(false);
+				alert.setMessage("Play Again?");
+				alert.setPositiveButton("OK", new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						registerUpdateHandler(utimehandler);
+						resetScreen();
+					}
+				});
+
+				alert.setNegativeButton("NO", new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
 						onBackKeyPressed();
 					}
 				});
@@ -287,28 +349,6 @@ public class GameSnakeScene extends BaseGameScene implements
 				alert.show();
 			}
 		});
-	}
-
-	public void playAgain() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-		alert.setCancelable(false);
-		alert.setMessage("Play Again?");
-		alert.setPositiveButton("OK", new OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				registerUpdateHandler(utimehandler);
-				resetScreen();
-			}
-		});
-
-		alert.setNegativeButton("NO", new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				onBackKeyPressed();
-			}
-		});
-
-		alert.show();
 	}
 
 	// Resets objects on screen

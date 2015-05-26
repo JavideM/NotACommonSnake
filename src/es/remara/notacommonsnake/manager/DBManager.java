@@ -35,7 +35,7 @@ public class DBManager extends SQLiteOpenHelper {
 	private final String SESSION_PLAYER_NAME = "PLAYER_NAME";
 	private final String SESSION_SCORE = "SCORE";
 	private final String SESSION_LEVEL = "LEVEL";
-	
+	//Script
 	private final String sessionsCreate = "CREATE TABLE " + SESSIONS_TABLE  +
 												" ("+ IDSESSION + " INTEGER primary key not null, " +
 												SESSION_PLAYER_NAME + " TEXT not null, " +
@@ -54,7 +54,7 @@ public class DBManager extends SQLiteOpenHelper {
 	private final String ACH_DESCRIP = "DESCRIPTION";
 	private final String ACH_DONE = "DONE";
 	private final String ACH_IDSESSION = IDSESSION;
-	
+	//Script
 	private String achievementsCreate = "CREATE TABLE " + ACHIEVEMENTS_TABLE + 
 											" ("+IDACHIEVEMENT + " INTEGER primary key, " +
 												ACH_NAME + " TEXT not null, " +
@@ -63,6 +63,9 @@ public class DBManager extends SQLiteOpenHelper {
 												ACH_IDSESSION + " INTEGER, " +
 												"FOREIGN KEY("+ACH_IDSESSION+") REFERENCES "+ SESSIONS_TABLE +"("+IDSESSION+"))";
 	
+	/*
+	 * Profiles
+	 */
 	// Table name
     private final String PROFILES_TABLE = "PROFILES";
 
@@ -71,7 +74,7 @@ public class DBManager extends SQLiteOpenHelper {
     private final String NAME = "NAME";
     private final String ACTIVE = "ACTIVE";
 
-    // Sript
+    // Script
     private String profilesCreate = "CREATE TABLE " + PROFILES_TABLE + "("
             + IDPROFILE + "INTEGER primary key, " + NAME + " TEXT NOT NULL, "
             + ACTIVE + " TEXT)";
@@ -114,17 +117,6 @@ public class DBManager extends SQLiteOpenHelper {
         db.close();
 	}
 	
-	public void saveProfile(Profile profile) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(NAME, profile.getName());
-        values.put(ACTIVE, profile.isActive());
-
-        db.insert(PROFILES_TABLE, null, values);
-        db.close();
-    }
-	
 	public List<Session> getAllSessionsByScore() {
         List<Session> sessionList = new ArrayList<Session>();
         // Select All Query
@@ -152,7 +144,21 @@ public class DBManager extends SQLiteOpenHelper {
     }
 	
 	/*
-	 * Achievements
+	 * Profiles CRUD
+	 */
+	public void saveProfile(Profile profile) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(NAME, profile.getName());
+        values.put(ACTIVE, profile.isActive());
+
+        db.insert(PROFILES_TABLE, null, values);
+        db.close();
+    }
+	
+	/*
+	 * Achievements CRUD
 	 */
 	
 	private void insertAchievements(SQLiteDatabase db) {
@@ -162,6 +168,13 @@ public class DBManager extends SQLiteOpenHelper {
 		values.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
+		
+		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 100 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1" + " WHERE "+ IDACHIEVEMENT +" = 1;" +
+				"END;");
 	}
 	
 	public List<Achievement> getAllAchievements() {
@@ -180,8 +193,35 @@ public class DBManager extends SQLiteOpenHelper {
                 achievement.setId(Integer.parseInt(cursor.getString(0)));
                 achievement.setName(cursor.getString(1));
                 achievement.setDescription(cursor.getString(2));
-                achievement.setCheck(Integer.parseInt(cursor.getString(3)));
+                achievement.setCheck(Integer.parseInt(cursor.getString(3)) == 1);
                 achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
+                // Adding achievement to list
+                achievementList.add(achievement);
+            } while (cursor.moveToNext());
+        }
+       
+        // return session list
+        return achievementList;
+    }
+	
+	public List<Achievement> getAllAchievementsDone() {
+        List<Achievement> achievementList = new ArrayList<Achievement>();
+        // Select All Query
+        String selectQuery = "SELECT * " +
+    						" FROM " + ACHIEVEMENTS_TABLE + " WHERE " + ACH_DONE + " = 1"  + " ORDER BY " + IDACHIEVEMENT;
+ 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+ 
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Achievement achievement = new Achievement();
+                achievement.setId(Integer.parseInt(cursor.getString(0)));
+                achievement.setName(cursor.getString(1));
+                achievement.setDescription(cursor.getString(2));
+                achievement.setCheck(Integer.parseInt(cursor.getString(3)) == 1);
+//                achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
                 // Adding achievement to list
                 achievementList.add(achievement);
             } while (cursor.moveToNext());
