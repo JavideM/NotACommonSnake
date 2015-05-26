@@ -200,7 +200,6 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			}
 		};
 		recordsPannel.attachChild(pannel);
-		registerTouchArea(pannel);
 
 		/*
 		 * Pannel Content
@@ -245,6 +244,8 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			}
 			count++;
 		}
+		if(count > 1)
+			registerTouchArea(pannel);
 		attachChild(recordsPannel);
 	}
 
