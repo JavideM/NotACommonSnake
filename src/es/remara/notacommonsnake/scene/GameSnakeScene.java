@@ -78,6 +78,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
 		this.level = this.session.getLevel();
+		addScore(session.getScore());
 		// Create all objects: Snake, Food and walls
 		createobjects();
 		//Create the scene handlers
