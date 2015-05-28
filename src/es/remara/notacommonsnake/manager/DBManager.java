@@ -162,18 +162,52 @@ public class DBManager extends SQLiteOpenHelper {
 	 */
 	
 	private void insertAchievements(SQLiteDatabase db) {
+		//First points
 		ContentValues values = new ContentValues();
-		values.put(ACH_NAME, "First meal.");
+		values.put(ACH_NAME, "First meal");
 		values.put(ACH_DESCRIP, "Eat your first food.");
 		values.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
 		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
-				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 100 " +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 100 " +
 				" BEGIN " +
 					"UPDATE " + ACHIEVEMENTS_TABLE +
-					" 	SET " + ACH_DONE + " = 1" + " WHERE "+ IDACHIEVEMENT +" = 1;" +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 1 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		//300 points 
+		values = new ContentValues();
+		values.put(ACH_NAME, "300 AU AU");
+		values.put(ACH_DESCRIP, "Score 300 points.");
+		values.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values);
+		
+		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 300 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 2, "+ ACH_IDSESSION + "=new." +IDSESSION
+					+" WHERE "+ IDACHIEVEMENT +" = 1 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		// Over 9000 points
+		values = new ContentValues();
+		values.put(ACH_NAME, "It's over 9000!");
+		values.put(ACH_DESCRIP, "Score more than 9000 points.");
+		values.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values);
+		
+		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 9000 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 3, "+ ACH_IDSESSION + "=new." +IDSESSION
+					+" WHERE "+ IDACHIEVEMENT +" = 1 AND "+ ACH_DONE+ "=0;" +
 				"END;");
 	}
 	

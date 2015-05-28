@@ -38,7 +38,6 @@ public class GameSnakeScene extends BaseGameScene implements
 	/*
 	 * Parameters
 	 */
-	private int level;
 
 	/*
 	 * Others
@@ -62,7 +61,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level = new Snake_Level();
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
-		this.level = this.session.getLevel();
+		
 		
 		// Create all objects: Snake, Food and walls
 		createobjects();
@@ -77,7 +76,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level = new Snake_Level();
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
-		this.level = this.session.getLevel();
+		session.nextlevel();
 		addScore(session.getScore());
 		// Create all objects: Snake, Food and walls
 		createobjects();
@@ -94,17 +93,12 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level = new Snake_Level();
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
-		this.level = this.session.getLevel();
+		
 		
 		// Create all objects: Snake, Food and walls
 		createobjects();
 		//Create the scene handlers
 		createHandlers();
-	}
-
-
-	public int getlevel() {
-		return this.level;
 	}
 
 	@Override
@@ -189,7 +183,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake.setZIndex(1);
 
 		// Walls
-		walls = new Walls(getlevel(), resourcesManager.wall_region, this,
+		walls = new Walls(session.getLevel(), resourcesManager.wall_region, this,
 				activity, vbom);
 		attachChild(walls);
 		walls.setZIndex(3);
@@ -231,7 +225,7 @@ public class GameSnakeScene extends BaseGameScene implements
 							if(snake.is_moving_through_worlds())
 								SceneManager.getInstance().createArkanoidScene(session);
 							else{
-								nextlevel();
+								session.nextlevel();
 								resetScreen();
 								door.setVisible(false);
 								registerUpdateHandler(utimehandler);
@@ -366,20 +360,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		createobjects();
 	}
 
-	// Choose the next level
-	private void nextlevel() {
-		switch (level) {
-		case 0:
-			level = 1;
-			break;
-		case 1:
-			level = 2;
-			break;
-		case 2:
-			level = 0;
-			break;
-		}
-	}
+	
 
 	@Override
 	public void onBackKeyPressed() {
