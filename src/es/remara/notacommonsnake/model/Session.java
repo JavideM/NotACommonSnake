@@ -91,7 +91,10 @@ public class Session {
 	
 	// Choose the next level
 		public int nextlevel() {
-			this.level = this.level == 2? 0: this.level++;
+			if(level == 2)
+				this.level = 0;
+			else
+				this.level = level + 1;
 			return this.level;
 		}
 }
