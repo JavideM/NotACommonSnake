@@ -50,7 +50,16 @@ public class Profile{
 	this.sessions = new ArrayList<Session>();
   }
   
+  /*
+   * Methods
+   */
   public void save(DBManager dbmanager) {
 		dbmanager.saveProfile(this);
 	}
+  
+  public void activeProfile(DBManager dbmanager)
+  {
+	  dbmanager.setActiveProfile(this);
+	  this.active = true;
+  }
 }
