@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level>	
+	<entity x="10" y="10" number="40" directionx="1" directiony="0"/>
+	<entity x="10" y="470" number="40" directionx="1" directiony="0"/>
+	<entity x="10" y="10" number="24" directionx="0" directiony="1"/>
+	<entity x="790" y="10" number="24" directionx="0" directiony="1"/>
+	
+	<entity x="110" y="150" number="5" directionx="1" directiony="0"/>
+	<entity x="110" y="330" number="5" directionx="1" directiony="0"/>
+	<entity x="290" y="150" number="12" directionx="1" directiony="0"/>
+	<entity x="290" y="330" number="12" directionx="1" directiony="0"/>
+	<entity x="610" y="150" number="5" directionx="1" directiony="0"/>
+	<entity x="610" y="330" number="5" directionx="1" directiony="0"/>
+	
+	<entity x="150" y="110" number="2" directionx="0" directiony="1"/>
+	<entity x="650" y="110" number="2" directionx="0" directiony="1"/>
+	<entity x="150" y="170" number="2" directionx="0" directiony="1"/>
+	<entity x="290" y="170" number="2" directionx="0" directiony="1"/>
+	<entity x="510" y="170" number="2" directionx="0" directiony="1"/>
+	<entity x="650" y="170" number="2" directionx="0" directiony="1"/>
+	<entity x="150" y="290" number="2" directionx="0" directiony="1"/>
+	<entity x="290" y="290" number="2" directionx="0" directiony="1"/>
+	<entity x="510" y="290" number="2" directionx="0" directiony="1"/>
+	<entity x="650" y="290" number="2" directionx="0" directiony="1"/>
+	<entity x="150" y="350" number="2" directionx="0" directiony="1"/>
+	<entity x="650" y="350" number="2" directionx="0" directiony="1"/>
+</level>
