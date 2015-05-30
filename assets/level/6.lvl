@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level>	
+	<entity x="10" y="10" number="40" directionx="1" directiony="0"/>
+	<entity x="10" y="470" number="40" directionx="1" directiony="0"/>
+	<entity x="10" y="10" number="24" directionx="0" directiony="1"/>
+	<entity x="790" y="10" number="24" directionx="0" directiony="1"/>
+	
+	<entity x="170" y="350" number="8" directionx="1" directiony="0"/>
+	<entity x="490" y="350" number="8" directionx="1" directiony="0"/>
+	<entity x="170" y="110" number="8" directionx="1" directiony="0"/>
+	<entity x="490" y="110" number="8" directionx="1" directiony="0"/>
+	<entity x="170" y="130" number="3" directionx="0" directiony="1"/>
+	<entity x="170" y="290" number="3" directionx="0" directiony="1"/>
+	<entity x="630" y="290" number="3" directionx="0" directiony="1"/>
+	<entity x="630" y="130" number="3" directionx="0" directiony="1"/>
+</level>

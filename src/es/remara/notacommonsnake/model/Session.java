@@ -88,4 +88,13 @@ public class Session {
 	public void update(DBManager dbmanager) {
 
 	}
+	
+	// Choose the next level
+		public int nextlevel() {
+			if(level == 9)
+				this.level = 0;
+			else
+				this.level = level + 1;
+			return this.level;
+		}
 }

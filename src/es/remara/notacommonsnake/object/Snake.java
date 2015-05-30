@@ -135,7 +135,7 @@ public class Snake extends Entity {
 
 	public void eat(Food food) {
 		set_default_states();
-		grow();
+		
 		switch (food.getType()) {
 		case AUG_SPEED:
 			this.speed = this.speed * 1.5f;
@@ -160,6 +160,8 @@ public class Snake extends Entity {
 		default:
 			break;
 		}
+		if(!moving_through_worlds)
+			grow();
 	}
 
 	private void set_default_states() {
@@ -260,6 +262,8 @@ public class Snake extends Entity {
 	}
 
 	public boolean go_through_portal() {
+		has_rotate_left = false;
+		has_rotate_right = false;
 		if (head != null) {
 			// Moves the body to the heads position
 			Entity new_tail = body.removeLast();
@@ -290,7 +294,7 @@ public class Snake extends Entity {
 			body.addLast(new_tail);
 			body.addFirst(new_body_part);
 			
-
+			//Removes the head because now it's in "the other side of the portal"
 			detachChild(head);
 			head = null;
 			return false;

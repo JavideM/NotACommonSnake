@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level>	
+	<entity x="10" y="470" number="24" directionx="1" directiony="-1"/>
+	<entity x="490" y="30" number="16" directionx="1" directiony="1"/>
+</level>
