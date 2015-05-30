@@ -269,7 +269,7 @@ public class GameSnakeScene extends BaseGameScene implements
 				} else {
 					gameOver();
 				}
-				if (getScore() > 500 + session.getScore()) {
+				if (getScore() > 100 + session.getScore()) {
 					door.setVisible(true);
 
 				}
@@ -366,8 +366,13 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void onBackKeyPressed() {
-
-		SceneManager.getInstance().loadMenuScene(engine, this);
+		 
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					SceneManager.getInstance().loadMenuScene(engine, SceneManager.getInstance().getCurrentScene());
+				}
+			});
 	}
 
 	@Override
