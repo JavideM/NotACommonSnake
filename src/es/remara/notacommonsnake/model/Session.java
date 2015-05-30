@@ -91,7 +91,7 @@ public class Session {
 	
 	// Choose the next level
 		public int nextlevel() {
-			if(level == 2)
+			if(level == 4)
 				this.level = 0;
 			else
 				this.level = level + 1;
