@@ -61,7 +61,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level = new Snake_Level();
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
-		
+		setLevelTitle(""+session.getLevel());
 		
 		// Create all objects: Snake, Food and walls
 		createobjects();
@@ -78,6 +78,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		session.AddSnake_Level(snake_level);
 		session.nextlevel();
 		addScore(session.getScore());
+		setLevelTitle("" + session.getLevel());
 		// Create all objects: Snake, Food and walls
 		createobjects();
 		//Create the scene handlers
@@ -93,7 +94,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level = new Snake_Level();
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
-		
+		setLevelTitle("" + session.getLevel());
 		
 		// Create all objects: Snake, Food and walls
 		createobjects();
@@ -357,6 +358,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		walls.dispose();
 		walls.detachSelf();
 		session.setScore(getScore());
+		setLevelTitle(""+session.getLevel());
 		createobjects();
 	}
 
