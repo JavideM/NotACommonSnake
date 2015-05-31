@@ -179,7 +179,7 @@ public class GameSnakeScene extends BaseGameScene implements
 		// attachChild(snake);
 		// Snake Sprites
 		snake = new Snake(camera.getWidth() / 16, camera.getHeight() * 25 / 48,
-				camera.getWidth() / 40, camera.getHeight() / 24, 0.3f, vbom);
+				camera.getWidth() / 40, camera.getHeight() / 24, 0.25f, vbom);
 		attachChild(snake);
 		snake.setZIndex(1);
 
@@ -214,13 +214,10 @@ public class GameSnakeScene extends BaseGameScene implements
 	}
 	
 	private void create_levelChangeHandler(){
-		chg_level_timehandler = new TimerHandler(snake.getSpeed(), true,
+		chg_level_timehandler = new TimerHandler(0.2f, true,
 				new ITimerCallback() {
 					@Override
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						
-						
-						
 						if(snake.go_through_portal()){
 							unregisterUpdateHandler(chg_level_timehandler);
 							if(snake.is_moving_through_worlds())
@@ -232,7 +229,7 @@ public class GameSnakeScene extends BaseGameScene implements
 								registerUpdateHandler(utimehandler);
 							}
 						}
-						pTimerHandler.setTimerSeconds(snake.getSpeed()*2);
+						pTimerHandler.setTimerSeconds(0.2f);
 					}
 				});
 
