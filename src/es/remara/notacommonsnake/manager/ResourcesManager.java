@@ -44,7 +44,8 @@ public class ResourcesManager {
 	public ITextureRegion options_region;
 	public ITextureRegion achivements_region;
 	public ITextureRegion title_region;
-	public ITextureRegion exit_region;
+	public ITextureRegion facebook_region;
+	public ITextureRegion youtube_region;
 
 	public ITextureRegion wip_region;
 	public ITextureRegion ark_ball_region;
@@ -185,8 +186,11 @@ public class ResourcesManager {
 		title_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				menuTextureAtlas, activity, "title.png");
 
-		exit_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				menuTextureAtlas, activity, "exit.png");
+		facebook_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuTextureAtlas, activity, "facebook_icon.png");
+		
+		youtube_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuTextureAtlas, activity, "youtube_icon.png");
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
