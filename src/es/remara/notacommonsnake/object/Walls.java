@@ -81,6 +81,7 @@ public class Walls extends Entity {
 							wall_section.setPosition(x + i * direction_x * 20,
 									y + i * direction_y * 20);
 							levelObject.attachChild(wall_section);
+							wall_section.setZIndex(3);
 							walls.add(wall_section);
 						}
 
