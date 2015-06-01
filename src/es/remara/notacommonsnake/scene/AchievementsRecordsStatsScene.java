@@ -93,7 +93,8 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				onBackKeyPressed();
+					onBackKeyPressed();
+				
 				return true;
 			}
 		};

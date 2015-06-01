@@ -27,7 +27,7 @@ public abstract class BaseGameScene extends BaseScene {
 		scoreText.setText("Score: 0");
 		gameHUD.attachChild(scoreText);
 		
-		titleText = new Text(625, 435, resourcesManager.font,
+		titleText = new Text(665, 435, resourcesManager.font,
 				"Level: 0123456789", new TextOptions(HorizontalAlign.LEFT),
 				vbom);
 		titleText.setAnchorCenter(0, 0);
