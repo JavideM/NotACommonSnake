@@ -49,5 +49,9 @@ public abstract class BaseGameScene extends BaseScene {
 		score += i;
 		scoreText.setText("Score: " + score);
 	}
-
+	
+	public void resetScore(){
+		scoreText.setText("Score: " + 0);
+		score = 0;
+	}
 }
