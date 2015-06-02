@@ -97,9 +97,12 @@ public class GameArkanoidScene extends BaseGameScene implements
 				resourcesManager.background_grass_region, vbom));
 		arkanoidPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
 		// Creación HUD y conservación de datos.
-		createHUD();
+		String sad = "Bonus level";
+		this.createHUD();
 		camera.getHUD().setRotation(-90.0f);
 		camera.getHUD().setPosition(480, 0);
+		setTitle(sad);
+		this.titleText.setPosition(300, 435);
 		// Creación sprites, físicas, conectores, etc.
 		registerUpdateHandler(arkanoidPhysicsWorld);
 		createFixtures();
@@ -521,7 +524,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 			bricksAmount = bricksAmount - 1;
 			// Cuando la cantidad llegué a cero se habrá completado el nivel.
 
-			if (bricksAmount <= 0) {
+			if (bricksAmount <= 25) {
 
 				if (session != null) {
 					session.setScore(getScore());

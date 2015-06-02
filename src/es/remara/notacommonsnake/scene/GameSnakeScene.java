@@ -411,8 +411,8 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void disposeScene() {
-		camera.setHUD(null);
-		snake.dispose();
+		
+		// snake.dispose();
 		snake.detachSelf();
 		foods.detachSelf();
 		foods.dispose();
