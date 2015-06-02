@@ -47,12 +47,11 @@ public class GameSnakeScene extends BaseGameScene implements
 	private TimerHandler chg_level_timehandler;
 	private Session session;
 	private Snake_Level snake_level;
-	
 
 	/**
 	 * Constructors
-	 */ 
-	//Contructor when you choose no level
+	 */
+	// Contructor when you choose no level
 	public GameSnakeScene() {
 		super();
 		session = new Session();
@@ -61,15 +60,16 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level = new Snake_Level();
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
-		setLevelTitle(""+session.getLevel());
-		
+		setLevelTitle("" + session.getLevel());
+
 		// Create all objects: Snake, Food and walls
 		createobjects();
-		//Create the scene handlers
+		// Create the scene handlers
 		createHandlers();
 	}
 
-	//Contructor when you come from another scene (for example and Arkanoid Scene)
+	// Contructor when you come from another scene (for example and Arkanoid
+	// Scene)
 	public GameSnakeScene(Session session) {
 		super();
 		this.session = session;
@@ -81,12 +81,12 @@ public class GameSnakeScene extends BaseGameScene implements
 		setLevelTitle("" + session.getLevel());
 		// Create all objects: Snake, Food and walls
 		createobjects();
-		//Create the scene handlers
+		// Create the scene handlers
 		createHandlers();
 	}
 
-	//Contructor when you choose a specific level
-	public GameSnakeScene(int level){
+	// Contructor when you choose a specific level
+	public GameSnakeScene(int level) {
 		super();
 		session = new Session();
 		session.setLevel(level);
@@ -95,10 +95,10 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake_level.setScore(0);
 		session.AddSnake_Level(snake_level);
 		setLevelTitle("" + session.getLevel());
-		
+
 		// Create all objects: Snake, Food and walls
 		createobjects();
-		//Create the scene handlers
+		// Create the scene handlers
 		createHandlers();
 	}
 
@@ -113,14 +113,15 @@ public class GameSnakeScene extends BaseGameScene implements
 		// Background
 		attachChild(new Sprite(camera.getWidth() / 2, camera.getHeight() / 2,
 				resourcesManager.background_grass_region, vbom));
-		
-		//Doors
-		door = new Sprite(camera.getWidth()/2 -10, camera.getHeight() - 30, resourcesManager.door_region, vbom);
+
+		// Doors
+		door = new Sprite(camera.getWidth() / 2 - 10, camera.getHeight() - 30,
+				resourcesManager.door_region, vbom);
 		door.setVisible(false);
 		door.setZIndex(5);
 		attachChild(door);
 	}
-	
+
 	/*
 	 * Metodos de creación de elementos
 	 */
@@ -184,8 +185,8 @@ public class GameSnakeScene extends BaseGameScene implements
 		snake.setZIndex(1);
 
 		// Walls
-		walls = new Walls(session.getLevel(), resourcesManager.wall_region, this,
-				activity, vbom);
+		walls = new Walls(session.getLevel(), resourcesManager.wall_region,
+				this, activity, vbom);
 		attachChild(walls);
 		walls.setZIndex(3);
 
@@ -195,12 +196,12 @@ public class GameSnakeScene extends BaseGameScene implements
 		foods.setZIndex(0);
 
 		sortChildren();
-		
-		//Set mode text
+
+		// Set mode text
 		setModetext(FoodType.getTextMode(FoodType.NORMAL));
 	}
 
-	private void createHandlers(){
+	private void createHandlers() {
 		utimehandler = new TimerHandler(snake.getSpeed(), true,
 				new ITimerCallback() {
 					@Override
@@ -215,17 +216,18 @@ public class GameSnakeScene extends BaseGameScene implements
 
 		setOnSceneTouchListener(this);
 	}
-	
-	private void create_levelChangeHandler(){
+
+	private void create_levelChangeHandler() {
 		chg_level_timehandler = new TimerHandler(0.2f, true,
 				new ITimerCallback() {
 					@Override
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						if(snake.go_through_portal()){
+						if (snake.go_through_portal()) {
 							unregisterUpdateHandler(chg_level_timehandler);
-							if(snake.is_moving_through_worlds())
-								SceneManager.getInstance().createArkanoidScene(session);
-							else{
+							if (snake.is_moving_through_worlds())
+								SceneManager.getInstance().createArkanoidScene(
+										session);
+							else {
 								session.nextlevel();
 								resetScreen();
 								door.setVisible(false);
@@ -238,21 +240,22 @@ public class GameSnakeScene extends BaseGameScene implements
 
 		registerUpdateHandler(chg_level_timehandler);
 	}
+
 	/*
 	 * Métodos
 	 */
 	// Handles the screen update
 	protected void updateScreen() {
-		//checks if a food has been eaten
+		// checks if a food has been eaten
 		if (foods.is_there_food(snake.getHead().getX(), snake.getHead().getY(),
 				true)) {
 			snake.eat(foods.get_eatenfood());
 			addScore((foods.get_eatenfood().getType() == FoodType.X2) ? 200
 					: 100);
-			//sets the mode text
+			// sets the mode text
 			setModetext(FoodType.getTextMode(foods.get_eatenfood().getType()));
 		}
-		//checks if the snake is changing game mode 
+		// checks if the snake is changing game mode
 		if (snake.is_moving_through_worlds()) {
 			session.setScore(getScore());
 			// it unregisters the snake update handler and register the changing
@@ -266,7 +269,7 @@ public class GameSnakeScene extends BaseGameScene implements
 				// it unregisters the snake update handler and register the
 				// changing level animations
 				create_levelChangeHandler();
-			} else {				
+			} else {
 				if (snake.is_ghost_mode()
 						|| (!snake.suicide() && !snake.hit_a_wall(walls))) {
 					snake.move();
@@ -319,10 +322,10 @@ public class GameSnakeScene extends BaseGameScene implements
 				});
 
 				alert.show();
-				
+
 			}
 		});
-		
+
 	}
 
 	public void playAgain() {
@@ -367,41 +370,42 @@ public class GameSnakeScene extends BaseGameScene implements
 		walls.dispose();
 		walls.detachSelf();
 		session.setScore(getScore());
-		setLevelTitle(""+session.getLevel());
+		setLevelTitle("" + session.getLevel());
 		createobjects();
 	}
 
-	private void go_to_menu(){
-		SceneManager.getInstance().loadMenuScene(engine, SceneManager.getInstance().getCurrentScene());
+	private void go_to_menu() {
+		SceneManager.getInstance().loadMenuScene(engine,
+				SceneManager.getInstance().getCurrentScene());
 	}
 
 	@Override
 	public void onBackKeyPressed() {
-		 	unregisterUpdateHandler(utimehandler);
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-					alert.setCancelable(false);
-					alert.setMessage("Are you sure you want to quit?");
-					alert.setPositiveButton("OK", new OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							
-							go_to_menu();
-						}
-					});
+		unregisterUpdateHandler(utimehandler);
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+				alert.setCancelable(false);
+				alert.setMessage("Are you sure you want to quit?");
+				alert.setPositiveButton("OK", new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
 
-					alert.setNegativeButton("NO", new OnClickListener() {
+						go_to_menu();
+					}
+				});
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							registerUpdateHandler(utimehandler);
-						}
-					});
+				alert.setNegativeButton("NO", new OnClickListener() {
 
-					alert.show();
-				}
-			});
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						registerUpdateHandler(utimehandler);
+					}
+				});
+
+				alert.show();
+			}
+		});
 	}
 
 	@Override
@@ -411,8 +415,8 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void disposeScene() {
-		camera.setHUD(null);
-		snake.dispose();
+
+		// snake.dispose();
 		snake.detachSelf();
 		foods.detachSelf();
 		foods.dispose();
