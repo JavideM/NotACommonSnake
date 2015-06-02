@@ -20,7 +20,14 @@ public final class R {
         /**  General Strings 
          */
         public static final int app_name=0x7f030000;
+        public static final int augsppedFoodtxt=0x7f03000b;
+        public static final int chggamemodeFoodtxt=0x7f03000c;
         public static final int difficulty_title=0x7f030008;
+        public static final int ghostmodeFoodtxt=0x7f03000d;
+        public static final int invcontrolsFoodtxt=0x7f03000e;
+        /**  Foods Text 
+         */
+        public static final int normalFoodtxt=0x7f03000a;
         public static final int options=0x7f030002;
         /**  Menu Strings  
          */
@@ -29,10 +36,13 @@ public final class R {
          */
         public static final int profile_title=0x7f030007;
         public static final int records_title=0x7f030005;
+        public static final int reducspeedFoodtxt=0x7f03000f;
         public static final int sound_title=0x7f030009;
         /**  Achievements Scene Strings  
          */
         public static final int stats_title=0x7f030004;
+        public static final int supergrowFoodtxt=0x7f030010;
+        public static final int x2Foodtxt=0x7f030011;
     }
     public static final class style {
         /** 

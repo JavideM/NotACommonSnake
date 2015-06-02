@@ -6,6 +6,8 @@ import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import es.remara.notacommonsnake.GameActivity;
+import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 
 public class Food extends Entity{
@@ -22,7 +24,40 @@ public class Food extends Entity{
 			Random random = new Random();
 	        return values()[random.nextInt(values().length)];
 	    }
-		
+		public static String getTextMode(FoodType type){
+			String mode = "";
+			GameActivity activity = ResourcesManager.getInstance().activity;
+			switch (type) {
+			case AUG_SPEED:
+				mode = activity.getString(R.string.augsppedFoodtxt);
+				break;
+			case CHG_GAME_MODE:
+				mode = activity.getString(R.string.chggamemodeFoodtxt);
+				break;
+			case GHOST_MODE:
+				mode = activity.getString(R.string.ghostmodeFoodtxt);
+				break;
+			case INV_CONTROLS:
+				mode = activity.getString(R.string.invcontrolsFoodtxt);
+				break;
+			case NORMAL:
+				mode = activity.getString(R.string.normalFoodtxt);
+				break;
+			case REDUC_SPEED:
+				mode = activity.getString(R.string.reducspeedFoodtxt);
+				break;
+			case SUPER_GROW:
+				mode = activity.getString(R.string.supergrowFoodtxt);
+				break;
+			case X2:
+				mode = activity.getString(R.string.x2Foodtxt);
+				break;
+			default:
+				break;
+
+			}
+			return mode;
+		}
 	}
 	
 	protected FoodType type;
