@@ -17,4 +17,14 @@
     <string name="difficulty_title">OPTIONS</string>
     <string name="sound_title">SOUND</string>
     
+    <!-- Foods Text -->
+    <string name="normalFoodtxt">Normal</string>
+    <string name = "augsppedFoodtxt">Super Speed</string>
+    <string name= "chggamemodeFoodtxt">Falling through a hole in the ground&#8230;</string>
+    <string name="ghostmodeFoodtxt">Ghosts can go through walls</string>
+    <string name="invcontrolsFoodtxt">Feeling a bit drunk?</string>
+    <string name="reducspeedFoodtxt">It\'s like there\'s glue on the ground</string>
+    <string name="supergrowFoodtxt">Finally a grown spurt!</string>
+    <string name="x2Foodtxt">That was worth double</string>
+    
 </resources>
