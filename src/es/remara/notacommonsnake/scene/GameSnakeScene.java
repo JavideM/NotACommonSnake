@@ -195,6 +195,9 @@ public class GameSnakeScene extends BaseGameScene implements
 		foods.setZIndex(0);
 
 		sortChildren();
+		
+		//Set mode text
+		setModetext(FoodType.getTextMode(FoodType.NORMAL));
 	}
 
 	private void createHandlers(){
@@ -240,25 +243,30 @@ public class GameSnakeScene extends BaseGameScene implements
 	 */
 	// Handles the screen update
 	protected void updateScreen() {
+		//checks if a food has been eaten
 		if (foods.is_there_food(snake.getHead().getX(), snake.getHead().getY(),
 				true)) {
 			snake.eat(foods.get_eatenfood());
 			addScore((foods.get_eatenfood().getType() == FoodType.X2) ? 200
 					: 100);
+			//sets the mode text
+			setModetext(FoodType.getTextMode(foods.get_eatenfood().getType()));
 		}
+		//checks if the snake is changing game mode 
 		if (snake.is_moving_through_worlds()) {
 			session.setScore(getScore());
 			// it unregisters the snake update handler and register the changing
 			// level animations
 			create_levelChangeHandler();
 		} else {
+			// Checks if the 'door' to change level is visible
 			if (door.isVisible()
 					&& snake.getHead().getX() == (camera.getWidth() / 2 - 10)
 					&& snake.getHead().getY() == (camera.getHeight() - 50)) {
 				// it unregisters the snake update handler and register the
 				// changing level animations
 				create_levelChangeHandler();
-			} else {
+			} else {				
 				if (snake.is_ghost_mode()
 						|| (!snake.suicide() && !snake.hit_a_wall(walls))) {
 					snake.move();

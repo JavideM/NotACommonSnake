@@ -10,7 +10,10 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 
 import es.remara.notacommonsnake.R;
@@ -44,8 +47,31 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void onBackKeyPressed() {
-		// TODO Auto-generated method stub
-		System.exit(0);
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+				alert.setCancelable(false);
+				alert.setMessage("Are you sure you want to quit?");
+				alert.setPositiveButton("OK", new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						
+						System.exit(0);
+					}
+				});
+
+				alert.setNegativeButton("NO", new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				});
+
+				alert.show();
+			}
+		});
+		
 	}
 
 	@Override
