@@ -327,6 +327,10 @@ public class GameSnakeScene extends BaseGameScene implements
 				alert.setPositiveButton("OK", new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						registerUpdateHandler(utimehandler);
+						session = new Session();
+						session.setLevel(0);
+						session.setScore(0);
+						resetScore();
 						resetScreen();
 					}
 				});
@@ -335,7 +339,7 @@ public class GameSnakeScene extends BaseGameScene implements
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						onBackKeyPressed();
+						go_to_menu();
 					}
 				});
 
@@ -359,15 +363,35 @@ public class GameSnakeScene extends BaseGameScene implements
 		createobjects();
 	}
 
-	
+	private void go_to_menu(){
+		SceneManager.getInstance().loadMenuScene(engine, SceneManager.getInstance().getCurrentScene());
+	}
 
 	@Override
 	public void onBackKeyPressed() {
-		 
+		 	unregisterUpdateHandler(utimehandler);
 			activity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					SceneManager.getInstance().loadMenuScene(engine, SceneManager.getInstance().getCurrentScene());
+					AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+					alert.setCancelable(false);
+					alert.setMessage("Are you sure you want to quit?");
+					alert.setPositiveButton("OK", new OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							
+							go_to_menu();
+						}
+					});
+
+					alert.setNegativeButton("NO", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							registerUpdateHandler(utimehandler);
+						}
+					});
+
+					alert.show();
 				}
 			});
 	}
