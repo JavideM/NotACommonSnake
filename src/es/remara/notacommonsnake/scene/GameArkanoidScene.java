@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -81,6 +83,10 @@ public class GameArkanoidScene extends BaseGameScene implements
 	private double y;
 
 	private Vector2 test;
+	
+	protected float touchedY;
+
+	private TimerHandler timerhandler;
 
 	public GameArkanoidScene(Session session) {
 		super();
@@ -133,6 +139,20 @@ public class GameArkanoidScene extends BaseGameScene implements
 				// TODO Auto-generated method stub
 				removeBricks(bricksRem);
 			}
+		});
+		
+		timerhandler = new TimerHandler(0.01f, true,
+				new ITimerCallback() {
+			@Override
+			public void onTimePassed(final TimerHandler pTimerHandler) {
+				if(touchedY -5  > platformSprite.getY() && platformSprite.getY() + platformSprite.getHeight()/2 < camera.getHeight()){
+					platformBody.setLinearVelocity(new Vector2(0,10.0f));
+				}else if(touchedY+5  < platformSprite.getY() && platformSprite.getY() - platformSprite.getHeight()/2 > 0)
+					platformBody.setLinearVelocity(new Vector2(0,-10.0f));
+				else
+					platformBody.setLinearVelocity(new Vector2(0,0));
+				}
+			
 		});
 	}
 
@@ -420,27 +440,20 @@ public class GameArkanoidScene extends BaseGameScene implements
 				}
 			});
 		}
-		// Movimiento de la plataforma.
-		if (pSceneTouchEvent.getY() > (platformSprite.getHeight() / 2)
-				&& pSceneTouchEvent.getY() < camera.getHeight()
-						- (platformSprite.getHeight() / 2)) {
-			if (pSceneTouchEvent.isActionUp()) {
-
-			} else {
-				platformBody.setTransform(platformSprite.getX() / pmr,
-						pSceneTouchEvent.getY() / pmr, 0.0f);
-			}
-		} else {
-			if (pSceneTouchEvent.getY() < (platformSprite.getHeight() / 2)) {
-				platformBody.setTransform(platformSprite.getX() / pmr,
-						(platformSprite.getHeight() / 2) / pmr, 0.0f);
-			} else {
-				platformBody.setTransform(platformSprite.getX() / pmr,
-						(camera.getHeight() - (platformSprite.getHeight() / 2))
-								/ pmr, 0.0f);
-			}
-
+		else if(pSceneTouchEvent.isActionUp() )
+		{
+			touchedY = pSceneTouchEvent.getY();
+			registerUpdateHandler(timerhandler);
 		}
+		else{
+			if(pSceneTouchEvent.isActionDown())
+				unregisterUpdateHandler(timerhandler);
+			if(pSceneTouchEvent.getY() -5 > platformSprite.getY() && platformSprite.getY() + platformSprite.getHeight()/2 < camera.getHeight())
+				platformBody.setLinearVelocity(new Vector2(0,10.0f));
+			else if(pSceneTouchEvent.getY()+5 < platformSprite.getY() && platformSprite.getY() - platformSprite.getHeight()/2 > 0)
+				platformBody.setLinearVelocity(new Vector2(0,-10.0f));
+			else
+				platformBody.setLinearVelocity(new Vector2(0,0));}
 		return false;
 	}
 
