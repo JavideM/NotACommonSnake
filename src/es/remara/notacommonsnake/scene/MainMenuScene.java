@@ -17,6 +17,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 
 import es.remara.notacommonsnake.R;
+import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -43,6 +44,13 @@ public class MainMenuScene extends BaseScene implements
 	public void createScene() {
 		createBackground();
 		createMenuScene();
+		playMusic();
+	}
+
+	private void playMusic() {
+		if(resourcesManager.music != null)
+		resourcesManager.music.play();
+		
 	}
 
 	@Override

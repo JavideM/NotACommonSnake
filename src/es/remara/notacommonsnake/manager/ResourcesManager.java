@@ -1,5 +1,9 @@
 package es.remara.notacommonsnake.manager;
 
+import java.io.IOException;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.opengl.font.Font;
@@ -93,7 +97,9 @@ public class ResourcesManager {
 	private BuildableBitmapTextureAtlas settingsTextureAtlas;
 
 	
-
+	//Music
+	public Music music;
+	
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -208,7 +214,15 @@ public class ResourcesManager {
 	}
 
 	private void loadMenuAudio() {
-
+		try
+		{
+			MusicFactory.setAssetBasePath("mfx/");
+		    music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "soundtrack.ogg");
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
 	}
 
 	private void loadMenuFonts() {
