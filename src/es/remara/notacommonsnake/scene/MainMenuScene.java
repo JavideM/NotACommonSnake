@@ -44,14 +44,8 @@ public class MainMenuScene extends BaseScene implements
 	public void createScene() {
 		createBackground();
 		createMenuScene();
-		playMusic();
 	}
 
-	private void playMusic() {
-		if(resourcesManager.music != null)
-		resourcesManager.music.play();
-		
-	}
 
 	@Override
 	public void onBackKeyPressed() {

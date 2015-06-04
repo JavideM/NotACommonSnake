@@ -14,9 +14,19 @@
     
     <!-- Settings Scene Strings -->
     <string name="profile_title">PROFILES</string>
-    <string name="difficulty_title">OPTIONS</string>
+    <string name="difficulty_title">ABOUT</string>
     <string name="sound_title">SOUND</string>
+    <string name="music">music</string>
+    <string name="sounds">sounds</string>
     
+    <string name="createdby">CREATED BY</string>
+    <string name="artwork">ARTWORK BY</string>
+    <string name="musicby">MUSIC</string>
+    <string name="soundsby">SOUNDS BY</string>
+    <string name="ivan">Iván Reyeros Santos</string>
+    <string name="sebas">Sebastian Ramírez Centena</string>
+    <string name="javi">F.J. de Martín Rivarés</string>
+    <string name="musicauthor">Badass - Bensound.com</string>
     <!-- Foods Text -->
     <string name="normalFoodtxt">Normal</string>
     <string name = "augsppedFoodtxt">Super Speed</string>
