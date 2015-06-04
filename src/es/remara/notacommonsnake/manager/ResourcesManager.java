@@ -1,5 +1,9 @@
 package es.remara.notacommonsnake.manager;
 
+import java.io.IOException;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.opengl.font.Font;
@@ -11,7 +15,7 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
@@ -32,6 +36,7 @@ public class ResourcesManager {
 	public Font font;
 	public Font fonttitle;
 	public Font fontARS;
+	public Font fontsubtitle;
 
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
@@ -77,9 +82,11 @@ public class ResourcesManager {
 	public ITextureRegion profile_region;
 	public ITextureRegion gamepad_region;
 	public ITextureRegion music_region;
+	public ITiledTextureRegion speaker_region;
 
 	private BitmapTextureAtlas mFontArsTexture;
 	private BitmapTextureAtlas mFontTitleTexture;
+	private BitmapTextureAtlas mFontsubTitleTexture;
 
 	// Bipmat Textures
 	private BitmapTextureAtlas splashTextureAtlas;
@@ -93,7 +100,13 @@ public class ResourcesManager {
 	private BuildableBitmapTextureAtlas settingsTextureAtlas;
 
 	
+	//Music
+	public Music music;
 
+	
+
+	
+	
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
@@ -208,7 +221,7 @@ public class ResourcesManager {
 	}
 
 	private void loadMenuAudio() {
-
+		
 	}
 
 	private void loadMenuFonts() {
@@ -317,6 +330,15 @@ public class ResourcesManager {
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash.png", 0, 0);
 		splashTextureAtlas.load();
+		try
+		{
+			MusicFactory.setAssetBasePath("mfx/");
+		    music = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "soundtrack.ogg");
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
 	}
 
 	public void unloadSplashScreen() {
@@ -471,6 +493,8 @@ public class ResourcesManager {
 				settingsTextureAtlas, activity, "settings/music.png");
 		back_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				settingsTextureAtlas, activity, "ars/back.png");
+		speaker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
+				settingsTextureAtlas, activity, "settings/speaker.png", 2, 1);
 		//Work in progress
 		BitmapTextureAtlasTextureRegionFactory
 		.setAssetBasePath("gfx/workinprogress/");
@@ -494,9 +518,17 @@ public class ResourcesManager {
 		mFontTitleTexture = new BitmapTextureAtlas(
 				this.engine.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		mFontsubTitleTexture = new BitmapTextureAtlas(
+				this.engine.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		fonttitle = new Font(this.engine.getFontManager(), mFontTitleTexture,
 				Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true,
+				Color.WHITE);
+		
+		fontsubtitle = new Font(this.engine.getFontManager(), mFontsubTitleTexture,
+				Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 20, true,
 				Color.WHITE);
 
 		fontARS = new Font(this.engine.getFontManager(), mFontTexture,
@@ -505,6 +537,8 @@ public class ResourcesManager {
 
 		engine.getTextureManager().loadTexture(mFontArsTexture);
 		engine.getTextureManager().loadTexture(mFontTitleTexture);
+		engine.getTextureManager().loadTexture(mFontsubTitleTexture);
+		engine.getFontManager().loadFont(fontsubtitle);
 		engine.getFontManager().loadFont(fontARS);
 		engine.getFontManager().loadFont(fonttitle);
 	}

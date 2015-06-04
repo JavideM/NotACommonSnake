@@ -14,6 +14,9 @@ public class SplashScene extends BaseScene {
 		splash = new Sprite(400, 240, resourcesManager.splash_region, vbom);
 
 		attachChild(splash);
+		
+		resourcesManager.music.play();
+		resourcesManager.music.setLooping(true);
 	}
 
 	@Override

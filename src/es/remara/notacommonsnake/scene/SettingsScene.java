@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
@@ -23,9 +24,9 @@ public class SettingsScene extends BaseScene {
 	 * Parameters
 	 */
 	private Entity profilesPannel;
-	private Entity difficultiesPannel;
+	private Entity aboutPannel;
 	private Entity soundsPannel;
-	private Sprite btndifficulties;
+	private Sprite btnabout;
 	private Sprite btnprofile;
 	private Sprite btnsound;
 	private Sprite btnback;
@@ -43,7 +44,7 @@ public class SettingsScene extends BaseScene {
 		createBackground();
 		createControls();
 		createProfilesPannel();
-		createDifficultiesPannel();
+		createAboutPannel();
 		createSoundsPannel();
 
 	}
@@ -61,29 +62,29 @@ public class SettingsScene extends BaseScene {
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				soundsPannel.setVisible(false);
-				difficultiesPannel.setVisible(false);
+				aboutPannel.setVisible(false);
 				profilesPannel.setVisible(true);
 				return true;
 			}
 		};
-		btndifficulties = new Sprite(camera.getWidth() / 2, 35,
+		btnabout = new Sprite(2*camera.getWidth() / 3, 35,
 				resourcesManager.gamepad_region, vbom) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				soundsPannel.setVisible(false);
-				difficultiesPannel.setVisible(true);
+				aboutPannel.setVisible(true);
 				profilesPannel.setVisible(false);
 				return true;
 			}
 		};
-		btnsound = new Sprite(2 * camera.getWidth() / 3, 35,
+		btnsound = new Sprite(camera.getWidth() / 2, 35,
 				resourcesManager.music_region, vbom) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				soundsPannel.setVisible(true);
-				difficultiesPannel.setVisible(false);
+				aboutPannel.setVisible(false);
 				profilesPannel.setVisible(false);
 				return true;
 			}
@@ -100,8 +101,8 @@ public class SettingsScene extends BaseScene {
 		};
 		attachChild(btnprofile);
 		registerTouchArea(btnprofile);
-		attachChild(btndifficulties);
-		registerTouchArea(btndifficulties);
+		attachChild(btnabout);
+		registerTouchArea(btnabout);
 		attachChild(btnsound);
 		registerTouchArea(btnsound);
 		attachChild(btnback);
@@ -124,11 +125,11 @@ public class SettingsScene extends BaseScene {
 		 * Pannel Content
 		 */
 		// Title
-		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
+		Text title = new Text(camera.getWidth() / 2, camera.getHeight()
 				- camera.getHeight() / 12, resourcesManager.fonttitle,
 				activity.getString(R.string.profile_title),
 				new TextOptions(HorizontalAlign.CENTER), this.vbom);
-		profilesPannel.attachChild(text);
+		profilesPannel.attachChild(title);
 		//Main Content
 		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
 		profilesPannel.attachChild(wip);
@@ -155,34 +156,131 @@ public class SettingsScene extends BaseScene {
 		soundsPannel.attachChild(text);
 		attachChild(soundsPannel);
 		//Main Content
-		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
-		soundsPannel.attachChild(wip);
+		Text musictxt = new Text(camera.getWidth() / 4, camera.getHeight()/ 3, resourcesManager.fonttitle,
+				activity.getString(R.string.music), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		soundsPannel.attachChild(musictxt);
+		TiledSprite speaker = new TiledSprite(camera.getWidth()/4, 3*camera.getHeight()/5, resourcesManager.speaker_region, vbom){
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if(soundsPannel.isVisible() && pSceneTouchEvent.isActionDown()){
+					if(this.getCurrentTileIndex() == 0){
+						resourcesManager.music.pause();
+						this.setCurrentTileIndex(1);
+					}else{
+						resourcesManager.music.play();
+						resourcesManager.music.setLooping(true);
+						this.setCurrentTileIndex(0);
+					}
+				}
+				return true;
+			}
+		};
+		registerTouchArea(speaker);
+		soundsPannel.attachChild(speaker);
+		if(!resourcesManager.music.isPlaying())
+			speaker.setCurrentTileIndex(1);
+		Text soundstxt = new Text(3*camera.getWidth() / 4, camera.getHeight()/ 3, resourcesManager.fonttitle,
+				activity.getString(R.string.sounds), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		soundsPannel.attachChild(soundstxt);
+		TiledSprite speaker_sounds = new TiledSprite(3*camera.getWidth()/4, 3*camera.getHeight()/5, resourcesManager.speaker_region, vbom){
+			int currentimage = 0;
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if(soundsPannel.isVisible() && pSceneTouchEvent.isActionDown()){
+					if(currentimage == 0){
+//						resourcesManager.music.pause();
+						this.setCurrentTileIndex(1);
+						this.currentimage = 1;
+					}else{
+//						resourcesManager.music.play();
+//						resourcesManager.music.setLooping(true);
+						this.setCurrentTileIndex(0);
+						this.currentimage = 0;
+					}
+				}
+				return true;
+			}
+		};
+		registerTouchArea(speaker_sounds);
+		soundsPannel.attachChild(speaker_sounds);
 	}
 
-	private void createDifficultiesPannel() {
-		difficultiesPannel = new Entity();
+	private void createAboutPannel() {
+		aboutPannel = new Entity();
 		/*
 		 * Color Pannel
 		 */
 		Sprite pannel = new Sprite(camera.getWidth() / 2,
 				camera.getHeight() / 2 + 30,
 				resourcesManager.blue_pannel_region, vbom);
-		difficultiesPannel.attachChild(pannel);
-		attachChild(difficultiesPannel);
-		difficultiesPannel.setVisible(false);
+		aboutPannel.attachChild(pannel);
+		attachChild(aboutPannel);
+		aboutPannel.setVisible(false);
 
 		/*
 		 * Pannel Content
 		 */
 		// Title
-		Text text = new Text(camera.getWidth() / 2, camera.getHeight()
+		Text title = new Text(camera.getWidth() / 2, camera.getHeight()
 				- camera.getHeight() / 12, resourcesManager.fonttitle,
 				activity.getString(R.string.difficulty_title), new TextOptions(
 						HorizontalAlign.CENTER), this.vbom);
-		difficultiesPannel.attachChild(text);
+		aboutPannel.attachChild(title);
 		//Main Content
-		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
-		difficultiesPannel.attachChild(wip);
+		//CREATED BY
+		Text textcreatedby = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 2*camera.getHeight() / 12, resourcesManager.fontsubtitle,
+				activity.getString(R.string.createdby), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textcreatedby);
+		Text textcreatedby_plp = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 3*camera.getHeight() / 12, resourcesManager.fontARS,
+				activity.getString(R.string.ivan) + ", "
+				+activity.getString(R.string.sebas) + " & " 
+				+ activity.getString(R.string.javi), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textcreatedby_plp);
+		//ARTWORK AUTHORS
+		Text textartwork = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 4*camera.getHeight() / 12, resourcesManager.fontsubtitle,
+				activity.getString(R.string.artwork), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textartwork);
+		Text textartwork_plp = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 5*camera.getHeight() / 12, resourcesManager.fontARS,
+				activity.getString(R.string.ivan) + ", "
+				+activity.getString(R.string.sebas) + " & " 
+				+ activity.getString(R.string.javi), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textartwork_plp);
+		//MUSIC AUTHORS
+		Text textmusicby = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 6*camera.getHeight() / 12, resourcesManager.fontsubtitle,
+				activity.getString(R.string.musicby), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textmusicby);
+		Text textmusic_plp = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 7*camera.getHeight() / 12, resourcesManager.fontARS,
+				activity.getString(R.string.musicauthor), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textmusic_plp);
+		//SOUNDS AUTHORS
+		Text textsoundsby = new Text(camera.getWidth() / 2, camera.getHeight()
+				- 8*camera.getHeight() / 12, resourcesManager.fontsubtitle,
+				activity.getString(R.string.soundsby), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textsoundsby);
+		Text textsoundsby_plp = new Text(camera.getWidth() / 2, camera.getHeight()
+				-9*camera.getHeight() / 12, resourcesManager.fontARS,
+				activity.getString(R.string.ivan) + ", "
+						+activity.getString(R.string.sebas) + " & " 
+						+ activity.getString(R.string.javi), new TextOptions(
+						HorizontalAlign.CENTER), this.vbom);
+		aboutPannel.attachChild(textsoundsby_plp);
 	}
 
 	@Override

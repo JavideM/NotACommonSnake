@@ -31,6 +31,7 @@ public class GameActivity extends BaseGameActivity {
 		this.engineoptions = new EngineOptions(true,
 				ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(),
 				camera);
+		this.engineoptions.getAudioOptions().setNeedsMusic(true);
 		// new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
 		return this.engineoptions;
 	}
