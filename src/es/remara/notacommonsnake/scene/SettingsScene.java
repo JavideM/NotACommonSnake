@@ -89,7 +89,7 @@ public class SettingsScene extends BaseScene {
 				return true;
 			}
 		};
-		btnback = new Sprite(45, 35, resourcesManager.back_region, vbom){
+		btnback = new Sprite(camera.getWidth() - 45, 35, resourcesManager.back_region, vbom){
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
