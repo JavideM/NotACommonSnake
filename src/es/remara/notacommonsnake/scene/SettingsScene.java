@@ -186,20 +186,16 @@ public class SettingsScene extends BaseScene {
 						HorizontalAlign.CENTER), this.vbom);
 		soundsPannel.attachChild(soundstxt);
 		TiledSprite speaker_sounds = new TiledSprite(3*camera.getWidth()/4, 3*camera.getHeight()/5, resourcesManager.speaker_region, vbom){
-			int currentimage = 0;
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(soundsPannel.isVisible() && pSceneTouchEvent.isActionDown()){
-					if(currentimage == 0){
-//						resourcesManager.music.pause();
+					if(this.getCurrentTileIndex() == 0){
+						resourcesManager.with_sounds = false;
 						this.setCurrentTileIndex(1);
-						this.currentimage = 1;
 					}else{
-//						resourcesManager.music.play();
-//						resourcesManager.music.setLooping(true);
+						resourcesManager.with_sounds = true;
 						this.setCurrentTileIndex(0);
-						this.currentimage = 0;
 					}
 				}
 				return true;
@@ -207,6 +203,8 @@ public class SettingsScene extends BaseScene {
 		};
 		registerTouchArea(speaker_sounds);
 		soundsPannel.attachChild(speaker_sounds);
+		if(!resourcesManager.with_sounds)
+			speaker_sounds.setCurrentTileIndex(1);
 	}
 
 	private void createAboutPannel() {
