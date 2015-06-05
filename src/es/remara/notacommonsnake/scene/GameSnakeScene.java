@@ -372,6 +372,7 @@ public class GameSnakeScene extends BaseGameScene implements
 	}
 
 	private void go_to_menu(){
+		camera.setHUD(null);
 		SceneManager.getInstance().loadMenuScene(engine, SceneManager.getInstance().getCurrentScene());
 	}
 
@@ -411,7 +412,6 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void disposeScene() {
-		
 		// snake.dispose();
 		snake.detachSelf();
 		foods.detachSelf();
@@ -423,7 +423,8 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-
+		
+		
 		return mSGD.onManagedTouchEvent(pSceneTouchEvent);
 	}
 }

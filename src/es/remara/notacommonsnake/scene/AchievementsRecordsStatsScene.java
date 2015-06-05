@@ -181,19 +181,21 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				// Scroll functionality
-				if (pSceneTouchEvent.isActionDown())
-					positionIn = pTouchAreaLocalY;
-				float distance = (positionIn - pTouchAreaLocalY) / 10;
-				if ((recordslist.get(0).getY() - distance) >= top_ini_position - 5
-						&& (recordslist.get(recordslist.size() - 1).getY() - distance <= bottom_ini_position + 5)) {
-					for (int i = 0; i < recordslist.size(); i++) {
-						recordslist.get(i).setPosition(recordslist.get(i).getX(),
-								recordslist.get(i).getY() - distance);
-						if (recordslist.get(i).getY() >= top_ini_position + 5
-								|| recordslist.get(i).getY() <= bottom_ini_position - 5) {
-							recordslist.get(i).setVisible(false);
-						} else {
-							recordslist.get(i).setVisible(true);
+				if(recordsPannel.isVisible()){
+					if (pSceneTouchEvent.isActionDown())
+						positionIn = pTouchAreaLocalY;
+					float distance = (positionIn - pTouchAreaLocalY) / 10;
+					if ((recordslist.get(0).getY() - distance) >= top_ini_position - 5
+							&& (recordslist.get(recordslist.size() - 1).getY() - distance <= bottom_ini_position + 5)) {
+						for (int i = 0; i < recordslist.size(); i++) {
+							recordslist.get(i).setPosition(recordslist.get(i).getX(),
+									recordslist.get(i).getY() - distance);
+							if (recordslist.get(i).getY() >= top_ini_position + 5
+									|| recordslist.get(i).getY() <= bottom_ini_position - 5) {
+								recordslist.get(i).setVisible(false);
+							} else {
+								recordslist.get(i).setVisible(true);
+							}
 						}
 					}
 				}
