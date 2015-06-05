@@ -15,6 +15,8 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 
+import android.util.Log;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -64,6 +66,16 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private int bricksAmount;
 
+	private float time;
+
+	private float timeElapsed = 0;
+
+	private boolean breaK = true;
+
+	private float distance;
+
+	private float platSpeed = 15.0f;
+
 	private float modSpeed;
 
 	private float initialX, initialY;
@@ -78,12 +90,6 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	private Sprite platformSprite, ballSprite;
 
-	private float a, b;
-
-	private double y;
-
-	private Vector2 test;
-	
 	protected float touchedY;
 
 	private TimerHandler timerhandler;
@@ -98,6 +104,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	@Override
 	public void createScene() {
+		time = 0.01f;
 		newGame = true;
 		attachChild(new Sprite(camera.getWidth() / 2, camera.getHeight() / 2,
 				resourcesManager.background_grass_region, vbom));
@@ -136,23 +143,35 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				// TODO Auto-generated method stub
+				if (timeElapsed < .4) {
+					timeElapsed = timeElapsed + pSecondsElapsed;
+				} else if (timeElapsed >= .4 && breaK) {
+					breaK = false;
+				}
+
+				if (platformSprite.getY() > camera.getHeight()
+						- (platformSprite.getHeight() / 2)) {
+					platformBody.setLinearVelocity(0.0f, 0.0f);
+					platformBody.setTransform(
+							platformSprite.getX() / pmr,
+							(camera.getHeight() - (platformSprite.getHeight() / 2))
+									/ pmr, 0.0f);
+
+				} else if (platformSprite.getY() < platformSprite.getHeight() / 2) {
+					platformBody.setLinearVelocity(0.0f, 0.0f);
+					platformBody.setTransform(platformSprite.getX() / pmr,
+							(platformSprite.getHeight() / 2) / pmr, 0.0f);
+				}
 				removeBricks(bricksRem);
 			}
 		});
-		
-		timerhandler = new TimerHandler(0.01f, true,
-				new ITimerCallback() {
+
+		timerhandler = new TimerHandler(time, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
-				if(touchedY -5  > platformSprite.getY() && platformSprite.getY() + platformSprite.getHeight()/2 < camera.getHeight()){
-					platformBody.setLinearVelocity(new Vector2(0,10.0f));
-				}else if(touchedY+5  < platformSprite.getY() && platformSprite.getY() - platformSprite.getHeight()/2 > 0)
-					platformBody.setLinearVelocity(new Vector2(0,-10.0f));
-				else
-					platformBody.setLinearVelocity(new Vector2(0,0));
-				}
-			
+				platformBody.setLinearVelocity(new Vector2(0.0f, 0.0f));
+			}
+
 		});
 	}
 
@@ -288,21 +307,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 		gORegion.setVisible(false);
 	}
 
-	/*
-	 * Elimina el sprite de la bola y cambia el valor del booleano "notStarted".
-	 */
-	private void resetArkanoid() {
-		destSprite(ballSprite, ballBody, ballPC);
-		destSprite(platformSprite, platformBody, platformPC);
-		createPlatformSprite();
-		setPlatformPhysicsConnectors();
-		createBallSprite();
-		setBallPhysicsConnectors();
-		SceneManager.getInstance().getCurrentScene().attachChild(ballSprite);
-		createJoint();
-		notStarted = true;
-	}
-
+	// Elimina la entidad
 	private void destSprite(Sprite sprite, Body body, PhysicsConnector pc) {
 		arkanoidPhysicsWorld.unregisterPhysicsConnector(pc);
 		pc = null;
@@ -418,42 +423,61 @@ public class GameArkanoidScene extends BaseGameScene implements
 	// "Listener" de interacción con la pantalla
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		/*
-		 * Evento de inicio: vector velocidad aleatorio y destrucción del
-		 * "joint" que une bola y plataforma.
-		 */
-		if (pSceneTouchEvent.isActionUp() && notStarted) {
-			modSpeed = SPEED.len();
-			a = (platformSprite.getX() - bricks.get(22).getX() - 16) / pmr;
-			b = (bricks.get(22).getHeight() / 2) / pmr;
-			y = Math.sqrt(a * a + b * b);
-
-			test = new Vector2(-(float) ((modSpeed * a) / y),
-					(float) ((modSpeed * b) / y));
-			notStarted = false;
-			ballBody.setLinearVelocity(normVecGen().mul(modSpeed));
-			// ballBody.setLinearVelocity(test);
-			engine.runOnUpdateThread(new Runnable() {
-				@Override
-				public void run() {
-					arkanoidPhysicsWorld.destroyJoint(ball_plat_Joint);
-				}
-			});
-		}
-		else if(pSceneTouchEvent.isActionUp() )
-		{
+		if (breaK == false) {
+			if (pSceneTouchEvent.getY() != touchedY
+					|| pSceneTouchEvent.getY() != platformSprite.getY()) {
+				this.unregisterUpdateHandler(timerhandler);
+				distance = pSceneTouchEvent.getY() / pmr
+						- platformSprite.getY() / pmr;
+				time = Math.abs(distance) / platSpeed;
+				if (pSceneTouchEvent.getY() > platformSprite.getY()
+						&& platformSprite.getY() + platformSprite.getHeight()
+								/ 2 < camera.getHeight())
+					platformBody.setLinearVelocity(new Vector2(0, platSpeed));
+				else if (pSceneTouchEvent.getY() < platformSprite.getY()
+						&& platformSprite.getY() - platformSprite.getHeight()
+								/ 2 > 0)
+					platformBody.setLinearVelocity(new Vector2(0, -platSpeed));
+				timerhandler.setTimerSeconds(time);
+				timerhandler.reset();
+				this.registerUpdateHandler(timerhandler);
+			}
 			touchedY = pSceneTouchEvent.getY();
-			registerUpdateHandler(timerhandler);
+			/*
+			 * Evento de inicio: vector velocidad aleatorio y destrucción del
+			 * "joint" que une bola y plataforma.
+			 */
+
+			if (pSceneTouchEvent.isActionUp() && notStarted) {
+				modSpeed = SPEED.len();
+				notStarted = false;
+				ballBody.setLinearVelocity(normVecGen().mul(modSpeed));
+				engine.runOnUpdateThread(new Runnable() {
+					@Override
+					public void run() {
+						arkanoidPhysicsWorld.destroyJoint(ball_plat_Joint);
+					}
+				});
+			}
+
+			// else if (pSceneTouchEvent.isActionUp()) {
+			// touchedY = pSceneTouchEvent.getY();
+			// registerUpdateHandler(timerhandler);
+			// } else {
+			// if (pSceneTouchEvent.isActionDown())
+			// unregisterUpdateHandler(timerhandler);
+			// if (pSceneTouchEvent.getY() - 5 > platformSprite.getY()
+			// && platformSprite.getY() + platformSprite.getHeight() / 2 <
+			// camera
+			// .getHeight())
+			// platformBody.setLinearVelocity(new Vector2(0, 10.0f));
+			// else if (pSceneTouchEvent.getY() + 5 < platformSprite.getY()
+			// && platformSprite.getY() - platformSprite.getHeight() / 2 > 0)
+			// platformBody.setLinearVelocity(new Vector2(0, -10.0f));
+			// else
+			// platformBody.setLinearVelocity(new Vector2(0, 0));
+			// }
 		}
-		else{
-			if(pSceneTouchEvent.isActionDown())
-				unregisterUpdateHandler(timerhandler);
-			if(pSceneTouchEvent.getY() -5 > platformSprite.getY() && platformSprite.getY() + platformSprite.getHeight()/2 < camera.getHeight())
-				platformBody.setLinearVelocity(new Vector2(0,10.0f));
-			else if(pSceneTouchEvent.getY()+5 < platformSprite.getY() && platformSprite.getY() - platformSprite.getHeight()/2 > 0)
-				platformBody.setLinearVelocity(new Vector2(0,-10.0f));
-			else
-				platformBody.setLinearVelocity(new Vector2(0,0));}
 		return false;
 	}
 
