@@ -53,7 +53,7 @@ public class Foods extends Entity {
 	private void setRandomPosition(Walls walls, Food food) {
 		do {
 			food.setX(MathUtils.random(1, 38) * 20 + 10);
-			food.setY(MathUtils.random(1, 22) * 20 + 10);
+			food.setY(MathUtils.random(2, 21) * 20 + 10);
 		} while (walls.is_there_a_wall(food) || is_there_food(food));
 	}
 

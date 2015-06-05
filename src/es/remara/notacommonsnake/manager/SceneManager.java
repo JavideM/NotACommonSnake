@@ -140,7 +140,7 @@ public class SceneManager {
 	
 	public void createSnakeGameScene(Session session) {
 		ResourcesManager.getInstance().loadGameSnakeResources();
-		gamesnakeScene = new GameSnakeScene();
+		gamesnakeScene = new GameSnakeScene(session);
 		SceneManager.getInstance().setScene(gamesnakeScene);
 		arkanoidScene.disposeScene();
 		ResourcesManager.getInstance().unloadGameArkanoidResources();

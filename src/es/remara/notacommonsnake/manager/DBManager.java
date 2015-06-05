@@ -238,14 +238,21 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
-		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
+//		db.execSQL("CREATE ach2_trigger AFTER" +
+//				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 300 " +
+//				" BEGIN " +
+//					"UPDATE " + ACHIEVEMENTS_TABLE +
+//					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION
+//					+" WHERE "+ IDACHIEVEMENT +" = 2 AND "+ ACH_DONE+ "=0;" +
+//				"END;");
+		db.execSQL("CREATE TRIGGER ach2_trigger AFTER" +
 				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 300 " +
 				" BEGIN " +
 					"UPDATE " + ACHIEVEMENTS_TABLE +
-					" 	SET " + ACH_DONE + " = 2, "+ ACH_IDSESSION + "=new." +IDSESSION
-					+" WHERE "+ IDACHIEVEMENT +" = 1 AND "+ ACH_DONE+ "=0;" +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 2 AND "+ ACH_DONE+ "=0;" +
 				"END;");
-		
+	
 		// Over 9000 points
 		values = new ContentValues();
 		values.put(ACH_NAME, "It's over 9000!");
@@ -254,13 +261,13 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
-		db.execSQL("CREATE TRIGGER ach1_trigger AFTER" +
-				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 9000 " +
-				" BEGIN " +
-					"UPDATE " + ACHIEVEMENTS_TABLE +
-					" 	SET " + ACH_DONE + " = 3, "+ ACH_IDSESSION + "=new." +IDSESSION
-					+" WHERE "+ IDACHIEVEMENT +" = 1 AND "+ ACH_DONE+ "=0;" +
-				"END;");
+//		db.execSQL("CREATE TRIGGER ach3_trigger AFTER" +
+//				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 9000 " +
+//				" BEGIN " +
+//					"UPDATE " + ACHIEVEMENTS_TABLE +
+//					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION
+//					+" WHERE "+ IDACHIEVEMENT +" = 3 AND "+ ACH_DONE+ "=0;" +
+//				"END;");
 	}
 	
 	public List<Achievement> getAllAchievements() {
