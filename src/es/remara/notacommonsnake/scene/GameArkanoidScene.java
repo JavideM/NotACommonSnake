@@ -309,17 +309,14 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 	// Elimina la entidad
 	private void destSprite(Sprite sprite, Body body, PhysicsConnector pc) {
-		try{
-			arkanoidPhysicsWorld.unregisterPhysicsConnector(pc);
-			pc = null;
-			body.setLinearVelocity(0.0f, 0.0f);
-			arkanoidPhysicsWorld.destroyBody(body);
-			body = null;
-			SceneManager.getInstance().getCurrentScene().detachChild(sprite);
-			sprite.dispose();
-			sprite = null;
-		}
-		catch(Exception ex){}
+		arkanoidPhysicsWorld.unregisterPhysicsConnector(pc);
+		pc = null;
+		body.setLinearVelocity(0.0f, 0.0f);
+		arkanoidPhysicsWorld.destroyBody(body);
+		body = null;
+		SceneManager.getInstance().getCurrentScene().detachChild(sprite);
+		sprite.dispose();
+		sprite = null;
 	}
 
 	// Elimina los ladrillos del PhysicsWorld (cuerpos) y de la escena (sprites)
@@ -394,32 +391,30 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 			@Override
 			public void run() {
-				try{
-					arkanoidPhysicsWorld.clearForces();
-					for (int i = 0; i < wallBodies.length; i++) {
-						arkanoidPhysicsWorld.destroyBody(wallBodies[i]);
-					}
-					arkanoidPhysicsWorld.destroyBody(platformBody);
-					arkanoidPhysicsWorld.destroyBody(ballBody);
-	
-					SceneManager.getInstance().getCurrentScene()
-							.detachChild(platformSprite);
-					SceneManager.getInstance().getCurrentScene()
-							.detachChild(ballSprite);
-					removeBricks(bricks);
-					bricks.clear();
-					for (int i = 0; i < walls.length; i++) {
-						SceneManager.getInstance().getCurrentScene()
-								.detachChild(walls[i]);
-						walls[i].dispose();
-					}
-					platformSprite.dispose();
-					ballSprite.dispose();
-	
-					SceneManager.getInstance().getCurrentScene().detachSelf();
-					SceneManager.getInstance().getCurrentScene().dispose();
+				arkanoidPhysicsWorld.clearForces();
+				for (int i = 0; i < wallBodies.length; i++) {
+					arkanoidPhysicsWorld.destroyBody(wallBodies[i]);
 				}
-				catch(Exception ex){}
+				arkanoidPhysicsWorld.destroyBody(platformBody);
+				arkanoidPhysicsWorld.destroyBody(ballBody);
+
+				SceneManager.getInstance().getCurrentScene()
+						.detachChild(platformSprite);
+				SceneManager.getInstance().getCurrentScene()
+						.detachChild(ballSprite);
+				removeBricks(bricks);
+				bricks.clear();
+				for (int i = 0; i < walls.length; i++) {
+					SceneManager.getInstance().getCurrentScene()
+							.detachChild(walls[i]);
+					walls[i].dispose();
+				}
+				platformSprite.dispose();
+				ballSprite.dispose();
+
+				SceneManager.getInstance().getCurrentScene().detachSelf();
+				SceneManager.getInstance().getCurrentScene().dispose();
+
 			}
 		});
 
