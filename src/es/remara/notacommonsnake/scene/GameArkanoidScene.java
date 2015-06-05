@@ -501,6 +501,8 @@ public class GameArkanoidScene extends BaseGameScene implements
 				Vector2 normVector = new Vector2(xCom, yCom);
 				ballBody.setLinearVelocity(normVector.mul(speedMagnitude1));
 			}
+			if(resourcesManager.with_sounds)
+				resourcesManager.bounce.play();
 		} else if (contact.getFixtureA().getBody().getUserData().toString()
 				.substring(0, 4).equals("Wall")) {
 			/*
@@ -520,6 +522,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 				newNormSpeed = new Vector2(normSpeed.x, -normSpeed.y);
 				ballBody.setLinearVelocity(newNormSpeed.mul(modSpeed));
 			}
+			
 		} else if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("GameOver")) {
 			/*
@@ -553,7 +556,8 @@ public class GameArkanoidScene extends BaseGameScene implements
 		 */
 		if (contact.getFixtureA().getBody().getUserData().toString()
 				.equals("Brick")) {
-
+			if(resourcesManager.with_sounds)
+				resourcesManager.break_brick.play();
 			bricksRem.add(getBrick(contact.getFixtureA().getBody().hashCode()));
 
 			addScore(100);

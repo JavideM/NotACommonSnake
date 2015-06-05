@@ -26,12 +26,13 @@ import es.remara.notacommonsnake.GameActivity;
 public class ResourcesManager {
 
 	private static final ResourcesManager INSTANCE = new ResourcesManager();
-
+	
 	public Engine engine;
 	public GameActivity activity;
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	public DBManager dbmanager;
+	public boolean with_sounds;
 
 	public Font font;
 	public Font fonttitle;
@@ -104,8 +105,11 @@ public class ResourcesManager {
 	public Music music;
 
 	
-
+	//Sounds
+	public Music omonnomnom;
 	
+	public Music bounce;
+	public Music break_brick;
 	
 	// ---------------------------------------------
 	// CLASS LOGIC
@@ -179,6 +183,14 @@ public class ResourcesManager {
 
 	private void loadGameArkanoidAudio() {
 		// Audio
+		try{
+			MusicFactory.setAssetBasePath("mfx/arkanoid/");
+		    bounce = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "bounce.ogg");
+		    break_brick = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "break_brick.ogg");
+		}catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
 	}
 
 	private void loadMenuGraphics() {
@@ -319,7 +331,13 @@ public class ResourcesManager {
 	}
 
 	private void loadGameSnakeAudio() {
-
+		try{
+			MusicFactory.setAssetBasePath("mfx/snake/");
+		    omonnomnom = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "nomnom.ogg");
+		}catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
 	}
 
 	public void loadSplashScreen() {
@@ -566,6 +584,7 @@ public class ResourcesManager {
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
 		getInstance().dbmanager = new DBManager(activity);
+		getInstance().with_sounds = true;
 	}
 
 	public static ResourcesManager getInstance() {

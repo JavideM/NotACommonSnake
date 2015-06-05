@@ -198,6 +198,9 @@ public class GameSnakeScene extends BaseGameScene implements
 		if (foods.is_there_food(snake.getHead().getX(), snake.getHead().getY(),
 				true)) {
 			snake.eat(foods.get_eatenfood());
+			if(foods.get_eatenfood().getType() != FoodType.CHG_GAME_MODE)
+				if(resourcesManager.with_sounds)
+					resourcesManager.omonnomnom.play();
 			addScore((foods.get_eatenfood().getType() == FoodType.X2) ? 200
 					: 100);
 			//sets the mode text
