@@ -78,21 +78,21 @@ public class Food extends Entity{
 	protected ITextureRegion setRandomType() {
 		switch(this.type){
 			case AUG_SPEED:
-				return resourcesManager.food_AUG_SPEED_region;
+				return resourcesManager.food_SUPER_GROW_region;
 			case CHG_GAME_MODE:
 				return resourcesManager.food_CHG_GAME_MODE_region;
 			case GHOST_MODE:
-				return resourcesManager.food_GHOST_MODE_region;
+				return resourcesManager.food_SUPER_GROW_region;
 			case INV_CONTROLS:
-				return resourcesManager.food_INV_CONTROLS_region;
+				return resourcesManager.food_SUPER_GROW_region;
 			case REDUC_SPEED:
-				return resourcesManager.food_REDUC_SPEED_region;
+				return resourcesManager.food_SUPER_GROW_region;
 			case SUPER_GROW:
 				return resourcesManager.food_SUPER_GROW_region;
 			case X2:
-				return resourcesManager.food_X2_region;
+				return resourcesManager.food_SUPER_GROW_region;
 			default:
-				return resourcesManager.food_NORMAL_region;
+				return resourcesManager.food_SUPER_GROW_region;
 		
 		}
 	}
