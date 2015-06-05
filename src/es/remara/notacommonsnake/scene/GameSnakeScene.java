@@ -6,12 +6,10 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.input.touch.detector.SurfaceGestureDetector;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.os.Looper;
 import android.widget.EditText;
 
 import es.remara.notacommonsnake.base.BaseGameScene;
@@ -42,11 +40,14 @@ public class GameSnakeScene extends BaseGameScene implements
 	/*
 	 * Others
 	 */
-	private SurfaceGestureDetector mSGD;
 	private TimerHandler utimehandler;
 	private TimerHandler chg_level_timehandler;
 	private Session session;
 	private Snake_Level snake_level;
+	
+	//Position touched
+	private float touched_x;
+	private float touched_y;
 	
 
 	/**
@@ -105,7 +106,7 @@ public class GameSnakeScene extends BaseGameScene implements
 	@Override
 	public void createScene() {
 		// Controles
-		createcontrols();
+//		createcontrols();
 
 		// Puntos
 		createHUD();
@@ -125,58 +126,8 @@ public class GameSnakeScene extends BaseGameScene implements
 	 * Metodos de creación de elementos
 	 */
 
-	private void createcontrols() {
-		if (Looper.myLooper() == null) {
-			Looper.prepare();
-		}
-		mSGD = new SurfaceGestureDetector(resourcesManager.activity) {
-
-			@Override
-			protected boolean onSwipeUp() {
-				if (snake.getDirec() != Direction.opposite(Direction.TOP))
-					snake.setDirec(Direction.TOP);
-				return false;
-			}
-
-			@Override
-			protected boolean onSwipeRight() {
-				if (snake.getDirec() != Direction.opposite(Direction.RIGHT))
-					snake.setDirec(Direction.RIGHT);
-				return false;
-			}
-
-			@Override
-			protected boolean onSwipeLeft() {
-				if (snake.getDirec() != Direction.opposite(Direction.LEFT))
-					snake.setDirec(Direction.LEFT);
-				return false;
-			}
-
-			@Override
-			protected boolean onSwipeDown() {
-				if (snake.getDirec() != Direction.opposite(Direction.DOWN))
-					snake.setDirec(Direction.DOWN);
-				return false;
-			}
-
-			@Override
-			protected boolean onSingleTap() {
-				return false;
-			}
-
-			@Override
-			protected boolean onDoubleTap() {
-				return false;
-			}
-		};
-		mSGD.setEnabled(true);
-	}
 
 	private void createobjects() {
-		// Serpiente
-		// snake = new Snake( camera.getWidth()/16, camera.getHeight()*25/48,
-		// camera.getWidth()/40, camera.getHeight()/24, 0.3f, vbom);
-		// attachChild(snake);
 		// Snake Sprites
 		snake = new Snake(camera.getWidth() / 16, camera.getHeight() * 25 / 48,
 				camera.getWidth() / 40, camera.getHeight() / 24, 0.25f, vbom);
@@ -271,12 +222,11 @@ public class GameSnakeScene extends BaseGameScene implements
 						|| (!snake.suicide() && !snake.hit_a_wall(walls))) {
 					snake.move();
 					registerUpdateHandler(utimehandler);
+					if (getScore() > 100 + session.getScore()) {
+						door.setVisible(true);
+					}
 				} else {
 					gameOver();
-				}
-				if (getScore() > 100 + session.getScore()) {
-					door.setVisible(true);
-
 				}
 			}
 		}
@@ -306,40 +256,7 @@ public class GameSnakeScene extends BaseGameScene implements
 							session.setPlayer_name("player1");
 						session.setScore(getScore());
 						session.save(dbmanager);
-						playAgain();
-					}
-				});
-
-				alert.setNegativeButton("NO", new OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						playAgain();
-					}
-				});
-
-				alert.show();
-				
-			}
-		});
-		
-	}
-
-	public void playAgain() {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-				alert.setCancelable(false);
-				alert.setMessage("Play Again?");
-				alert.setPositiveButton("OK", new OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						registerUpdateHandler(utimehandler);
-						session = new Session();
-						session.setLevel(0);
-						session.setScore(0);
-						resetScore();
-						resetScreen();
+						go_to_menu();
 					}
 				});
 
@@ -352,20 +269,26 @@ public class GameSnakeScene extends BaseGameScene implements
 				});
 
 				alert.show();
+				
 			}
 		});
+		
 	}
 
 	// Resets objects on screen
 	protected void resetScreen() {
-		detachChild(snake);
-		snake = null;
-		foods.disposeChilds();
-		detachChild(foods);
-		foods = null;
-		walls.disposeChilds();
-		walls.dispose();
-		walls.detachSelf();
+		try{
+			detachChild(snake);
+			snake = null;
+			foods.disposeChilds();
+			detachChild(foods);
+			foods = null;
+			walls.disposeChilds();
+			walls.dispose();
+			walls.detachSelf();
+		}catch(Exception ex){
+			
+		}
 		session.setScore(getScore());
 		setLevelTitle(""+session.getLevel());
 		createobjects();
@@ -412,19 +335,57 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void disposeScene() {
-		// snake.dispose();
-		snake.detachSelf();
-		foods.detachSelf();
-		foods.dispose();
-		this.detachSelf();
-		this.dispose();
-
+		try{
+			walls.disposeChilds();
+			walls.dispose();
+			walls.detachSelf();
+			snake.detachSelf();
+			snake.dispose();
+			foods.disposeChilds();
+			foods.detachSelf();
+			foods.dispose();
+			this.detachSelf();
+			this.dispose();
+		}
+		catch(Exception ex){
+			
+		}
 	}
-
+	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		float swipe_distance = 30.0f;
+		//Swipe Conditions
+		boolean swipe_left = Math.abs(touched_x - pSceneTouchEvent.getX())>Math.abs(touched_y - pSceneTouchEvent.getY())
+				&& touched_x > pSceneTouchEvent.getX() + swipe_distance;
+		boolean swipe_right = Math.abs(touched_x - pSceneTouchEvent.getX())>Math.abs(touched_y - pSceneTouchEvent.getY())
+		&& touched_x + swipe_distance < pSceneTouchEvent.getX();
+		boolean swipe_up = Math.abs(touched_x - pSceneTouchEvent.getX())<Math.abs(touched_y - pSceneTouchEvent.getY())
+				&& touched_y + swipe_distance < pSceneTouchEvent.getY();
+		boolean swipe_down = Math.abs(touched_x - pSceneTouchEvent.getX())<Math.abs(touched_y - pSceneTouchEvent.getY())
+				&& touched_y > pSceneTouchEvent.getY() + swipe_distance ;
+		// Swipe
+		if(pSceneTouchEvent.isActionDown()){
+			touched_x = pSceneTouchEvent.getX();
+			touched_y = pSceneTouchEvent.getY();
+		}else{
+			if(pSceneTouchEvent.isActionUp()){
+				if(swipe_right){
+					if (snake.getDirec() != Direction.opposite(Direction.RIGHT))
+						snake.setDirec(Direction.RIGHT);
+				}else if(swipe_left){
+					if (snake.getDirec() != Direction.opposite(Direction.LEFT))
+						snake.setDirec(Direction.LEFT);
+				}else if(swipe_up){
+					if (snake.getDirec() != Direction.opposite(Direction.TOP))
+						snake.setDirec(Direction.TOP);
+				}else if(swipe_down){
+					if (snake.getDirec() != Direction.opposite(Direction.DOWN))
+						snake.setDirec(Direction.DOWN);
+				}
+			}
+		}
 		
-		
-		return mSGD.onManagedTouchEvent(pSceneTouchEvent);
+		return false;
 	}
 }

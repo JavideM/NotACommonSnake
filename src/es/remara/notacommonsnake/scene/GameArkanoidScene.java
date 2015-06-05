@@ -123,6 +123,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 		createJoint();
 		attachChilds();
 		bricksAmount = bricks.size();
+		touchedY = camera.getHeight()/2;
 		// Listeners
 		this.setOnSceneTouchListener(this);
 		arkanoidPhysicsWorld.setContactListener(this);
@@ -301,6 +302,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 		SceneManager.getInstance().getCurrentScene().attachChild(ballSprite);
 		createJoint();
 		notStarted = true;
+		touchedY = camera.getHeight()/2;
 	}
 
 	private void destSprite(Sprite sprite, Body body, PhysicsConnector pc) {
@@ -437,6 +439,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 				@Override
 				public void run() {
 					arkanoidPhysicsWorld.destroyJoint(ball_plat_Joint);
+					platformBody.setLinearVelocity(0, 0);
 				}
 			});
 		}
@@ -446,7 +449,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 			registerUpdateHandler(timerhandler);
 		}
 		else{
-			if(pSceneTouchEvent.isActionDown())
+			if(pSceneTouchEvent.isActionDown() && !notStarted)
 				unregisterUpdateHandler(timerhandler);
 			if(pSceneTouchEvent.getY() -5 > platformSprite.getY() && platformSprite.getY() + platformSprite.getHeight()/2 < camera.getHeight())
 				platformBody.setLinearVelocity(new Vector2(0,10.0f));
@@ -508,6 +511,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 				public void run() {
 					destSprite(ballSprite, ballBody, ballPC);
 					notStarted = true;
+					touchedY = camera.getHeight()/2;
 					createBallSprite();
 					setBallPhysicsConnectors();
 					createJoint();
@@ -539,9 +543,9 @@ public class GameArkanoidScene extends BaseGameScene implements
 
 			if (bricksAmount <= 25) {
 
-				if (session != null) {
-					session.setScore(getScore());
-					SceneManager.getInstance().createSnakeGameScene(session);
+				if (this.session != null) {
+					this.session.setScore(getScore());
+					SceneManager.getInstance().createSnakeGameScene(this.session);
 				}
 
 			}
