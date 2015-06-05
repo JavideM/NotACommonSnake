@@ -129,42 +129,40 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				activity.getString(R.string.achievements_title),
 				new TextOptions(HorizontalAlign.CENTER), this.vbom);
 		achievementsPannel.attachChild(text);
-		//Achievements
-		int count = 1;
-		achievementslist = new ArrayList<Text>();
-		ArrayList<Achievement> achievements = (ArrayList<Achievement>) dbmanager
-				.getAllAchievementsDone();
-		for (Achievement achievement : achievements) {
-			String content = count + ". " + achievement.getName();
-			// Name and position
-			Text textName = new Text(camera.getHeight() / 2,
-					camera.getHeight()
-							- (camera.getHeight() / 12 + camera.getHeight()
-									/ 12 * count), resourcesManager.fontARS,
-					content, new TextOptions(HorizontalAlign.LEFT), this.vbom);
-			textName.setPosition(textName.getX() + textName.getWidth()
-					/ 2, textName.getY());
-			// Description
-			content = achievement.getDescription();
-			Text textDescript = new Text(600, camera.getHeight()
-					- (camera.getHeight() / 12 + camera.getHeight() / 12
-							* count), resourcesManager.fontARS, content,
-					new TextOptions(HorizontalAlign.LEFT), this.vbom);
-			textDescript.setPosition(textDescript.getX() - textDescript.getWidth() / 2,
-					textDescript.getY());
-			achievementsPannel.attachChild(textName);
-			achievementsPannel.attachChild(textDescript);
-			achievementslist.add(textName);
-			achievementslist.add(textDescript);
-			if (count > 8) {
-				textName.setVisible(false);
-				textDescript.setVisible(false);
-			}
-			count++;
-		}
 		//Main Content
-		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
-		achievementsPannel.attachChild(wip);
+		//Achievements
+				int count = 1;
+				achievementslist = new ArrayList<Text>();
+				ArrayList<Achievement> achievements = (ArrayList<Achievement>) dbmanager
+						.getAllAchievementsDone();
+				for (Achievement achievement : achievements) {
+					String content = count + ". " + achievement.getName();
+					// Name and position
+					Text textName = new Text(camera.getHeight() / 2,
+							camera.getHeight()
+									- (camera.getHeight() / 12 + camera.getHeight()
+											/ 12 * count), resourcesManager.fontARS,
+							content, new TextOptions(HorizontalAlign.LEFT), this.vbom);
+					textName.setPosition(textName.getX() + textName.getWidth()
+							/ 2, textName.getY());
+					// Description
+					content = achievement.getDescription();
+					Text textDescript = new Text(600, camera.getHeight()
+							- (camera.getHeight() / 12 + camera.getHeight() / 12
+									* count), resourcesManager.fontARS, content,
+							new TextOptions(HorizontalAlign.LEFT), this.vbom);
+					textDescript.setPosition(textDescript.getX() - textDescript.getWidth() / 2,
+							textDescript.getY());
+					achievementsPannel.attachChild(textName);
+					achievementsPannel.attachChild(textDescript);
+					achievementslist.add(textName);
+					achievementslist.add(textDescript);
+					if (count > 8) {
+						textName.setVisible(false);
+						textDescript.setVisible(false);
+					}
+					count++;
+				}
 	}
 
 	private void createRecordsPannel() {
