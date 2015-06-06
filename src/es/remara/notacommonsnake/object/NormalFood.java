@@ -12,7 +12,7 @@ public class NormalFood extends Food {
 		super(FoodType.NORMAL, walls, resourcesmanager, vbom);
 
 		Sprite foodtype = new Sprite(getX(), getY(),
-				resourcesmanager.food_NORMAL_region, this.vbom);
+				resourcesmanager.food_SUPER_GROW_region, this.vbom);
 		attachChild(foodtype);
 	}
 
