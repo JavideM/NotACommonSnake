@@ -23,6 +23,7 @@ public final class R {
         public static final int ach12title=0x7f03002f;
         public static final int ach1descrip=0x7f030030;
         /**  Achievements 
+ Achievements 
          */
         public static final int ach1title=0x7f030024;
         public static final int ach2descrip=0x7f030031;
@@ -44,6 +45,7 @@ public final class R {
         public static final int achievements_title=0x7f030006;
         public static final int achivements=0x7f030003;
         /**  General Strings 
+ General Strings 
          */
         public static final int app_name=0x7f030000;
         public static final int artwork=0x7f030012;
@@ -64,13 +66,17 @@ public final class R {
         public static final int musicby=0x7f030013;
         /**  HUD 
  Foods Text 
+ HUD 
+ Foods Text 
          */
         public static final int normalFoodtxt=0x7f030019;
         public static final int options=0x7f030002;
         /**  Menu Strings  
+ Menu Strings  
          */
         public static final int play=0x7f030001;
         /**  Settings Scene Strings 
+ Settings Scene Strings 
          */
         public static final int profile_title=0x7f03000c;
         public static final int records_title=0x7f030005;
@@ -83,6 +89,7 @@ public final class R {
         public static final int sounds=0x7f030010;
         public static final int soundsby=0x7f030014;
         /**  Achievements Scene Strings  
+ Achievements Scene Strings  
          */
         public static final int stats_title=0x7f030004;
         public static final int supergrowFoodtxt=0x7f03001f;
