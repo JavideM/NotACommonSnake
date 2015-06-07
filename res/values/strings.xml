@@ -16,6 +16,7 @@
     <string name="higherlevel">Higher level: </string>
     <string name="scoreperlevel">Average score per level: </string>
     <string name="avergaescore">Average score: </string>
+    <string name="sessionsplayed">Games played: </string>
     
     <!-- Settings Scene Strings -->
     <string name="profile_title">PROFILES</string>

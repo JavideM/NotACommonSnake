@@ -3,16 +3,11 @@ package es.remara.notacommonsnake.object;
 import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
-
-import android.util.Log;
 
 import es.remara.notacommonsnake.manager.ResourcesManager;
-import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.other.Direction;
 
 public class Snake extends Entity {
