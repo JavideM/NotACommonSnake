@@ -1,8 +1,5 @@
 package es.remara.notacommonsnake.scene;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
@@ -16,7 +13,6 @@ import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
-import es.remara.notacommonsnake.model.Session;
 
 public class SettingsScene extends BaseScene {
 
@@ -31,13 +27,6 @@ public class SettingsScene extends BaseScene {
 	private Sprite btnsound;
 	private Sprite btnback;
 
-	private List<Text> textlist;
-
-	private final float top_ini_position = camera.getHeight()
-			- (camera.getHeight() / 12 + camera.getHeight() / 12);
-	private final float bottom_ini_position = camera.getHeight()
-			- (camera.getHeight() / 12 + camera.getHeight() / 12 * 8);
-	
 
 	@Override
 	public void createScene() {

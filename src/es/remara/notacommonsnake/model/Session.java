@@ -2,7 +2,7 @@ package es.remara.notacommonsnake.model;
 
 import java.util.ArrayList;
 
-import es.remara.notacommonsnake.manager.DBManager;
+import es.remara.notacommonsnake.manager.ResourcesManager;
 
 public class Session {
 
@@ -14,7 +14,6 @@ public class Session {
 	private String player_name;
 	private int score;
 	private int level;
-	private ArrayList<Snake_Level> snake_levels;
 	private ArrayList<Achievement> achievements_achieved;
 
 	/*
@@ -52,18 +51,12 @@ public class Session {
 	public void setLevel(int level) {
 		this.level = level;
 	}
-
-	public void AddSnake_Level(Snake_Level snake_level){
-		this.snake_levels.add(snake_level);
-	}
 	
 	public ArrayList<Achievement> getAchievements_achieved() {
 		return this.achievements_achieved;
 	}
 
-	public ArrayList<Snake_Level> getSnake_levels() {
-		return snake_levels;
-	}
+
 
 	public void addAchievement(Achievement achievement) {
 		this.achievements_achieved.add(achievement);
@@ -73,7 +66,7 @@ public class Session {
 		//
 		// Constructor logic
 		//
-		this.snake_levels = new ArrayList<Snake_Level>();
+
 		this.achievements_achieved = new ArrayList<Achievement>();
 	}
 
@@ -81,11 +74,11 @@ public class Session {
 	 * Methods
 	 */
 
-	public void save(DBManager dbmanager) {
-		dbmanager.saveSession(this);
+	public void save() {
+		ResourcesManager.getInstance().dbmanager.saveSession(this);
 	}
 
-	public void update(DBManager dbmanager) {
+	public void update() {
 
 	}
 	
