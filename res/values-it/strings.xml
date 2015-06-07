@@ -1,0 +1,77 @@
+<resources>
+	<!-- General Strings -->
+    <string name="app_name">Not A Common Snake</string>
+    
+	<!-- Menu Strings  -->
+    <string name="play">GIOCA</string>
+    <string name="options">CONFIGURAZIONE</string>
+    <string name="achivements">SUCESSI</string>
+    
+    <!-- Achievements Scene Strings  -->
+    <string name="stats_title">STATISTICHE</string>
+    <string name="records_title">PUNTEGGI</string>
+    <string name="achievements_title">SUCESSI</string>
+    
+    <string name="totalscore">Puntuazione totale: </string>
+    <string name="higherlevel">Livello massimo: </string>
+    <string name="scoreperlevel">Punti medi per livello: </string>
+    <string name="avergaescore">Punti medi per partita: </string>
+    <string name="sessionsplayed">Partite giocate: </string>
+    
+    <!-- Settings Scene Strings -->
+    <string name="profile_title">PROFILES</string>
+    <string name="difficulty_title">ABOUT</string>
+    <string name="sound_title">SUONI</string>
+    <string name="music">musica</string>
+    <string name="sounds">suoni</string>
+    
+    <string name="createdby">CREATO DA</string>
+    <string name="artwork">LAVORO ARTISTICO</string>
+    <string name="musicby">MUSICA</string>
+    <string name="soundsby">SUONI</string>
+    <string name="ivan">Iván Reyeros Santos</string>
+    <string name="sebas">Sebastian Ramírez Centena</string>
+    <string name="javi">F.J. de Martín Rivarés</string>
+    <string name="musicauthor">Badass - Bensound.com</string>
+    <!-- HUD -->
+    <!-- Foods Text -->
+    <string name="normalFoodtxt">Normale</string>
+    <string name = "augsppedFoodtxt">Super Velocitá</string>
+    <string name= "chggamemodeFoodtxt">Cadendo da un buco&#8230;</string>
+    <string name="ghostmodeFoodtxt">I fantasmi attraversano i muri</string>
+    <string name="invcontrolsFoodtxt">Ti senti un po vertiginoso?</string>
+    <string name="reducspeedFoodtxt">É como se ci fosse colla per terra</string>
+    <string name="supergrowFoodtxt">Finally a grown spurt!</string>
+    <string name="x2Foodtxt">Quella valeva doppio</string>
+    
+    <string name="scoreHud">Punti: </string>
+    <string name="levelHUD">Livello: </string>
+    <string name="bonuslevelHUD">Livello Bonus</string>
+    
+    <!-- Achievements -->
+    <string name="ach1title">Primo pasto</string>
+    <string name="ach2title">300 AUAU</string>
+    <string name="ach3title">It\'s over 9000!</string>
+    <string name="ach4title">Livello 0 complete</string>
+    <string name="ach5title">Livello 1 complete</string>
+    <string name="ach6title">Livello 2 complete</string>
+    <string name="ach7title">Livello 3 complete</string>
+    <string name="ach8title">Livello 4 complete</string>
+    <string name="ach9title">Livello 5 complete</string>
+    <string name="ach10title">Livello 6 complete</string>
+    <string name="ach11title">Livello 7 complete</string>
+    <string name="ach12title">Livello 8 complete</string>
+    
+    <string name="ach1descrip">Mangia il tuo primo pasto.</string>
+    <string name="ach2descrip">Segna 300 punti in una partita.</string>
+    <string name="ach3descrip">Segna piú di 9000 punti in una partita.</string>
+    <string name="ach4descrip">Completa il livello 0.</string>
+    <string name="ach5descrip">Completa il livello 1.</string>
+    <string name="ach6descrip">Completa il livello 2.</string>
+    <string name="ach7descrip">Completa il livello 3.</string>
+    <string name="ach8descrip">Completa il livello 4.</string>
+    <string name="ach9descrip">Completa il livello 5.</string>
+    <string name="ach10descrip">Completa il livello 6.</string>
+    <string name="ach11descrip">Completa il livello 7.</string>
+    <string name="ach12descrip">Completa il livello 8.</string>
+</resources>
