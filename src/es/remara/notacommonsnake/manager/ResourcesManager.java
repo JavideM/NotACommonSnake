@@ -80,7 +80,6 @@ public class ResourcesManager {
 	public ITextureRegion medal_region;
 	public ITextureRegion back_region;
 	public ITextureRegion door_region;
-	public ITextureRegion profile_region;
 	public ITextureRegion gamepad_region;
 	public ITextureRegion music_region;
 	public ITiledTextureRegion speaker_region;
@@ -126,7 +125,7 @@ public class ResourcesManager {
 
 	public void loadGameSnakeResources() {
 		loadGameSnakeGraphics();
-		loadGameSnakeFonts();
+		loadGameFonts();
 		loadGameSnakeAudio();
 	}
 
@@ -136,7 +135,7 @@ public class ResourcesManager {
 
 	public void loadGameArkanoidResources() {
 		loadGameArkanoidGraphics();
-		loadGameSnakeFonts();
+		loadGameFonts();
 		loadGameArkanoidAudio();
 	}
 
@@ -329,8 +328,17 @@ public class ResourcesManager {
 		wall_region = null;
 	}
 
-	private void loadGameSnakeFonts() {
+	private void loadGameFonts() {
+		this.mFontTexture = new BitmapTextureAtlas(
+				this.engine.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
+		this.font = new Font(this.engine.getFontManager(), this.mFontTexture,
+				Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true,
+				Color.WHITE);
+
+		this.engine.getTextureManager().loadTexture(this.mFontTexture);
+		this.engine.getFontManager().loadFont(this.font);
 	}
 
 	private void loadGameSnakeAudio() {
@@ -500,14 +508,10 @@ public class ResourcesManager {
 				.setAssetBasePath("gfx/");
 		background_grass_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(settingsTextureAtlas, activity, "background/grass.png");
-		orange_pannel_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(settingsTextureAtlas, activity, "ars/orangepannel.png");
 		blue_pannel_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(settingsTextureAtlas, activity, "ars/bluepannel.png");
 		salmon_pannel_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(settingsTextureAtlas, activity, "ars/salmonpannel.png");
-		profile_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				settingsTextureAtlas, activity, "settings/profiles.png");
 		gamepad_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				settingsTextureAtlas, activity, "settings/gamepad.png");
 		music_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
@@ -574,10 +578,8 @@ public class ResourcesManager {
 	public void unloadSettingsResources() {
 		settingsTextureAtlas.unload();
 		background_grass_region = null;
-		orange_pannel_region = null;
 		salmon_pannel_region = null;
 		blue_pannel_region = null;
-		profile_region = null;
 		gamepad_region = null;
 		music_region = null;
 	}
