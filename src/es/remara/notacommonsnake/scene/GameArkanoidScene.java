@@ -30,6 +30,7 @@ import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 
+import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -117,7 +118,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 				resourcesManager.background_grass_region, vbom));
 		arkanoidPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
 		// Creación HUD y conservación de datos.
-		String sad = "Bonus level";
+		String sad = activity.getString(R.string.bonuslevelHUD);
 		this.createHUD();
 		camera.getHUD().setRotation(-90.0f);
 		camera.getHUD().setPosition(480, 0);

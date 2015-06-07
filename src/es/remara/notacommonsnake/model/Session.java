@@ -19,7 +19,7 @@ public class Session {
 	/*
 	 * Getters setters
 	 */
-
+	
 	public int getIdSession() {
 		return idSession;
 	}
@@ -35,7 +35,7 @@ public class Session {
 	public void setPlayer_name(String player_name) {
 		this.player_name = player_name;
 	}
-
+	
 	public int getScore() {
 		return this.score;
 	}
@@ -83,11 +83,11 @@ public class Session {
 	}
 	
 	// Choose the next level
-		public int nextlevel() {
-			if(level == 9)
-				this.level = 0;
-			else
-				this.level = level + 1;
-			return this.level;
-		}
+	public int nextlevel() {
+		if(level == 9)
+			this.level = 0;
+		else
+			this.level = level + 1;
+		return this.level;
+	}
 }
