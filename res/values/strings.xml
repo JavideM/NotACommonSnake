@@ -33,6 +33,7 @@
     <string name="sebas">Sebastian Ramírez Centena</string>
     <string name="javi">F.J. de Martín Rivarés</string>
     <string name="musicauthor">Badass - Bensound.com</string>
+    <!-- HUD -->
     <!-- Foods Text -->
     <string name="normalFoodtxt">Normal</string>
     <string name = "augsppedFoodtxt">Super Speed</string>
@@ -43,4 +44,34 @@
     <string name="supergrowFoodtxt">Finally a grown spurt!</string>
     <string name="x2Foodtxt">That was worth double</string>
     
+    <string name="scoreHud">Score: </string>
+    <string name="levelHUD">Level: </string>
+    <string name="bonuslevelHUD">Bonus level</string>
+    
+    <!-- Achievements -->
+    <string name="ach1title">First meal</string>
+    <string name="ach2title">300 AUAU</string>
+    <string name="ach3title">It\'s over 9000!</string>
+    <string name="ach4title">Level 0 complete</string>
+    <string name="ach5title">Level 1 complete</string>
+    <string name="ach6title">Level 2 complete</string>
+    <string name="ach7title">Level 3 complete</string>
+    <string name="ach8title">Level 4 complete</string>
+    <string name="ach9title">Level 5 complete</string>
+    <string name="ach10title">Level 6 complete</string>
+    <string name="ach11title">Level 7 complete</string>
+    <string name="ach12title">Level 8 complete</string>
+    
+    <string name="ach1descrip">Eat your first food.</string>
+    <string name="ach2descrip">Score 300 points.</string>
+    <string name="ach3descrip">Score more than 9000 points.</string>
+    <string name="ach4descrip">Complete level 0.</string>
+    <string name="ach5descrip">Complete level 1.</string>
+    <string name="ach6descrip">Complete level 2.</string>
+    <string name="ach7descrip">Complete level 3.</string>
+    <string name="ach8descrip">Complete level 4.</string>
+    <string name="ach9descrip">Complete level 5.</string>
+    <string name="ach10descrip">Complete level 6.</string>
+    <string name="ach11descrip">Complete level 7.</string>
+    <string name="ach12descrip">Complete level 8.</string>
 </resources>

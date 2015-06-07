@@ -3,8 +3,13 @@ package es.remara.notacommonsnake.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.remara.notacommonsnake.GameActivity;
+import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.model.Achievement;
 import es.remara.notacommonsnake.model.Session;
+
+
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -132,8 +137,8 @@ public class DBManager extends SQLiteOpenHelper {
 	private void insertAchievements(SQLiteDatabase db) {
 		//First points
 		ContentValues values = new ContentValues();
-		values.put(ACH_NAME, "First meal");
-		values.put(ACH_DESCRIP, "Eat your first food.");
+		values.put(ACH_NAME, R.string.ach1title);
+		values.put(ACH_DESCRIP, R.string.ach1descrip);
 		values.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
@@ -148,8 +153,8 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		//300 points 
 		ContentValues values2 = new ContentValues();
-		values2.put(ACH_NAME, "300 AU AU");
-		values2.put(ACH_DESCRIP, "Score 300 points.");
+		values2.put(ACH_NAME, R.string.ach2title);
+		values2.put(ACH_DESCRIP, R.string.ach2descrip);
 		values2.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values2);
@@ -164,8 +169,8 @@ public class DBManager extends SQLiteOpenHelper {
 	
 		// Over 9000 points
 		ContentValues values3 = new ContentValues();
-		values3.put(ACH_NAME, "It's over 9000!");
-		values3.put(ACH_DESCRIP, "Score more than 9000 points.");
+		values3.put(ACH_NAME, R.string.ach3title);
+		values3.put(ACH_DESCRIP, R.string.ach3descrip);
 		values3.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values3);
@@ -180,8 +185,8 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		//Complete levels
 		ContentValues values4 = new ContentValues();
-		values4.put(ACH_NAME, "Level 0 complete");
-		values4.put(ACH_DESCRIP, "Complete level 0.");
+		values4.put(ACH_NAME, R.string.ach4title);
+		values4.put(ACH_DESCRIP, R.string.ach4descrip);
 		values4.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values4);
@@ -195,8 +200,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values5 = new ContentValues();
-		values5.put(ACH_NAME, "Level 1 complete");
-		values5.put(ACH_DESCRIP, "Complete level 1.");
+		values5.put(ACH_NAME, R.string.ach5title);
+		values5.put(ACH_DESCRIP, R.string.ach5descrip);
 		values5.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values5);
@@ -210,8 +215,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values6 = new ContentValues();
-		values6.put(ACH_NAME, "Level 2 complete");
-		values6.put(ACH_DESCRIP, "Complete level 2.");
+		values6.put(ACH_NAME, R.string.ach6title);
+		values6.put(ACH_DESCRIP, R.string.ach6descrip);
 		values6.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values6);
@@ -225,8 +230,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values7 = new ContentValues();
-		values7.put(ACH_NAME, "Level 3 complete");
-		values7.put(ACH_DESCRIP, "Complete level 3.");
+		values7.put(ACH_NAME, R.string.ach7title);
+		values7.put(ACH_DESCRIP, R.string.ach7descrip);
 		values7.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values7);
@@ -240,8 +245,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values8 = new ContentValues();
-		values8.put(ACH_NAME, "Level 4 complete");
-		values8.put(ACH_DESCRIP, "Complete level 4.");
+		values8.put(ACH_NAME, R.string.ach8title);
+		values8.put(ACH_DESCRIP, R.string.ach8descrip);
 		values8.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values8);
@@ -255,8 +260,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values9 = new ContentValues();
-		values9.put(ACH_NAME, "Level 5 complete");
-		values9.put(ACH_DESCRIP, "Complete level 5.");
+		values9.put(ACH_NAME, R.string.ach9title);
+		values9.put(ACH_DESCRIP, R.string.ach9descrip);
 		values9.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values9);
@@ -270,8 +275,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values10 = new ContentValues();
-		values10.put(ACH_NAME, "Level 6 complete");
-		values10.put(ACH_DESCRIP, "Complete level 6.");
+		values10.put(ACH_NAME, R.string.ach10title);
+		values10.put(ACH_DESCRIP, R.string.ach10descrip);
 		values10.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values10);
@@ -285,8 +290,8 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values11 = new ContentValues();
-		values11.put(ACH_NAME, "Level 7 complete");
-		values11.put(ACH_DESCRIP, "Complete level 7.");
+		values11.put(ACH_NAME, R.string.ach11title);
+		values11.put(ACH_DESCRIP, R.string.ach11descrip);
 		values11.put(ACH_DONE, "0");
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values11);
@@ -300,11 +305,11 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		ContentValues values12 = new ContentValues();
-		values12.put(ACH_NAME, "Level 8 complete");
-		values12.put(ACH_DESCRIP, "Complete level 8.");
+		values12.put(ACH_NAME, R.string.ach12title);
+		values12.put(ACH_DESCRIP, R.string.ach12descrip);
 		values12.put(ACH_DONE, "0");
 		
-		db.insert(ACHIEVEMENTS_TABLE, null, values11);
+		db.insert(ACHIEVEMENTS_TABLE, null, values12);
 		
 		db.execSQL("CREATE TRIGGER ach12_trigger AFTER" +
 				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 8 " +
@@ -323,14 +328,14 @@ public class DBManager extends SQLiteOpenHelper {
  
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
- 
+        GameActivity activity = ResourcesManager.getInstance().activity;
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 Achievement achievement = new Achievement();
                 achievement.setId(Integer.parseInt(cursor.getString(0)));
-                achievement.setName(cursor.getString(1));
-                achievement.setDescription(cursor.getString(2));
+                achievement.setName(activity.getString(Integer.parseInt(cursor.getString(1))));
+                achievement.setDescription(activity.getString(Integer.parseInt(cursor.getString(2))));
                 achievement.setCheck(Integer.parseInt(cursor.getString(3)) == 1);
                 achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
                 // Adding achievement to list
@@ -350,14 +355,14 @@ public class DBManager extends SQLiteOpenHelper {
  
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
- 
+        GameActivity activity = ResourcesManager.getInstance().activity;
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 Achievement achievement = new Achievement();
                 achievement.setId(Integer.parseInt(cursor.getString(0)));
-                achievement.setName(cursor.getString(1));
-                achievement.setDescription(cursor.getString(2));
+                achievement.setName(activity.getString(Integer.parseInt(cursor.getString(1))));
+                achievement.setDescription(activity.getString(Integer.parseInt(cursor.getString(2))));
                 achievement.setCheck(Integer.parseInt(cursor.getString(3)) == 1);
                 achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
                 // Adding achievement to list
