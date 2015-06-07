@@ -2,7 +2,6 @@ package es.remara.notacommonsnake.model;
 
 import java.util.ArrayList;
 
-import es.remara.notacommonsnake.manager.DBManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 
 public class Profile{

@@ -288,7 +288,7 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
-		db.execSQL("CREATE TRIGGER ach2_trigger AFTER" +
+		db.execSQL("CREATE TRIGGER ach3_trigger AFTER" +
 				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 9000 " +
 				" BEGIN " +
 					"UPDATE " + ACHIEVEMENTS_TABLE +

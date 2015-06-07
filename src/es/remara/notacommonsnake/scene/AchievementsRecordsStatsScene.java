@@ -38,17 +38,43 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 	private final float bottom_ini_position = camera.getHeight()
 			- (camera.getHeight() / 12 + camera.getHeight() / 12 * 8);
 	
+	private ArrayList<Session> sessions;
+	
 
 	@Override
 	public void createScene() {
 		createBackground();
 		createControls();
+		chargeData();
 		createAchievementsPannel();
 		createStatsPannel();
 		createRecordsPannel();
-
+		
+	}
+	
+	@Override
+	public void onBackKeyPressed() {
+		SceneManager.getInstance().loadMenuScene(engine, this);
 	}
 
+	@Override
+	public SceneType getSceneType() {
+		return SceneType.SCENE_ARS;
+	}
+
+	@Override
+	public void disposeScene() {
+		detachChildren();
+		this.detachSelf();
+		this.dispose();
+	}
+
+	//Charge data
+	public void chargeData(){
+		sessions = (ArrayList<Session>) dbmanager
+				.getAllSessionsByScore();
+	}
+	
 	// Background
 	private void createBackground() {
 		attachChild(new Sprite(camera.getWidth() / 2, camera.getHeight() / 2,
@@ -215,8 +241,6 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 		// Records
 		int count = 1;
 		recordslist = new ArrayList<Text>();
-		ArrayList<Session> sessions = (ArrayList<Session>) dbmanager
-				.getAllSessionsByScore();
 		for (Session session : sessions) {
 			String content = count + ". " + session.getPlayer_name();
 			// Name and position
@@ -271,25 +295,100 @@ public class AchievementsRecordsStatsScene extends BaseScene {
 				activity.getString(R.string.stats_title), new TextOptions(
 						HorizontalAlign.CENTER), this.vbom);
 		statisticPannel.attachChild(text);
-		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
-		statisticPannel.attachChild(wip);
+		//Main Content
+		Text titleTotal = new Text(camera.getWidth() / 4,
+				camera.getHeight()
+				- (camera.getHeight() / 12 + camera.getHeight()
+						/ 12 ), resourcesManager.fontARS,
+						activity.getString(R.string.totalscore), new TextOptions(HorizontalAlign.LEFT), this.vbom);
+		titleTotal.setPosition(titleTotal.getX() + titleTotal.getWidth()/2, titleTotal.getY());
+		statisticPannel.attachChild(titleTotal);
+		Text textTotal = new Text(2*camera.getWidth() / 3,
+				camera.getHeight()
+						- (camera.getHeight() / 12 + camera.getHeight()
+								/ 12 ), resourcesManager.fontARS,
+				""+totalScore(), new TextOptions(HorizontalAlign.RIGHT), this.vbom);
+		statisticPannel.attachChild(textTotal);
+		textTotal.setPosition(textTotal.getX() - textTotal.getWidth()/2, textTotal.getY());
+		
+		Text titleHigher = new Text(camera.getWidth() / 4,
+				camera.getHeight()
+				- (camera.getHeight() / 12 + camera.getHeight()
+						/ 12 * 3), resourcesManager.fontARS,
+						activity.getString(R.string.higherlevel), new TextOptions(HorizontalAlign.LEFT), this.vbom);
+		titleHigher.setPosition(titleHigher.getX() + titleHigher.getWidth()/2, titleHigher.getY());
+		statisticPannel.attachChild(titleHigher);
+		Text textHigherLevel = new Text(2*camera.getWidth() / 3,
+				camera.getHeight()
+						- (camera.getHeight() / 12 + camera.getHeight()
+								/ 12 * 3), resourcesManager.fontARS,
+				""+higherLevel(), new TextOptions(HorizontalAlign.RIGHT), this.vbom);
+		statisticPannel.attachChild(textHigherLevel);
+		textHigherLevel.setPosition(textHigherLevel.getX() - textHigherLevel.getWidth()/2, textHigherLevel.getY());
+		
+		Text titleAverage = new Text(camera.getWidth() / 4,
+				camera.getHeight()
+				- (camera.getHeight() / 12 + camera.getHeight()
+						/ 12 * 5), resourcesManager.fontARS,
+						activity.getString(R.string.avergaescore), new TextOptions(HorizontalAlign.LEFT), this.vbom);
+		titleAverage.setPosition(titleAverage.getX() + titleAverage.getWidth()/2, titleAverage.getY());
+		statisticPannel.attachChild(titleAverage);
+		Text textaverage = new Text(2*camera.getWidth() / 3,
+				camera.getHeight()
+						- (camera.getHeight() / 12 + camera.getHeight()
+								/ 12 * 5), resourcesManager.fontARS,
+				""+averageScore(), new TextOptions(HorizontalAlign.RIGHT), this.vbom);
+		statisticPannel.attachChild(textaverage);
+		textaverage.setPosition(textaverage.getX() - textaverage.getWidth()/2, textaverage.getY());
+		
+		Text titlePerLevel = new Text(camera.getWidth() / 4,
+				camera.getHeight()
+				- (camera.getHeight() / 12 + camera.getHeight()
+						/ 12 * 7), resourcesManager.fontARS,
+						activity.getString(R.string.scoreperlevel), new TextOptions(HorizontalAlign.LEFT), this.vbom);
+		titlePerLevel.setPosition(titlePerLevel.getX() + titlePerLevel.getWidth()/2, titlePerLevel.getY());
+		statisticPannel.attachChild(titlePerLevel);
+		Text textaverageScorePerLevel = new Text(2*camera.getWidth() / 3,
+				camera.getHeight()
+						- (camera.getHeight() / 12 + camera.getHeight()
+								/ 12 * 7), resourcesManager.fontARS,
+				""+averageScorePerLevel(), new TextOptions(HorizontalAlign.RIGHT), this.vbom);
+		statisticPannel.attachChild(textaverageScorePerLevel);
+		textaverageScorePerLevel.setPosition(textaverageScorePerLevel.getX() - textaverageScorePerLevel.getWidth()/2, textaverageScorePerLevel.getY());
 	}
 
-	@Override
-	public void onBackKeyPressed() {
-		SceneManager.getInstance().loadMenuScene(engine, this);
+	
+	/*
+	 * Data Operations
+	 */
+	public double averageScore(){
+		int total = totalScore();
+		int countSessions = sessions.size();
+		return (countSessions == 0)? 0:total/sessions.size();
+	}
+	
+	public int totalScore(){
+		int total= 0;
+		for (Session session : sessions) {
+			total += session.getScore();
+		}
+		return total;
+	}
+	
+	public double averageScorePerLevel(){
+		int total = totalScore();
+		int totallevels = 0;
+		for (Session session : sessions) {
+			totallevels += session.getLevel();
+		}
+		return (totallevels == 0)? 0: total/totallevels;
 	}
 
-	@Override
-	public SceneType getSceneType() {
-		return SceneType.SCENE_ARS;
+	public int higherLevel(){
+		int higherLevel = 0;
+		for (Session session : sessions) 
+			if(session.getLevel() > higherLevel)
+				higherLevel = session.getLevel();
+		return higherLevel;
 	}
-
-	@Override
-	public void disposeScene() {
-		detachChildren();
-		this.detachSelf();
-		this.dispose();
-	}
-
 }
