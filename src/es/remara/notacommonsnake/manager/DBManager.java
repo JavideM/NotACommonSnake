@@ -158,6 +158,32 @@ public class DBManager extends SQLiteOpenHelper {
         db.close();
     }
 	
+	public void updateProfile(Profile profile)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		String cond = IDPROFILE + " = " + profile.getIdprofile();
+		
+		ContentValues values = new ContentValues();
+		values.put(IDPROFILE, profile.getIdprofile());
+		values.put(PROF_NAME, profile.getName());
+		values.put(PROF_ACTIVE, profile.isActive()?1:0);
+		
+		db.update(PROFILES_TABLE, values, cond, null);
+		
+		db.close();
+	}
+	
+	public void deleteProfile(Profile profile){
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+        db.delete(PROFILES_TABLE, //table name
+                IDPROFILE+" = ?",  // selections
+                new String[] { String.valueOf(profile.getIdprofile()) }); //selections args
+ 
+        db.close();
+	}
+	
 	public boolean isThereAnActiveProfile()
 	{
         // Select Active Profile Query
@@ -172,13 +198,21 @@ public class DBManager extends SQLiteOpenHelper {
 	public void setActiveProfile(Profile profile)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
+		//All Profile non-active
+		ContentValues values = new ContentValues();
+		values.put(PROF_ACTIVE, 0);
+		
+		db.update(PROFILES_TABLE, values, null, null);
+		
+		db.close();
+		
 		//Update condition
 		String cond = IDPROFILE + " = " + profile.getIdprofile(); 
 		
-		ContentValues values = new ContentValues();
-		values.put(PROF_ACTIVE, 1);
+		ContentValues values2 = new ContentValues();
+		values2.put(PROF_ACTIVE, 1);
 		
-		db.update(PROFILES_TABLE, values, cond, null);
+		db.update(PROFILES_TABLE, values2, cond, null);
 		
 		db.close();
 	}
@@ -238,13 +272,6 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
-//		db.execSQL("CREATE ach2_trigger AFTER" +
-//				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 300 " +
-//				" BEGIN " +
-//					"UPDATE " + ACHIEVEMENTS_TABLE +
-//					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION
-//					+" WHERE "+ IDACHIEVEMENT +" = 2 AND "+ ACH_DONE+ "=0;" +
-//				"END;");
 		db.execSQL("CREATE TRIGGER ach2_trigger AFTER" +
 				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 300 " +
 				" BEGIN " +
@@ -261,13 +288,13 @@ public class DBManager extends SQLiteOpenHelper {
 		
 		db.insert(ACHIEVEMENTS_TABLE, null, values);
 		
-//		db.execSQL("CREATE TRIGGER ach3_trigger AFTER" +
-//				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " > 9000 " +
-//				" BEGIN " +
-//					"UPDATE " + ACHIEVEMENTS_TABLE +
-//					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION
-//					+" WHERE "+ IDACHIEVEMENT +" = 3 AND "+ ACH_DONE+ "=0;" +
-//				"END;");
+		db.execSQL("CREATE TRIGGER ach3_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 9000 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 3 AND "+ ACH_DONE+ "=0;" +
+				"END;");
 	}
 	
 	public List<Achievement> getAllAchievements() {
@@ -314,7 +341,7 @@ public class DBManager extends SQLiteOpenHelper {
                 achievement.setName(cursor.getString(1));
                 achievement.setDescription(cursor.getString(2));
                 achievement.setCheck(Integer.parseInt(cursor.getString(3)) == 1);
-//                achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
+                achievement.setIdsession(Integer.parseInt(cursor.getString(4)));
                 // Adding achievement to list
                 achievementList.add(achievement);
             } while (cursor.moveToNext());

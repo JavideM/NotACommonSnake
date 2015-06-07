@@ -84,6 +84,9 @@ public class ResourcesManager {
 	public ITextureRegion gamepad_region;
 	public ITextureRegion music_region;
 	public ITiledTextureRegion speaker_region;
+	public ITextureRegion arrow_region;
+	public ITextureRegion edit_region;
+	public ITextureRegion delete_region;
 
 	private BitmapTextureAtlas mFontArsTexture;
 	private BitmapTextureAtlas mFontTitleTexture;
@@ -513,6 +516,13 @@ public class ResourcesManager {
 				settingsTextureAtlas, activity, "ars/back.png");
 		speaker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
 				settingsTextureAtlas, activity, "settings/speaker.png", 2, 1);
+		//Profile Entity
+		arrow_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "ars/back.png");
+		edit_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "ars/back.png");
+		delete_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "ars/back.png");
 		//Work in progress
 		BitmapTextureAtlasTextureRegionFactory
 		.setAssetBasePath("gfx/workinprogress/");

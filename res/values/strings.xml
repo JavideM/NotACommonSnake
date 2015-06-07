@@ -12,6 +12,11 @@
     <string name="records_title">TOP SCORES</string>
     <string name="achievements_title">ACHIEVEMENTS</string>
     
+    <string name="totalscore">Total score: </string>
+    <string name="higherlevel">Higher level: </string>
+    <string name="scoreperlevel">Average score per level: </string>
+    <string name="avergaescore">Average score: </string>
+    
     <!-- Settings Scene Strings -->
     <string name="profile_title">PROFILES</string>
     <string name="difficulty_title">ABOUT</string>
