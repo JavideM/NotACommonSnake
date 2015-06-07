@@ -3,6 +3,7 @@ package es.remara.notacommonsnake.model;
 import java.util.ArrayList;
 
 import es.remara.notacommonsnake.manager.DBManager;
+import es.remara.notacommonsnake.manager.ResourcesManager;
 
 public class Profile{
   /*
@@ -53,13 +54,21 @@ public class Profile{
   /*
    * Methods
    */
-  public void save(DBManager dbmanager) {
-		dbmanager.saveProfile(this);
+  public void save() {
+	  ResourcesManager.getInstance().dbmanager.saveProfile(this);
 	}
   
-  public void activeProfile(DBManager dbmanager)
+  public void update(){
+	  ResourcesManager.getInstance().dbmanager.updateProfile(this);
+  }
+  
+  public void delete(){
+	  ResourcesManager.getInstance().dbmanager.deleteProfile(this);
+  }
+  
+  public void activeProfile()
   {
-	  dbmanager.setActiveProfile(this);
+	  ResourcesManager.getInstance().dbmanager.setActiveProfile(this);
 	  this.active = true;
   }
 }

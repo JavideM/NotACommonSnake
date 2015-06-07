@@ -16,7 +16,6 @@ import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
 import es.remara.notacommonsnake.model.Session;
-import es.remara.notacommonsnake.model.Snake_Level;
 import es.remara.notacommonsnake.object.Foods;
 import es.remara.notacommonsnake.object.Snake;
 import es.remara.notacommonsnake.object.Food.FoodType;
@@ -43,7 +42,6 @@ public class GameSnakeScene extends BaseGameScene implements
 	private TimerHandler utimehandler;
 	private TimerHandler chg_level_timehandler;
 	private Session session;
-	private Snake_Level snake_level;
 	
 	//Position touched
 	private float touched_x;
@@ -59,9 +57,6 @@ public class GameSnakeScene extends BaseGameScene implements
 		session = new Session();
 		session.setLevel(0);
 		session.setScore(0);
-		snake_level = new Snake_Level();
-		snake_level.setScore(0);
-		session.AddSnake_Level(snake_level);
 		setLevelTitle(""+session.getLevel());
 		
 		// Create all objects: Snake, Food and walls
@@ -74,9 +69,6 @@ public class GameSnakeScene extends BaseGameScene implements
 	public GameSnakeScene(Session session) {
 		super();
 		this.session = session;
-		snake_level = new Snake_Level();
-		snake_level.setScore(0);
-		session.AddSnake_Level(snake_level);
 		session.nextlevel();
 		addScore(session.getScore());
 		setLevelTitle("" + session.getLevel());
@@ -92,9 +84,6 @@ public class GameSnakeScene extends BaseGameScene implements
 		session = new Session();
 		session.setLevel(level);
 		session.setScore(0);
-		snake_level = new Snake_Level();
-		snake_level.setScore(0);
-		session.AddSnake_Level(snake_level);
 		setLevelTitle("" + session.getLevel());
 		
 		// Create all objects: Snake, Food and walls
@@ -258,7 +247,7 @@ public class GameSnakeScene extends BaseGameScene implements
 						} else
 							session.setPlayer_name("player1");
 						session.setScore(getScore());
-						session.save(dbmanager);
+						session.save();
 						go_to_menu();
 					}
 				});
