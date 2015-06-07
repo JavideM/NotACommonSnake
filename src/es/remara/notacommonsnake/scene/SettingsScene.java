@@ -19,11 +19,9 @@ public class SettingsScene extends BaseScene {
 	/*
 	 * Parameters
 	 */
-	private Entity profilesPannel;
 	private Entity aboutPannel;
 	private Entity soundsPannel;
 	private Sprite btnabout;
-	private Sprite btnprofile;
 	private Sprite btnsound;
 	private Sprite btnback;
 
@@ -32,7 +30,6 @@ public class SettingsScene extends BaseScene {
 	public void createScene() {
 		createBackground();
 		createControls();
-		createProfilesPannel();
 		createAboutPannel();
 		createSoundsPannel();
 
@@ -45,17 +42,6 @@ public class SettingsScene extends BaseScene {
 	}
 
 	private void createControls() {
-		btnprofile = new Sprite(camera.getWidth() / 3, 35,
-				resourcesManager.profile_region, vbom) {
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
-					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				soundsPannel.setVisible(false);
-				aboutPannel.setVisible(false);
-				profilesPannel.setVisible(true);
-				return true;
-			}
-		};
 		btnabout = new Sprite(2*camera.getWidth() / 3, 35,
 				resourcesManager.gamepad_region, vbom) {
 			@Override
@@ -63,18 +49,16 @@ public class SettingsScene extends BaseScene {
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				soundsPannel.setVisible(false);
 				aboutPannel.setVisible(true);
-				profilesPannel.setVisible(false);
 				return true;
 			}
 		};
-		btnsound = new Sprite(camera.getWidth() / 2, 35,
+		btnsound = new Sprite(camera.getWidth() / 3, 35,
 				resourcesManager.music_region, vbom) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				soundsPannel.setVisible(true);
 				aboutPannel.setVisible(false);
-				profilesPannel.setVisible(false);
 				return true;
 			}
 		};
@@ -88,40 +72,12 @@ public class SettingsScene extends BaseScene {
 				return true;
 			}
 		};
-		attachChild(btnprofile);
-		registerTouchArea(btnprofile);
 		attachChild(btnabout);
 		registerTouchArea(btnabout);
 		attachChild(btnsound);
 		registerTouchArea(btnsound);
 		attachChild(btnback);
 		registerTouchArea(btnback);
-	}
-
-	private void createProfilesPannel() {
-		profilesPannel = new Entity();
-		/*
-		 * Pannel
-		 */
-		Sprite pannel = new Sprite(camera.getWidth() / 2,
-				camera.getHeight() / 2 + 30,
-				resourcesManager.orange_pannel_region, vbom);
-		profilesPannel.attachChild(pannel);
-		attachChild(profilesPannel);
-		profilesPannel.setVisible(true);
-
-		/*
-		 * Pannel Content
-		 */
-		// Title
-		Text title = new Text(camera.getWidth() / 2, camera.getHeight()
-				- camera.getHeight() / 12, resourcesManager.fonttitle,
-				activity.getString(R.string.profile_title),
-				new TextOptions(HorizontalAlign.CENTER), this.vbom);
-		profilesPannel.attachChild(title);
-		//Main Content
-		Sprite wip = new Sprite(camera.getWidth()/2, camera.getHeight()/2, resourcesManager.wip_region, vbom);
-		profilesPannel.attachChild(wip);
 	}
 
 	private void createSoundsPannel() {
@@ -133,7 +89,7 @@ public class SettingsScene extends BaseScene {
 				camera.getHeight() / 2 + 30,
 				resourcesManager.salmon_pannel_region, vbom);
 		soundsPannel.attachChild(pannel);
-		soundsPannel.setVisible(false);
+		soundsPannel.setVisible(true);
 		/*
 		 * Pannel Content
 		 */

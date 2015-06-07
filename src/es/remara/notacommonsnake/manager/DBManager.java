@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.remara.notacommonsnake.model.Achievement;
-import es.remara.notacommonsnake.model.Profile;
 import es.remara.notacommonsnake.model.Session;
 import android.content.ContentValues;
 import android.content.Context;
@@ -63,22 +62,6 @@ public class DBManager extends SQLiteOpenHelper {
 												ACH_IDSESSION + " INTEGER, " +
 												"FOREIGN KEY("+ACH_IDSESSION+") REFERENCES "+ SESSIONS_TABLE +"("+IDSESSION+"))";
 	
-	/*
-	 * Profiles
-	 */
-	// Table name
-    private final String PROFILES_TABLE = "PROFILES";
-
-    // Columns
-    private final String IDPROFILE = "IDPROFILE";
-    private final String PROF_NAME = "NAME";
-    private final String PROF_ACTIVE = "ACTIVE";
-
-    // Script
-    private String profilesCreate = "CREATE TABLE " + PROFILES_TABLE + "("
-            										+ IDPROFILE + "INTEGER primary key, " 
-        											+ PROF_NAME + " TEXT NOT NULL, "
-    												+ PROF_ACTIVE + " INTEGER NOT NULL)";
 	
 	public DBManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -88,7 +71,6 @@ public class DBManager extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(sessionsCreate);
 		db.execSQL(achievementsCreate);
-		db.execSQL(profilesCreate);
 		insertAchievements(db);
 	}
 
@@ -96,7 +78,6 @@ public class DBManager extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXIST " + SESSIONS_TABLE);
 		db.execSQL("DROP TABLE IF EXIST " + ACHIEVEMENTS_TABLE);
-		db.execSQL("DROP TABLE IF EXIST " + PROFILES_TABLE);
 		
 		onCreate(db);
 	}
@@ -145,105 +126,6 @@ public class DBManager extends SQLiteOpenHelper {
     }
 	
 	/*
-	 * Profiles CRUD
-	 */
-	public void saveProfile(Profile profile) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(PROF_NAME, profile.getName());
-        values.put(PROF_ACTIVE, profile.isActive()?1:0);
-
-        db.insert(PROFILES_TABLE, null, values);
-        db.close();
-    }
-	
-	public void updateProfile(Profile profile)
-	{
-		SQLiteDatabase db = this.getWritableDatabase();
-		
-		String cond = IDPROFILE + " = " + profile.getIdprofile();
-		
-		ContentValues values = new ContentValues();
-		values.put(IDPROFILE, profile.getIdprofile());
-		values.put(PROF_NAME, profile.getName());
-		values.put(PROF_ACTIVE, profile.isActive()?1:0);
-		
-		db.update(PROFILES_TABLE, values, cond, null);
-		
-		db.close();
-	}
-	
-	public void deleteProfile(Profile profile){
-		SQLiteDatabase db = this.getWritableDatabase();
-		
-        db.delete(PROFILES_TABLE, //table name
-                IDPROFILE+" = ?",  // selections
-                new String[] { String.valueOf(profile.getIdprofile()) }); //selections args
- 
-        db.close();
-	}
-	
-	public boolean isThereAnActiveProfile()
-	{
-        // Select Active Profile Query
-        String selectQuery = "SELECT * " +
-    						" FROM " + PROFILES_TABLE + " WHERE " +PROF_ACTIVE+ "=1 DESC";
- 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-		return cursor.getCount() == 1;
-	}
-	
-	public void setActiveProfile(Profile profile)
-	{
-		SQLiteDatabase db = this.getWritableDatabase();
-		//All Profile non-active
-		ContentValues values = new ContentValues();
-		values.put(PROF_ACTIVE, 0);
-		
-		db.update(PROFILES_TABLE, values, null, null);
-		
-		db.close();
-		
-		//Update condition
-		String cond = IDPROFILE + " = " + profile.getIdprofile(); 
-		
-		ContentValues values2 = new ContentValues();
-		values2.put(PROF_ACTIVE, 1);
-		
-		db.update(PROFILES_TABLE, values2, cond, null);
-		
-		db.close();
-	}
-	
-	public List<Profile> getAllProfiles()
-	{
-		List<Profile> profiles = new ArrayList<Profile>();
-		// Select All query
-		String selectQuery = "SELECT * " +
-								"FROM " + PROFILES_TABLE + " ORDER BY " + PROF_NAME;
-		
-		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor cursor = db.rawQuery(selectQuery, null);
-		
-		//looping through all rows and adding to the list
-		if(cursor.moveToFirst())
-		{
-			do{
-				Profile profile = new Profile();
-				profile.setIdprofile(Integer.parseInt(cursor.getString(0)));
-				profile.setName(cursor.getString(1));
-				profile.setActive(cursor.getString(2).equals("1"));
-				profiles.add(profile);
-			}while(cursor.moveToNext());
-		}
-		
-		return profiles;
-		
-	}
-	
-	/*
 	 * Achievements CRUD
 	 */
 	
@@ -265,12 +147,12 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 		
 		//300 points 
-		values = new ContentValues();
-		values.put(ACH_NAME, "300 AU AU");
-		values.put(ACH_DESCRIP, "Score 300 points.");
-		values.put(ACH_DONE, "0");
+		ContentValues values2 = new ContentValues();
+		values2.put(ACH_NAME, "300 AU AU");
+		values2.put(ACH_DESCRIP, "Score 300 points.");
+		values2.put(ACH_DONE, "0");
 		
-		db.insert(ACHIEVEMENTS_TABLE, null, values);
+		db.insert(ACHIEVEMENTS_TABLE, null, values2);
 		
 		db.execSQL("CREATE TRIGGER ach2_trigger AFTER" +
 				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 300 " +
@@ -281,12 +163,12 @@ public class DBManager extends SQLiteOpenHelper {
 				"END;");
 	
 		// Over 9000 points
-		values = new ContentValues();
-		values.put(ACH_NAME, "It's over 9000!");
-		values.put(ACH_DESCRIP, "Score more than 9000 points.");
-		values.put(ACH_DONE, "0");
+		ContentValues values3 = new ContentValues();
+		values3.put(ACH_NAME, "It's over 9000!");
+		values3.put(ACH_DESCRIP, "Score more than 9000 points.");
+		values3.put(ACH_DONE, "0");
 		
-		db.insert(ACHIEVEMENTS_TABLE, null, values);
+		db.insert(ACHIEVEMENTS_TABLE, null, values3);
 		
 		db.execSQL("CREATE TRIGGER ach3_trigger AFTER" +
 				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_SCORE + " >= 9000 " +
@@ -294,6 +176,142 @@ public class DBManager extends SQLiteOpenHelper {
 					"UPDATE " + ACHIEVEMENTS_TABLE +
 					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
 					+ " WHERE "+ IDACHIEVEMENT +" = 3 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		//Complete levels
+		ContentValues values4 = new ContentValues();
+		values4.put(ACH_NAME, "Level 0 complete");
+		values4.put(ACH_DESCRIP, "Complete level 0.");
+		values4.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values4);
+		
+		db.execSQL("CREATE TRIGGER ach4_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 0 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 4 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values5 = new ContentValues();
+		values5.put(ACH_NAME, "Level 1 complete");
+		values5.put(ACH_DESCRIP, "Complete level 1.");
+		values5.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values5);
+		
+		db.execSQL("CREATE TRIGGER ach5_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 1 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 5 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values6 = new ContentValues();
+		values6.put(ACH_NAME, "Level 2 complete");
+		values6.put(ACH_DESCRIP, "Complete level 2.");
+		values6.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values6);
+		
+		db.execSQL("CREATE TRIGGER ach6_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 2 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 6 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values7 = new ContentValues();
+		values7.put(ACH_NAME, "Level 3 complete");
+		values7.put(ACH_DESCRIP, "Complete level 3.");
+		values7.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values7);
+		
+		db.execSQL("CREATE TRIGGER ach7_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 3 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 7 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values8 = new ContentValues();
+		values8.put(ACH_NAME, "Level 4 complete");
+		values8.put(ACH_DESCRIP, "Complete level 4.");
+		values8.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values8);
+		
+		db.execSQL("CREATE TRIGGER ach8_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 4 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 8 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values9 = new ContentValues();
+		values9.put(ACH_NAME, "Level 5 complete");
+		values9.put(ACH_DESCRIP, "Complete level 5.");
+		values9.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values9);
+		
+		db.execSQL("CREATE TRIGGER ach9_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 5 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 9 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values10 = new ContentValues();
+		values10.put(ACH_NAME, "Level 6 complete");
+		values10.put(ACH_DESCRIP, "Complete level 6.");
+		values10.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values10);
+		
+		db.execSQL("CREATE TRIGGER ach10_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 6 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 10 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values11 = new ContentValues();
+		values11.put(ACH_NAME, "Level 7 complete");
+		values11.put(ACH_DESCRIP, "Complete level 7.");
+		values11.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values11);
+		
+		db.execSQL("CREATE TRIGGER ach11_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 7 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 11 AND "+ ACH_DONE+ "=0;" +
+				"END;");
+		
+		ContentValues values12 = new ContentValues();
+		values12.put(ACH_NAME, "Level 8 complete");
+		values12.put(ACH_DESCRIP, "Complete level 8.");
+		values12.put(ACH_DONE, "0");
+		
+		db.insert(ACHIEVEMENTS_TABLE, null, values11);
+		
+		db.execSQL("CREATE TRIGGER ach12_trigger AFTER" +
+				" INSERT ON " + SESSIONS_TABLE + " WHEN new."+ SESSION_LEVEL + " > 8 " +
+				" BEGIN " +
+					"UPDATE " + ACHIEVEMENTS_TABLE +
+					" 	SET " + ACH_DONE + " = 1, "+ ACH_IDSESSION + "=new." +IDSESSION 
+					+ " WHERE "+ IDACHIEVEMENT +" = 12 AND "+ ACH_DONE+ "=0;" +
 				"END;");
 	}
 	
