@@ -5,6 +5,8 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 
+import es.remara.notacommonsnake.R;
+
 public abstract class BaseGameScene extends BaseScene {
 
 	private int score = 0;
@@ -56,7 +58,7 @@ public abstract class BaseGameScene extends BaseScene {
 	}
 
 	public void setLevelTitle(String string) {
-		titleText.setText("Level " + string);
+		titleText.setText(activity.getString(R.string.levelHUD) + string);
 	}
 
 	public void setTitle(String title) {
@@ -69,11 +71,11 @@ public abstract class BaseGameScene extends BaseScene {
 
 	public void addScore(int i) {
 		score += i;
-		scoreText.setText("Score: " + score);
+		scoreText.setText(activity.getString(R.string.scoreHud)  + score);
 	}
 
 	public void resetScore() {
-		scoreText.setText("Score: " + 0);
+		scoreText.setText(activity.getString(R.string.scoreHud) + 0);
 		score = 0;
 	}
 
