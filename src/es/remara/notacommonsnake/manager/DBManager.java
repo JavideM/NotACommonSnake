@@ -8,8 +8,6 @@ import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.model.Achievement;
 import es.remara.notacommonsnake.model.Session;
 
-
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

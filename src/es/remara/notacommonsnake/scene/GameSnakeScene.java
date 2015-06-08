@@ -361,20 +361,18 @@ public class GameSnakeScene extends BaseGameScene implements
 			touched_x = pSceneTouchEvent.getX();
 			touched_y = pSceneTouchEvent.getY();
 		}else{
-			if(pSceneTouchEvent.isActionUp()){
-				if(swipe_right){
-					if (snake.getDirec() != Direction.opposite(Direction.RIGHT))
-						snake.setDirec(Direction.RIGHT);
-				}else if(swipe_left){
-					if (snake.getDirec() != Direction.opposite(Direction.LEFT))
-						snake.setDirec(Direction.LEFT);
-				}else if(swipe_up){
-					if (snake.getDirec() != Direction.opposite(Direction.TOP))
-						snake.setDirec(Direction.TOP);
-				}else if(swipe_down){
-					if (snake.getDirec() != Direction.opposite(Direction.DOWN))
-						snake.setDirec(Direction.DOWN);
-				}
+			if(swipe_right){
+				if (snake.getDirec() != Direction.opposite(Direction.RIGHT))
+					snake.setDirec(Direction.RIGHT);
+			}else if(swipe_left){
+				if (snake.getDirec() != Direction.opposite(Direction.LEFT))
+					snake.setDirec(Direction.LEFT);
+			}else if(swipe_up){
+				if (snake.getDirec() != Direction.opposite(Direction.TOP))
+					snake.setDirec(Direction.TOP);
+			}else if(swipe_down){
+				if (snake.getDirec() != Direction.opposite(Direction.DOWN))
+					snake.setDirec(Direction.DOWN);
 			}
 		}
 		
