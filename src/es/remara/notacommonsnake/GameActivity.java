@@ -11,7 +11,6 @@ import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import es.remara.notacommonsnake.manager.DBManager;
 import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 
@@ -22,8 +21,6 @@ public class GameActivity extends BaseGameActivity {
 
 	private BoundCamera camera;
 	private EngineOptions engineoptions;
-	private ResourcesManager resourcesmanager;
-	private DBManager datamanager;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -42,7 +39,6 @@ public class GameActivity extends BaseGameActivity {
 			throws IOException {
 		ResourcesManager.prepareManager(mEngine, this, this.camera,
 				getVertexBufferObjectManager());
-		resourcesmanager = ResourcesManager.getInstance();
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
@@ -67,16 +63,6 @@ public class GameActivity extends BaseGameActivity {
 				}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event)
-	// {
-	// if (keyCode == KeyEvent.KEYCODE_BACK)
-	// {
-	// SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
-	// }
-	// return false;
-	// }
 
 	@Override
 	public void onBackPressed() {
