@@ -57,6 +57,10 @@ public final class R {
         public static final int chggamemodeFoodtxt=0x7f03001b;
         public static final int createdby=0x7f030011;
         public static final int difficulty_title=0x7f03000d;
+        /**  Snake 
+ Snake 
+         */
+        public static final int exitmessage=0x7f03003c;
         public static final int ghostmodeFoodtxt=0x7f03001c;
         public static final int higherlevel=0x7f030008;
         public static final int invcontrolsFoodtxt=0x7f03001d;

@@ -406,7 +406,7 @@ public class GameArkanoidScene extends BaseGameScene implements
 			public void run() {
 				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 				alert.setCancelable(false);
-				alert.setMessage("Are you sure you want to quit?");
+				alert.setMessage(activity.getString(R.string.exitmessage));
 				alert.setPositiveButton("OK", new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						SceneManager.getInstance().loadMenuScene(engine,

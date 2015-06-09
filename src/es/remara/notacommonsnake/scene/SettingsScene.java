@@ -66,9 +66,7 @@ public class SettingsScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				ResourcesManager.getInstance().unloadSettingsResources();
-				disposeScene();
-				SceneManager.getInstance().createArkanoidScene();
+				onBackKeyPressed();
 				return true;
 			}
 		};
