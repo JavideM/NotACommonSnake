@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.EditText;
 
+import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -94,9 +95,6 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void createScene() {
-		// Controles
-//		createcontrols();
-
 		// Puntos
 		createHUD();
 
@@ -299,7 +297,7 @@ public class GameSnakeScene extends BaseGameScene implements
 				public void run() {
 					AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 					alert.setCancelable(false);
-					alert.setMessage("Are you sure you want to quit?");
+					alert.setMessage(activity.getString(R.string.exitmessage));
 					alert.setPositiveButton("OK", new OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							
@@ -361,20 +359,18 @@ public class GameSnakeScene extends BaseGameScene implements
 			touched_x = pSceneTouchEvent.getX();
 			touched_y = pSceneTouchEvent.getY();
 		}else{
-			if(pSceneTouchEvent.isActionUp()){
-				if(swipe_right){
-					if (snake.getDirec() != Direction.opposite(Direction.RIGHT))
-						snake.setDirec(Direction.RIGHT);
-				}else if(swipe_left){
-					if (snake.getDirec() != Direction.opposite(Direction.LEFT))
-						snake.setDirec(Direction.LEFT);
-				}else if(swipe_up){
-					if (snake.getDirec() != Direction.opposite(Direction.TOP))
-						snake.setDirec(Direction.TOP);
-				}else if(swipe_down){
-					if (snake.getDirec() != Direction.opposite(Direction.DOWN))
-						snake.setDirec(Direction.DOWN);
-				}
+			if(swipe_right){
+				if (snake.getDirec() != Direction.opposite(Direction.RIGHT))
+					snake.setDirec(Direction.RIGHT);
+			}else if(swipe_left){
+				if (snake.getDirec() != Direction.opposite(Direction.LEFT))
+					snake.setDirec(Direction.LEFT);
+			}else if(swipe_up){
+				if (snake.getDirec() != Direction.opposite(Direction.TOP))
+					snake.setDirec(Direction.TOP);
+			}else if(swipe_down){
+				if (snake.getDirec() != Direction.opposite(Direction.DOWN))
+					snake.setDirec(Direction.DOWN);
 			}
 		}
 		

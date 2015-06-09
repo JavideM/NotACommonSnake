@@ -34,6 +34,7 @@ int string bonuslevelHUD 0x7f030023
 int string chggamemodeFoodtxt 0x7f03001b
 int string createdby 0x7f030011
 int string difficulty_title 0x7f03000d
+int string exitmessage 0x7f03003c
 int string ghostmodeFoodtxt 0x7f03001c
 int string higherlevel 0x7f030008
 int string invcontrolsFoodtxt 0x7f03001d

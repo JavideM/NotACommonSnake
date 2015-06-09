@@ -17,7 +17,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 
 import es.remara.notacommonsnake.R;
-import es.remara.notacommonsnake.manager.ResourcesManager;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.base.BaseScene;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -54,10 +53,10 @@ public class MainMenuScene extends BaseScene implements
 			public void run() {
 				AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 				alert.setCancelable(false);
-				alert.setMessage("Are you sure you want to quit?");
+				alert.setMessage(activity.getString(R.string.exitmessage));
 				alert.setPositiveButton("OK", new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
-						
+						resourcesManager.music.pause();
 						System.exit(0);
 					}
 				});

@@ -4,7 +4,7 @@
     
 	<!-- Menu Strings  -->
     <string name="play">GIOCA</string>
-    <string name="options">CONFIGURAZIONE</string>
+    <string name="options">CONFIG</string>
     <string name="achivements">SUCESSI</string>
     
     <!-- Achievements Scene Strings  -->
@@ -74,4 +74,7 @@
     <string name="ach10descrip">Completa il livello 6.</string>
     <string name="ach11descrip">Completa il livello 7.</string>
     <string name="ach12descrip">Completa il livello 8.</string>
+    
+    <!-- Snake -->
+    <string name="exitmessage">Sei sicuro di volere uscire?</string>
 </resources>
