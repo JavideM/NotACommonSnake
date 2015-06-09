@@ -56,7 +56,7 @@ public class MainMenuScene extends BaseScene implements
 				alert.setMessage("Are you sure you want to quit?");
 				alert.setPositiveButton("OK", new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
-						
+						resourcesManager.music.pause();
 						System.exit(0);
 					}
 				});
