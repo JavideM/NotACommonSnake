@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.EditText;
 
+import es.remara.notacommonsnake.R;
 import es.remara.notacommonsnake.base.BaseGameScene;
 import es.remara.notacommonsnake.manager.SceneManager;
 import es.remara.notacommonsnake.manager.SceneManager.SceneType;
@@ -94,9 +95,6 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void createScene() {
-		// Controles
-//		createcontrols();
-
 		// Puntos
 		createHUD();
 
@@ -299,7 +297,7 @@ public class GameSnakeScene extends BaseGameScene implements
 				public void run() {
 					AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 					alert.setCancelable(false);
-					alert.setMessage("Are you sure you want to quit?");
+					alert.setMessage(activity.getString(R.string.exitmessage));
 					alert.setPositiveButton("OK", new OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							

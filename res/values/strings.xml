@@ -74,4 +74,7 @@
     <string name="ach10descrip">Complete level 6.</string>
     <string name="ach11descrip">Complete level 7.</string>
     <string name="ach12descrip">Complete level 8.</string>
+    
+    <!-- Snake -->
+    <string name="exitmessage">¿Estás seguro que deseas salir?</string>
 </resources>
