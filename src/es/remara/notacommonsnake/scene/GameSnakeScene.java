@@ -94,9 +94,6 @@ public class GameSnakeScene extends BaseGameScene implements
 
 	@Override
 	public void createScene() {
-		// Controles
-//		createcontrols();
-
 		// Puntos
 		createHUD();
 
