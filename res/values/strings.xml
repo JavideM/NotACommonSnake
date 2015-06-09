@@ -76,5 +76,5 @@
     <string name="ach12descrip">Complete level 8.</string>
     
     <!-- Snake -->
-    <string name="exitmessage">¿Estás seguro que deseas salir?</string>
+    <string name="exitmessage">Are you sure you want to quit?</string>
 </resources>
